@@ -270,7 +270,7 @@ def typesub(seq,patterns,types):
 # secondary structure into account, and replacing termini if requested.
 def ssClassification(ss,program="dssp"):      
                  
-    # Translate dssp/pymol/gmx ss to Martini ss # ????                                           
+    # Translate dssp/pymol/gmx ss to Martini ss                                             
     ss  = ss.translate(sstt[program])                                                       
     # Separate the different secondary structure types                                      
     sep = dict([(i,ss.translate(sstd[i])) for i in sstd.keys()])       
@@ -324,7 +324,6 @@ for residue in aa_model.get_residues():
     std_name = to_three_letter_code[to_one_letter_code[cur_name]].upper()
     residue.resname = std_name
 
-## create temporary pdb
 io.set_structure(aa_model)
 temp_pdbf_path = '%s-temp.pdb' %os.path.basename(pdbf_path)[:-4]
 io.save(temp_pdbf_path)
@@ -340,14 +339,13 @@ for model in aa_model:
     structure_builder.init_model(model.id)
     
     # Run DSSP
-    dssp = DSSP(model, temp_pdbf_path) # calculate SS and accessibility [http://biopython.org/DIST/docs/api/Bio.PDB.DSSP%27-module.html]
+    dssp = DSSP(model, temp_pdbf_path)
 
     # CG Model
     for chain in model:
         structure_builder.init_chain(chain.id)
 
         # Get SS information and translate it to MARTINI
-        ## check if there is SS assignment for this residue
         dssp_ss = []
         for residue in chain:
           if residue.id[0] != ' ':
