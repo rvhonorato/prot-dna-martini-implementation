@@ -7,7 +7,6 @@ autogenerate
   dihedrals=false
 end
 
-
 MASS   Q0 72.000
 MASS   Na 72.000
 MASS   Nd 72.000
