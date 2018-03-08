@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-
+#!/usr/bin/env python2.6
 """
 Uses Biopython to parse the structure and DSSP output.
 Uses pieces of the martinize-1.1.py script to convert the SS types
@@ -10,19 +9,23 @@ Outputs a tbl file to map the beads to the atoms they represent.
 Updates
  - Updated python version to 2.6 to support isdisjoint() set method in DSSP.py (JR Apr 2012)
  - Residues that DSSP can't handle (incomplete backbone f ex) treated as coil  (JR Apr 2012)
-
+ - Update to_one_letter_code library to protein_letters_3to1 (Jorge Roel 2017)
+ - Inclusion of fake beads for corresponding amino-acids <SCd> (Jorge Roel 2017)
 """
 import os
 import sys
+import random
+import math
 import warnings
+warnings.filterwarnings("ignore")
 
 try:
   from Bio.PDB import PDBParser
   from Bio.PDB import PDBIO
   from Bio.PDB.DSSP import DSSP
   from Bio.PDB import Entity
-  from Bio.Data.SCOPData import protein_letters_3to1 as to_one_letter_code 
-  from Bio.Data.IUPACData import protein_letters_1to3 as to_three_letter_code
+#  from Bio.PDB import to_one_letter_code 
+  from Bio.PDB import protein_letters_3to1
   from Bio.PDB.StructureBuilder import StructureBuilder
 except ImportError, emsg:
     sys.stderr.write('Error: %s\n' %emsg)
@@ -74,9 +77,32 @@ def center_of_mass(entity, geometric=False):
 
         return [sum(coord_list)/sum(masses) for coord_list in w_pos]
 
+def norm(a):
+    return math.sqrt(norm2(a))
+
+def norm2(a):
+    return sum([i*i for i in a])
+
+def add_dummy(beads, dist=0.11, n=2):
+    # Generate a random vector in a sphere of -1 to +1, to add to the bead position
+    v    = [random.random()*2.-1, random.random()*2.-1, random.random()*2.-1]
+    # Calculated the length of the vector and divide by the final distance of the dummy bead
+    norm_v = norm(v)/dist
+    # Resize the vector
+    vn   = [i/norm_v for i in v]
+    # m sets the direction of the added vector, currently only works when adding one or two beads.
+    m = 1
+    for j in range(n):
+        newName = 'SCD' + str(j+1)
+        newBead = (newName, [i+(m*j) for i, j in zip(beads[-1][1], vn)])
+        beads.append(newBead)
+        m *= -2
+    return beads
+
+
 ## Coarse Graining
 
-def MARTINI(aares, user_chain):
+def MARTINI(aares):
     """
     Reduces complexity of protein residue to the MARTINI coarse grained model:
     CA, O, Bead(s) in specific atom location.
@@ -113,22 +139,22 @@ def MARTINI(aares, user_chain):
                         
     cg_to_aa_restraints = []
     beads = []
+    b_list = []
     bead_names = [" BB", " SC1", " SC2", " SC3", " SC4"] # Space bc of IO issues.
+    polar   = ["GLN","ASN","SER","THR"]
+    charged = ["ARG", "LYS","ASP","GLU"]
     resn = aares.resname
-    segid = aares.segid.strip()
-    if not segid:
-        segid = user_chain
+    segid = aares.segid.strip() 
     resi = aares.id[1]
     
     try:
         atom_groups = cg_mapping[resn]
     except KeyError:
         raise ValueError("Residue %s not recognized" %resn)
-        
+     
     # delete and replace side chain atoms
     for index, centroid in enumerate(atom_groups):
         bname = bead_names[index]
-
         # Get as many atoms as possible..
         atoms = [aares[atom] for atom in centroid.split() if atom in aares.child_dict]
         if not atoms:
@@ -143,7 +169,12 @@ def MARTINI(aares, user_chain):
 
         # Output restraint pairs for CG to AA conversion
         cg_to_aa_restraints.append("assign (segid %sCG and resid %i and name %s) (segid %s and resid %i and (name %s)) 0 0 0" %(segid, resi, bname.strip(), segid, resi, ' or name '.join([a.name for a in atoms])))
-
+    
+    if len(beads) > 1 and resn in polar:
+        beads = add_dummy(beads, dist=0.14, n=2)
+    if len(beads) > 1 and resn in charged:
+        beads = add_dummy(beads, dist=0.11, n=1)
+    
     return (cg_to_aa_restraints, beads)
 
 ## SECONDARY STRUCTURE DEFINITION  ## 
@@ -270,7 +301,7 @@ def typesub(seq,patterns,types):
 # secondary structure into account, and replacing termini if requested.
 def ssClassification(ss,program="dssp"):      
                  
-    # Translate dssp/pymol/gmx ss to Martini ss # ????                                           
+    # Translate dssp/pymol/gmx ss to Martini ss                                             
     ss  = ss.translate(sstt[program])                                                       
     # Separate the different secondary structure types                                      
     sep = dict([(i,ss.translate(sstd[i])) for i in sstd.keys()])       
@@ -301,33 +332,17 @@ ss_to_code = {'C': 1, # Free,
               'F': 9  # Fibril 
               }
 
-
-###### MAIN CODE ######
-
-warnings.simplefilter('ignore') # Silence PDB Parser warnings
+ss_eq = list("CBHHHHBTF")
 
 # Load things
 P = PDBParser()
+# P = PDBParser()
 io = PDBIO()
 
 
 # Parse PDB and run DSSP
 pdbf_path = os.path.abspath(sys.argv[1])
-pdb_chain = sys.argv[2]
-
 aa_model = P.get_structure('aa_model', pdbf_path)
-
-# Standardize aminoacid names
-# Ugly hack, have to read, change, rewrite, and re-read PDB..
-for residue in aa_model.get_residues():
-    cur_name = residue.resname
-    std_name = to_three_letter_code[to_one_letter_code[cur_name]].upper()
-    residue.resname = std_name
-
-## create temporary pdb
-io.set_structure(aa_model)
-temp_pdbf_path = '%s-temp.pdb' %os.path.basename(pdbf_path)[:-4]
-io.save(temp_pdbf_path)
 
 # Convert to MARTINI types
 # Assign by chain and build the cg structure already
@@ -337,17 +352,15 @@ structure_builder.init_seg(' ') # Empty SEGID
 
 nbeads = 0
 for model in aa_model:
-    structure_builder.init_model(model.id)
-    
-    # Run DSSP
-    dssp = DSSP(model, temp_pdbf_path) # calculate SS and accessibility [http://biopython.org/DIST/docs/api/Bio.PDB.DSSP%27-module.html]
 
-    # CG Model
+    structure_builder.init_model(model.id)
+
+    dssp = DSSP(model, pdbf_path)
+
     for chain in model:
         structure_builder.init_chain(chain.id)
 
         # Get SS information and translate it to MARTINI
-        ## check if there is SS assignment for this residue
         dssp_ss = []
         for residue in chain:
           if residue.id[0] != ' ':
@@ -360,7 +373,8 @@ for model in aa_model:
 
         #dssp_ss = ''.join([ residue.xtra["SS_DSSP"] for residue in chain if residue.id[0] == ' '])
         martini_ss, martini_types = ssClassification(dssp_ss)
-        aa_seq = ''.join([ to_one_letter_code[residue.resname] for residue in chain if residue.id[0] == ' '])    
+        # exit()
+        # aa_seq = ''.join([ protein_letters_3to1[residue.resname] for residue in chain if residue.id[0] == ' '])    
 
         tbl_cg_to_aa = []
 
@@ -371,12 +385,13 @@ for model in aa_model:
             
             # Convert SS to bfactor code
             sscode = ss_to_code[sstype]
+            #print sscode
             # Coarse grain residue
-            residue_restraints, beads = MARTINI(residue, pdb_chain)
+            residue_restraints, beads = MARTINI(residue)
             structure_builder.init_residue(residue.resname, residue.id[0], residue.id[1], residue.id[2])
             # Populate residue
             for name,coord in beads:
-                structure_builder.init_atom(name, coord, sscode, 1.00, " ", name, nbeads, "C")
+                structure_builder.init_atom(name, coord, sscode, 1.00, " ", name, nbeads, ss_eq[int(sscode)-1])
                 nbeads += 1
             # Save restraints
             tbl_cg_to_aa.extend(residue_restraints)
@@ -384,7 +399,7 @@ for model in aa_model:
 cg_model = structure_builder.get_structure()
 
 # output sequence and ss information
-print "%s:\t" %chain.id, aa_seq
+# print "%s:\t" %chain.id, aa_seq
 print "%s:\t" %chain.id, martini_types
 print "%s:\t" %chain.id, ''.join(map(lambda x: str(ss_to_code[x]), martini_types))
 
@@ -393,8 +408,5 @@ io.set_structure(cg_model)
 io.save('%s_cg.pdb' %(pdbf_path[:-4]), write_end=1)
 # Write Restraints
 tbl_file = open('%s_cg_to_aa.tbl' %pdbf_path[:-4], 'w')
-tbl_file.write('\n'.join(tbl_cg_to_aa)+'\n')
+tbl_file.write('\n'.join(tbl_cg_to_aa))
 tbl_file.close()
-
-# Remove temporary file
-os.remove(temp_pdbf_path)

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+!/usr/bin/env python
 
 """
 Uses Biopython to parse the structure and DSSP output.
