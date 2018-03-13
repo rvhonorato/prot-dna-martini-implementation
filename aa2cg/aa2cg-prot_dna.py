@@ -11,12 +11,16 @@ Updates
  - Residues that DSSP can't handle (incomplete backbone f ex) treated as coil  (JR Apr 2012)
  - Update to_one_letter_code library to protein_letters_3to1 (Jorge Roel 2017)
  - Inclusion of fake beads for corresponding amino-acids <SCd> (Jorge Roel 2017)
+ - Implemented feature to check if nucleic acid is a candidate for hbond (Rodrigo Honorato 2018)
+ - Changed the mapping routine to include DNA and hbond DNA bead types (Rodrifo Honorato 2018)
 """
 import os
 import sys
 import random
 import math
 import operator #
+import itertools #
+import collections
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -103,81 +107,6 @@ def add_dummy(beads, dist=0.11, n=2):
 
 ## Coarse Graining
 
-def MARTINI(aares):
-    """
-    Reduces complexity of protein residue to the MARTINI coarse grained model:
-    CA, O, Bead(s) in specific atom location.
-    
-    Reference:
-    Monticelli et al. The MARTINI coarse-grained force field: extension to proteins. 
-    J. Chem. Theory Comput. (2008) vol. 4 (5) pp. 819-834
-    
-    Martinize Script from Tserk Wassenaar
-    """
-    
-    bb = "CA C N O "    
-    cg_mapping = {      "ALA":  [bb + "CB"],
-                        "CYS":  [bb, "CB SG"],
-                        "ASP":  [bb, "CB CG OD1 OD2"],
-                        "GLU":  [bb, "CB CG CD OE1 OE2"],
-                        "PHE":  [bb, "CB CG CD1","CD2 CE2","CE1 CZ"],
-                        "GLY":  [bb],
-                        "HIS":  [bb, "CB CG","CD2 NE2","ND1 CE1"],
-                        "ILE":  [bb, "CB CG1 CG2 CD1"],
-                        "LYS":  [bb, "CB CG CD","CE NZ"],
-                        "LEU":  [bb, "CB CG CD1 CD2"],
-                        "MET":  [bb, "CB CG SD CE"],
-                        "ASN":  [bb, "CB CG ND1 ND2 OD1 OD2"],
-                        "PRO":  [bb, "CB CG CD"],
-                        "GLN":  [bb, "CB CG CD OE1 OE2 NE1 NE2"],
-                        "ARG":  [bb, "CB CG CD","NE CZ NH1 NH2"],    
-                        "SER":  [bb, "CB OG"],
-                        "THR":  [bb, "CB OG1 CG2"],
-                        "VAL":  [bb, "CB CG1 CG2"],
-                        "TRP":  [bb, "CB CG CD2","CD1 NE1 CE2","CE3 CZ3","CZ2 CH2"],
-                        "TYR":  [bb, "CB CG CD1","CD2 CE2","CE1 CZ OH"],
-                        }
-                        
-    cg_to_aa_restraints = []
-    beads = []
-    b_list = []
-    bead_names = [" BB", " SC1", " SC2", " SC3", " SC4"] # Space bc of IO issues.
-    polar   = ["GLN","ASN","SER","THR"]
-    charged = ["ARG", "LYS","ASP","GLU"]
-    resn = aares.resname
-    segid = aares.segid.strip() 
-    resi = aares.id[1]
-    
-    try:
-        atom_groups = cg_mapping[resn]
-    except KeyError:
-        raise ValueError("Residue %s not recognized" %resn)
-     
-    # delete and replace side chain atoms
-    for index, centroid in enumerate(atom_groups):
-        bname = bead_names[index]
-        # Get as many atoms as possible..
-        atoms = [aares[atom] for atom in centroid.split() if atom in aares.child_dict]
-        if not atoms:
-            resi = aares.id[1]
-            chain = aares.parent.id
-            sys.stderr.write('Residue %(resn)s%(resi)s of chain %(chain)s cannot be processed: missing atoms (%(centroid)s)\n' %locals())
-            #sys.exit(1)
-            continue
-        # Get center of mass of bead based on the position and mass of atoms
-        bcom = center_of_mass(atoms)
-        beads.append((bname, bcom))
-
-        # Output restraint pairs for CG to AA conversion
-        cg_to_aa_restraints.append("assign (segid %sCG and resid %i and name %s) (segid %s and resid %i and (name %s)) 0 0 0" %(segid, resi, bname.strip(), segid, resi, ' or name '.join([a.name for a in atoms])))
-    
-    if len(beads) > 1 and resn in polar:
-        beads = add_dummy(beads, dist=0.14, n=2)
-    if len(beads) > 1 and resn in charged:
-        beads = add_dummy(beads, dist=0.11, n=1)
-    
-    return (cg_to_aa_restraints, beads)
-
 def mapcg(aares):    
     """
     Reduces complexity of protein residue to the MARTINI coarse grained model:
@@ -213,7 +142,7 @@ def mapcg(aares):
                         "TRP":  [bb, "CB CG CD2","CD1 NE1 CE2","CE3 CZ3","CZ2 CH2"],
                         "TYR":  [bb, "CB CG CD1","CD2 CE2","CE1 CZ OH"]}
 
-    bead_names = [" BB", " SC1", " SC2", " SC3", " SC4"] # Space bc of IO issues.
+    bead_names = ["BB", "SC1", "SC2", "SC3", "SC4"] # Space bc of IO issues.
 
     # insert beads into the data structure
     cg_mapping = {}
@@ -224,54 +153,87 @@ def mapcg(aares):
             cg_mapping[res][atom_l] = bead
 
 
-    dna_bead_dic = {' DC':
-    {
-        "P OP1 OP2 O5' O3'": "Q0",
-        "C5' O4' C4'":       "SN0",
-        "C3' C2' C1'":       "SC2",
-        #
-        "N1 C6":             "TN0",
-        "N3 C2 O2":          "TY2", 
-        "C5 C4 N4":          "TY3"
-    },
-                    ' DA':
-    {
-        "P OP1 OP2 O5' O3'": "Q0",
-        "C5' O4' C4'":       "SN0",
-        "C3' C2' C1'":       "SC2",
-        #
-        "N9 C4":             "TN0",
-        "C2 N3":             "TA2",
-        "C6 N6 N1":          "TA3",
-        "C8 N7 C5":          "TNa"
-    },
-                    ' DG':
-    {
-        "P OP1 OP2 O5' O3'": "Q0",
-        "C5' O4' C4'":       "SN0",
-        "C3' C2' C1'":       "SC2",
-        #
-        "N9 C4":             "TN0",
-        "C2 N2 N3":          "TG2",
-        "C6 O6 N1":          "TG3",
-        "C8 N7 C5":          "TNa"
-    },
-                    ' DT':
-    {
-        "P OP1 OP2 O5' O3'": "Q0",
-        "C5' O4' C4'":       "SN0",
-        "C3' C2' C1'":       "SC2",
-        #
-        "N1 C6":             "TN0",
-        "N3 C2 O2":          "TT2",
-        "C5 C4 O4 C7":       "TT3"
-    }
-    }
+    # Define nucleotide mapping,
+    ## This is a custom naming convetion
+    ##  but the atom mapping is defined in
+    ##   10.1021/acs.jctc.5b00286 -  S1
+    ######################################
+    DC_beads = collections.OrderedDict()
+    DC_beads["P OP1 OP2 O5' O3'"] =  "nB0"
+    DC_beads["C5' O4' C4'"] =        "nB1"
+    DC_beads["C3' C2' C1'"] =        "nB2"
+    DC_beads["N1 C6"] =              "S4"
+    DC_beads["N3 C2 O2"] =           "S8" 
+    DC_beads["C5 C4 N4"] =           "S9"
 
-    cg_mapping[' DA'] = dna_bead_dic[' DA']
-    cg_mapping[' DC'] = dna_bead_dic[' DC']
-    cg_mapping[' DT'] = dna_bead_dic[' DT']
-    cg_mapping[' DG'] = dna_bead_dic[' DG']
+    hDC_beads = collections.OrderedDict()
+    hDC_beads["P OP1 OP2 O5' O3'"] = "nB0"
+    hDC_beads["C5' O4' C4'"] =       "nB1"
+    hDC_beads["C3' C2' C1'"] =       "nB2"
+    hDC_beads["N1 C6"] =             "S4"
+    hDC_beads["N3 C2 O2"] =          "H6"
+    hDC_beads["C5 C4 N4"] =          "H7"
+
+    DA_beads = collections.OrderedDict()
+    DA_beads["P OP1 OP2 O5' O3'"] =  "nB0"
+    DA_beads["C5' O4' C4'"] =        "nB1"
+    DA_beads["C3' C2' C1'"] =        "nB2"
+    DA_beads["N9 C4"] =              "S4"
+    DA_beads["C2 N3"] =              "S0"
+    DA_beads["C6 N6 N1"] =           "S1"
+    DA_beads["C8 N7 C5"] =           "S5"
+
+    hDA_beads = collections.OrderedDict()
+    hDA_beads["P OP1 OP2 O5' O3'"] = "nB0"
+    hDA_beads["P OP1 OP2 O5' O3'"] = "nB0"
+    hDA_beads["C5' O4' C4'"] =       "nB1"
+    hDA_beads["N9 C4"] =             "S4"
+    hDA_beads["C2 N3"] =             "H0"
+    hDA_beads["C6 N6 N1"] =          "H1"
+
+    DG_beads = collections.OrderedDict()
+    DG_beads["P OP1 OP2 O5' O3'"] =  "nB0"
+    DG_beads["C5' O4' C4'"] =        "nB1"
+    DG_beads["C3' C2' C1'"] =        "nB2"
+    DG_beads["N9 C4"] =              "S4"
+    DG_beads["C2 N2 N3"] =           "S2"
+    DG_beads["C6 O6 N1"] =           "S3"
+    DG_beads["C8 N7 C5"] =           "S5"
+
+    hDG_beads = collections.OrderedDict()
+    hDG_beads["P OP1 OP2 O5' O3'"] = "nB0"
+    hDG_beads["C5' O4' C4'"] =       "nB1"
+    hDG_beads["C3' C2' C1'"] =       "nB2"
+    hDG_beads["N9 C4"] =             "S4"
+    hDG_beads["C2 N2 N3"] =          "H2"
+    hDG_beads["C6 O6 N1"] =          "H3"
+    hDG_beads["C8 N7 C5"] =          "S5"
+
+    DT_beads = collections.OrderedDict()
+    DT_beads["P OP1 OP2 O5' O3'"] =  "nB1"
+    DT_beads["C5' O4' C4'"] =        "nB2"
+    DT_beads["C3' C2' C1'"] =        "nB3"
+    DT_beads["N1 C6"] =              "S4"
+    DT_beads["N3 C2 O2"] =           "S6"
+    DT_beads["C5 C4 O4 C7"] =        "S7"
+
+    hDT_beads = collections.OrderedDict()
+    hDT_beads["P OP1 OP2 O5' O3'"] = "nB1"
+    hDT_beads["C5' O4' C4'"] =       "nB2"
+    hDT_beads["C3' C2' C1'"] =       "nB3"
+    hDT_beads["N1 C6"] =             "S4"
+    hDT_beads["N3 C2 O2"] =          "H4"
+    hDT_beads["C5 C4 O4 C7"] =       "H5"
+
+
+    cg_mapping['DA'] = DA_beads
+    cg_mapping['DC'] = DC_beads
+    cg_mapping['DT'] = DT_beads
+    cg_mapping['DG'] = DG_beads
+    cg_mapping['hDA'] = hDA_beads
+    cg_mapping['hDC'] = hDC_beads
+    cg_mapping['hDT'] = hDT_beads
+    cg_mapping['hDG'] = hDG_beads
  
     resn = aares.resname
     segid = aares.segid.strip() 
@@ -279,16 +241,16 @@ def mapcg(aares):
 
     beads = []
     cg_to_aa_restraints = []
-    # cg_mapping = n_d
-    # print cg_mapping[resn]
-    for atom_segment in sorted(cg_mapping[resn].items(), key=operator.itemgetter(0)):
-        bead = cg_mapping[resn][atom_segment[0]]
-        atoms = [aares[a] for a in atom_segment[0].split() if a in aares.child_dict]
+
+    for atom_segment in cg_mapping[resn]:
+        bead = cg_mapping[resn][atom_segment]
+        atoms = [aares[a] for a in atom_segment.split() if a in aares.child_dict]
         if not atoms:
-            # print 'Residue %(resn)s%(resi)s of chain %(chain)s cannot be processed: missing atoms (%(centroid)s)\n' %locals()
+            resi = aares.id[1]
+            chain = aares.parent.id
+            print 'Residue %(resn)s%(resi)s of chain %(chain)s cannot be processed: missing atoms (%(atom_segment)s)\n' %locals()
             continue
         bcom = center_of_mass(atoms)
-        # [aares[atom] for atom in centroid.split() if atom in aares.child_dict]
         beads.append((bead, bcom))
         cg_to_aa_restraints.append("assign (segid %sCG and resid %i and name %s) (segid %s and resid %i and (name %s)) 0 0 0" %(segid, resi, bead, segid, resi, ' or name '.join(atom_segment[0].split(' '))))
 
@@ -300,6 +262,67 @@ def mapcg(aares):
     return (cg_to_aa_restraints, beads)
 
 
+def determine_hbonds(structure):
+    nuc = ['DA', 'DC', 'DG', 'DT']
+    hb_nuc = ['hDA', 'hDC', 'hDG', 'hDT']
+    aa = ["ALA", "CYS", "ASP", "GLU", "PHE", "GLY", "HIS", "ILE", "LYS", "LEU", "MET", "ASN", "PRO", "GLN", "ARG", "SER", "THR", "VAL", "TRP", "TYR"]
+    pairing = {'A':'T', 'C':'G', 'T':'A', 'G':'C'}
+    #
+    # for model in structure:
+    model = structure[0]
+    #
+    dna_chain_l = []
+    for chain in model:
+        # print chain
+        prot_comp = len([r for r in chain.get_residues() if r.resname.split()[0] in aa])
+        dna_comp =  len([r for r in chain.get_residues() if r.resname.split()[0] in nuc])
+        hbond_dna_comp = len([r for r in chain.get_residues() if r.resname.split()[0] in hb_nuc])
+        #
+        if prot_comp:
+            # print chain, 'is protein'
+            pass
+        if dna_comp:
+            # print chain, 'is nucleic'
+            dna_chain_l.append(chain)
+        if hbond_dna_comp:
+            # print chain, 'is hbond nucleic'
+            pass
+        if dna_comp and prot_comp:
+            print chain, 'is mixed nucleic/protein, investigate'
+            exit()
+    #
+    # check distances!
+    ## list sizes could be different, this might be improvable
+    distance_cutoff = 3.
+    for chainA, chainB in itertools.combinations(dna_chain_l, 2):
+        #
+        reslistA = [r for r in chainA.get_residues()]
+        reslistB = [r for r in chainB.get_residues()]
+        #
+        for rA in reslistA:
+            #
+            atomlistA = rA.child_dict.values()
+            #
+            for rB in reslistB:
+                #
+                atomlistB = rB.child_dict.values()
+                #
+                baseA = rA.resname.split()[0][-1]
+                baseB = rB.resname.split()[0][-1]
+                #
+                # do all calculations so we can check if there's an incorrect pairing
+                distance_list = [a-b for a in atomlistA for b in atomlistB]
+                if min(distance_list) <= distance_cutoff:
+                    #
+                    if not 'h' in rA.resname:
+                        rA.resname = 'h' + rA.resname.split()[0]
+                    if not 'h' in rB.resname:
+                        rB.resname = 'h' + rB.resname.split()[0]
+                    #
+                    if pairing[baseA] != baseB:
+                        print 'warning, incorrect pairing!'
+                        exit()
+    return structure 
 
 ## SECONDARY STRUCTURE DEFINITION  ## 
 ##  CODE TAKEN FROM MARTINIZE 1.1  ##
@@ -468,6 +491,8 @@ io = PDBIO()
 pdbf_path = os.path.abspath(sys.argv[1])
 aa_model = P.get_structure('aa_model', pdbf_path)
 
+aa_model = determine_hbonds(aa_model)
+
 # Convert to MARTINI types
 # Assign by chain and build the cg structure already
 structure_builder=StructureBuilder()
@@ -533,6 +558,6 @@ print "%s:\t" %chain.id, ''.join(map(lambda x: str(ss_to_code[x]), martini_types
 io.set_structure(cg_model)
 io.save('%s_cg_dbg.pdb' %(pdbf_path[:-4]), write_end=1)
 # Write Restraints
-tbl_file = open('%s_cg_to_aa.tbl' %pdbf_path[:-4], 'w')
+tbl_file = open('%s_cg_to_aa_dbg.tbl' %pdbf_path[:-4], 'w')
 tbl_file.write('\n'.join(tbl_cg_to_aa))
 tbl_file.close()

@@ -1,0 +1,29 @@
+
+##### CROSSTERMS
+# MARTINI
+                    sigma.      eps
+P5      SP5  1  4.700000e-01 5.600000e+00
+
+A = 4 * 10 * sigma^12 * (eps / 4.178)
+B = 4 * 10 * sigma^6 * (eps / 4.178)
+
+# CNS               A             B                A           B
+NBFIx P5  SP5	621392051.667  57647.244	621392051.667  57647.244
+
+####### SELF
+# if self term some math required
+# MARTINI
+                   sigma          eps
+P2       P2  1  4.700000e-01 4.500000e+00
+
+A = sigma*10
+B = eps/4.178
+
+## CNS
+				 A.    B      A    B
+NONBONded Hda	1.075 4.7	1.075 4.7
+
+
+
+#############
+# missing bonds, angles, dih that come from martinize.py

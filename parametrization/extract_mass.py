@@ -1,11 +1,10 @@
 # topology contains masses of the beads, try to get it from martini_v2.1P-dna.itp
 
-reference_file = 'haddock-martini-dna-bead-reference_4top.csv'
+reference_file = 'haddock-martini-bead-reference_4top.csv'
 
-bead_dic = dict([(l.split(',')[0],l.split(',')[1].split('\n')[0]) for l in open(reference_file).readlines()[1:]])
+bead_dic = dict([(l.split(',')[0],l.split(',')[1].split('\n')[0]) for l in open(reference_file).readlines()])
 
 # load all masses from martini file
-# mass_check = False
 mass_dic = {}
 for l in open('martini_v2.1P-dna_masses.itp'):
 	# print l
