@@ -76,7 +76,7 @@ for l in open('bond_angles_dihedrals.csv'):
 	if idx == 3:
 		# print 'dih'
 		degree = float(value)
-		dih += ['DIHEdral\t%s\t%s\t%s\t%s\t%.2f\t%i' % (a, b, c, d, force, degree) for (a, b, c, d) in haddock_combinations]
+		dih += ['DIHEdral %s %s %s %s\t%.2f\t%i\t%i' % (a, b, c, d, force, int(entry_type), degree) for (a, b, c, d) in haddock_combinations]
 	#	
 	if idx == 2:
 		degree = float(value)
@@ -85,7 +85,6 @@ for l in open('bond_angles_dihedrals.csv'):
 	if idx == 1:
 		lenght = float(value) * 10 # value here is len
 		bonds += ['BOND\t%s\t%s\t%.2f\t%.2f' % (a, b, force, lenght) for (a, b) in haddock_combinations]
-
 
 # output!
 out = open('bonds-angles-dih.param','w')

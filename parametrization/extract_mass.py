@@ -20,4 +20,4 @@ for e in bead_dic:
 	mass_value = mass_dic[martini_bead]
 	#
 	# print haddock_bead, martini_bead, mass_value
-	print 'MASS\t%s\t%.2f' % (haddock_bead, mass_value)
+	print 'MASS %s %.2f' % (haddock_bead, mass_value)

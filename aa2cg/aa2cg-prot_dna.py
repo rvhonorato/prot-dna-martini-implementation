@@ -20,7 +20,7 @@ import random
 import math
 import operator #
 import itertools #
-import collections
+import collections #
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -37,9 +37,124 @@ except ImportError, emsg:
     sys.stderr.write("Error loading Biopython. Make sure it's on your PYTHONPATH\n")
     sys.exit(1)
 
-##########################
-## CG STRUCTURE BUILDER ##
-##########################
+
+def add_dummy(bead_list, dist=0.11, n=2):
+
+    new_bead_dic = {}
+
+    # Generate a random vector in a sphere of -1 to +1, to add to the bead position
+    v  = [random.random()*2.-1, random.random()*2.-1, random.random()*2.-1]
+
+    # Calculated the length of the vector and divide by the final distance of the dummy bead
+    norm_v = norm(v)/dist
+
+    # Resize the vector
+    vn = [i/norm_v for i in v]
+
+    # m sets the direction of the added vector, currently only works when adding one or two beads.
+    m = 1
+    for j in range(n): # create two new beads
+        newName = 'SCD' + str(j+1) # set the name of the new bead
+        new_bead_dic[newName] = [i+(m*j) for i, j in zip(bead_list[-1][1], vn)]
+        m *= -2
+    return new_bead_dic
+
+def map_cg(chain):
+
+    m_dic = collections.OrderedDict()
+
+    for aares in chain: 
+
+        m_dic[aares] = collections.OrderedDict()
+
+        resn = aares.resname.split()[0] # resname
+        segid = aares.segid.strip() 
+        resi = aares.id[1]
+
+        # for each atom segment, calculate its center of mass and map the correct bead
+        for atom_segment in cg_mapping[resn]:
+            atoms = [aares[a] for a in atom_segment.split() if a in aares.child_dict]
+
+            if '*' in atom_segment:
+                # this * means it belongs to the previous residue... find it!
+                target_previous_atom_list = [a for a in atom_segment.split() if '*' in a]
+
+                for target_atom in target_previous_atom_list:
+                    # does it exist?
+                    target_atom_name = target_atom.split('*')[0]
+                    try:
+                        previous_atom = chain[resi-1][target_atom_name]
+                        # how far away the previous atom is from this atom segment? 
+                        #  if it is too far away this could be the next chain...!
+                        minimum_dist = min([(a-previous_atom) for a in atoms])
+                        if minimum_dist < 2.0: # 2.0 A is very permissive
+                            atoms.append(previous_atom) 
+                    except KeyError:
+                        # previous atom not found, move on
+                        pass
+            if 'O1P' in atom_segment:
+                if resn == 'DT':
+                    print atom_segment, atoms, resn, resi
+                # exit()
+
+            bead_name = cg_mapping[resn][atom_segment]
+            
+            if not atoms:
+                print 'Residue %s %i of chain %s cannot be processed: missing atoms %s ' % (resn, resi, aares.parent.id, atom_segment)
+                continue
+
+            # get center of mass
+            code = list(set([a.bfactor for a in aares if a.bfactor != 0]))
+            # print aares, [a.bfactor for a in aares]
+            # exit()
+            #
+            if len(code) > 1:
+                print 'Something is wrong with HADDOCK codes'
+                exit()
+            if not code:
+                code = 0.0
+            else:
+                code = code[0]
+            # print , atoms, bead_name
+            # exit()
+            bead_coord = center_of_mass(atoms)
+
+            # restrain for backmapping
+            # atom_string = ' '.join(atom_segment.split())
+            restrain = "assign (segid %sCG and resid %i and name %s) (segid %s and resid %i and (name %s)) 0 0 0" % (segid, resi, bead_name, segid, resi, ' or name '.join(atom_segment.split()))
+            # print [atom_segment]
+            # exit()
+            # print ' or name '.join(atom_segment.split(' '))
+                       # "assign (segid %sCG and resid %i and name %s) (segid %s and resid %i and (name %s)) 0 0 0
+# out.write('assign ( %s ) \n(\n %s \n) 2.0 2.0 0.0\n' % (tbwA, '\n or '.join(tbwB)))
+            m_dic[aares][bead_name] = bead_coord, code, restrain
+    
+    # add dummy beads whenever its needed
+    for r in m_dic:
+        
+        if r.resname in polar:
+            d = 0.14 # distance
+            n = 2 # number of dummy beads to be placed
+
+        elif r.resname in charged:
+            d = 0.11 # distance
+            n = 1 # number of dummy beads to be placed
+
+        else:
+            continue
+        
+        # add to data structure
+        ## this special beads have no HADDOCK code
+        bead_list = [(b, m_dic[r][b][0]) for b in m_dic[r]]
+        dummy_bead_dic = add_dummy(bead_list, dist=d, n=n)
+        for dB in dummy_bead_dic:
+            dB_coords = dummy_bead_dic[dB]
+            # code should be the same as the residue
+            code = m_dic[r][m_dic[r].keys()[0]][1]
+            # exit()
+            m_dic[r][dB] = (dB_coords, code, None)
+
+    return m_dic
 
 def center_of_mass(entity, geometric=False):
     """
@@ -82,250 +197,203 @@ def center_of_mass(entity, geometric=False):
 
         return [sum(coord_list)/sum(masses) for coord_list in w_pos]
 
+def identify_pairing(rA, rB, Basedist_cutoff):
+    # rename_dic = {}
+    renumber_dic = {}
+
+    # check if the pairing is correct
+    #
+    # make sure it does not get lost on special bases
+    # if 'h' in rA.resname:
+    #     rA_name = rA.resname[1:]
+    # else:
+    rA_name = rA.resname
+    # #
+    # if 'h' in rB.resname:
+    #     rB_name = rB.resname[1:]
+    # else:
+    rB_name = rB.resname
+    #
+    try:
+        atom_pair_list = pairing[rA_name, rB_name]
+    except KeyError:
+        # pairing not possible
+        return
+
+    # check if distances are ok
+    distance_l = []
+    for atom_list in atom_pair_list:
+        a = rA[atom_list[0]]
+        b = rB[atom_list[1]]
+        distance_l.append(a-b)
+
+    if [ e for e in distance_l if e < Basedist_cutoff ]: # if any bond is withing range
+        #
+        # special atoms, mark them!
+        #
+        # atomlistA = rA.
+        # atomlistB = 
+        # print atom_pair_list, rA.resname, rB.resname, rA, rB
+        for atom_pair in atom_pair_list:
+            atomA, atomB = atom_pair
+            #
+            rA[atomA].bfactor = 1
+            rB[atomB].bfactor = 1
+        # # atomsA = [rA[a[0]] for a in atom_pair_list]
+        # # atomsB = [rB[a[1]] for a in atom_pair_list]
+        # #
+        # # return atom_pair_list, rA.resname, rB.resname
+        # exit()
+        # # if not 'h' in rA.resname:
+        # #     rename_dic[rA] = 'h' + rA.resname.split()[0]
+        # # if not 'h' in rB.resname:
+        # #     rename_dic[rB] = 'h' + rB.resname.split()[0]
+        # # if not 'h' in rA.resname:
+        # renumber_dic[rA] = 1
+        # # if not 'h' in rB.resname:
+        # renumber_dic[rB] = 1
+    # else:
+        # print rA, rB, distance_l, [ e for e in distance_l if e < 3.5 ]
+
+    return renumber_dic
+
+# def rename_res(resdic):
+#     for r in resdic:
+#         r.resname = resdic[r]
+
+# def change_bfactor(resdic):
+
+def determine_hbonds(structure):
+
+    nuc = ['DA', 'DC', 'DG', 'DT']
+    # hb_nuc = ['hDA', 'hDC', 'hDG', 'hDT']
+    aa = ["ALA", "CYS", "ASP", "GLU", "PHE", "GLY", "HIS", "ILE", "LYS", "LEU", "MET", "ASN", "PRO", "GLN", "ARG", "SER", "THR", "VAL", "TRP", "TYR"] 
+
+    distance_cutoff = 3.5
+
+    renumber_list = []
+
+    for model in structure:
+
+        dna_chain_l = []
+
+        for chain in model:
+
+            prot_comp = len([r for r in chain.get_residues() if r.resname.split()[0] in aa])
+            dna_comp =  len([r for r in chain.get_residues() if r.resname.split()[0] in nuc])
+
+            if prot_comp:
+                # print chain, 'is protein'
+                pass
+
+            if dna_comp:
+                # print chain, 'is nucleic'
+                dna_chain_l.append(chain)
+
+            if dna_comp and prot_comp:
+                print chain, 'is mixed nucleic/protein, not supported'
+                exit()
+
+        if len(dna_chain_l) == 1:
+            print ' WARNING: Only one DNA chain detected, is this correct?'
+
+            chainA = dna_chain_l[0]
+            reslistA = [r for r in chainA.get_residues()]
+
+            for rA, rB in itertools.combinations(reslistA, 2):
+                # print rA.id[1], rB.id[1]
+                identify_pairing(rA, rB, distance_cutoff)
+                # if paired_dna_dic:
+                #     # print rA, rB
+                #     # print paired_dna_dic.keys()
+                #     rename_res(paired_dna_dic)
+                #     # #
+                #     # for r in paired_dna_dic:
+                #     #     renumber_list.append(r.id[1])
+
+
+        if len(dna_chain_l) > 1:   ## list sizes could be different, this might be improvable
+            for chainA, chainB in itertools.combinations(dna_chain_l, 2):
+                reslistA = [r for r in chainA.get_residues()]
+                reslistB = [r for r in chainB.get_residues()]
+                for rA in reslistA:
+                    atomlistA = rA.child_dict.values()
+                    for rB in reslistB:
+                        identify_pairing(rA, rB, distance_cutoff)
+                        # if paired_dna_dic:
+                            # rename_res(paired_dna_dic)            
+    return structure, renumber_list
+
+def determine_ss(structure):
+    # calculate SS
+    ss_dic = {}
+    for model in structure:
+        try:
+            dssp = DSSP(model, pdbf_path)
+        except:
+            # no seconday structure detected for this model
+            ## does it have contain proteins?
+            continue #
+
+        calculated_chains = list(set([e[0] for e in dssp.keys()]))
+        # print calculated_chains
+
+        # Get SS information and translate it:
+        # DSSP > MARTINI > HADDOCK
+        ## this could still be improved
+        for chain in model:
+            if chain.id in calculated_chains:
+                # if ss_dic[model]:
+                # get DSSP value for each residue            
+                dssp_dic = collections.OrderedDict([(r, r.xtra["SS_DSSP"]) for r in chain])
+                # transform DSSP > MARTINI
+                dssp_ss = ''.join(dssp_dic.values())
+                _, martini_types = ssClassification(dssp_ss) # ancestral function, keep it there
+
+                # transform MARTINI > HADDOCK
+                ## and add it to the bfactor col
+                for residue, ss in zip(dssp_dic, martini_types):
+                    code = ss_to_code[ss]
+                    for atom in residue.get_atoms():
+                        # print residue, atom, code, atom.bfactor
+                        atom.bfactor = code
+                        # print residue, atom, code, atom.bfactor
+                        # exit()
+    return structure
+
+def rename_nucbases(structure):
+    dna_nuc = {'CYT': 'DC', 'THY': 'DT', 'ADE': 'DA', 'GUA': 'DG'}
+    for model in structure:
+        for chain in model:
+            for r in chain.get_residues():
+                if r.resname in dna_nuc.keys():
+                    # rename!
+                    r.resname = dna_nuc[r.resname]
+
+
+#==========================================================================================#
+#==========================================================================================#
+#==========================================================================================#
+
+##  CODE TAKEN FROM MARTINIZE 1.1 ##
+"""
+Reduces complexity of protein residue to the MARTINI coarse grained model:
+CA, O, Bead(s) in specific atom location.
+
+Reference:
+Monticelli et al. The MARTINI coarse-grained force field: extension to proteins. 
+J. Chem. Theory Comput. (2008) vol. 4 (5) pp. 819-834
+
+Martinize Script from Tserk Wassenaar
+"""
+## Please refer to it for more information  ##
+## SECONDARY STRUCTURE DEFINITION  ## 
+
 def norm(a):
     return math.sqrt(norm2(a))
 
 def norm2(a):
     return sum([i*i for i in a])
-
-def add_dummy(beads, dist=0.11, n=2):
-    # Generate a random vector in a sphere of -1 to +1, to add to the bead position
-    v    = [random.random()*2.-1, random.random()*2.-1, random.random()*2.-1]
-    # Calculated the length of the vector and divide by the final distance of the dummy bead
-    norm_v = norm(v)/dist
-    # Resize the vector
-    vn   = [i/norm_v for i in v]
-    # m sets the direction of the added vector, currently only works when adding one or two beads.
-    m = 1
-    for j in range(n):
-        newName = 'SCD' + str(j+1)
-        newBead = (newName, [i+(m*j) for i, j in zip(beads[-1][1], vn)])
-        beads.append(newBead)
-        m *= -2
-    return beads
-
-
-## Coarse Graining
-
-def mapcg(aares):    
-    """
-    Reduces complexity of protein residue to the MARTINI coarse grained model:
-    CA, O, Bead(s) in specific atom location.
-
-    Reference:
-    Monticelli et al. The MARTINI coarse-grained force field: extension to proteins. 
-    J. Chem. Theory Comput. (2008) vol. 4 (5) pp. 819-834
-
-    Martinize Script from Tserk Wassenaar
-    """
-    polar   = ["GLN","ASN","SER","THR"]
-    charged = ["ARG", "LYS","ASP","GLU"]
-    bb = "CA C N O "
-    prot_atoms = {      "ALA":  [bb + "CB"],
-                        "CYS":  [bb, "CB SG"],
-                        "ASP":  [bb, "CB CG OD1 OD2"],
-                        "GLU":  [bb, "CB CG CD OE1 OE2"],
-                        "PHE":  [bb, "CB CG CD1","CD2 CE2","CE1 CZ"],
-                        "GLY":  [bb],
-                        "HIS":  [bb, "CB CG","CD2 NE2","ND1 CE1"],
-                        "ILE":  [bb, "CB CG1 CG2 CD1"],
-                        "LYS":  [bb, "CB CG CD","CE NZ"],
-                        "LEU":  [bb, "CB CG CD1 CD2"],
-                        "MET":  [bb, "CB CG SD CE"],
-                        "ASN":  [bb, "CB CG ND1 ND2 OD1 OD2"], #ND1?
-                        "PRO":  [bb, "CB CG CD"],
-                        "GLN":  [bb, "CB CG CD OE1 OE2 NE1 NE2"],
-                        "ARG":  [bb, "CB CG CD","NE CZ NH1 NH2"],    
-                        "SER":  [bb, "CB OG"],
-                        "THR":  [bb, "CB OG1 CG2"],
-                        "VAL":  [bb, "CB CG1 CG2"],
-                        "TRP":  [bb, "CB CG CD2","CD1 NE1 CE2","CE3 CZ3","CZ2 CH2"],
-                        "TYR":  [bb, "CB CG CD1","CD2 CE2","CE1 CZ OH"]}
-
-    bead_names = ["BB", "SC1", "SC2", "SC3", "SC4"] # Space bc of IO issues.
-
-    # insert beads into the data structure
-    cg_mapping = {}
-    for res in prot_atoms:
-        cg_mapping[res] = {}
-        for i, atom_l in enumerate(prot_atoms[res]):
-            bead = bead_names[i]
-            cg_mapping[res][atom_l] = bead
-
-
-    # Define nucleotide mapping,
-    ## This is a custom naming convetion
-    ##  but the atom mapping is defined in
-    ##   10.1021/acs.jctc.5b00286 -  S1
-    ######################################
-    DC_beads = collections.OrderedDict()
-    DC_beads["P OP1 OP2 O5' O3'"] =  "nB0"
-    DC_beads["C5' O4' C4'"] =        "nB1"
-    DC_beads["C3' C2' C1'"] =        "nB2"
-    DC_beads["N1 C6"] =              "S4"
-    DC_beads["N3 C2 O2"] =           "S8" 
-    DC_beads["C5 C4 N4"] =           "S9"
-
-    hDC_beads = collections.OrderedDict()
-    hDC_beads["P OP1 OP2 O5' O3'"] = "nB0"
-    hDC_beads["C5' O4' C4'"] =       "nB1"
-    hDC_beads["C3' C2' C1'"] =       "nB2"
-    hDC_beads["N1 C6"] =             "S4"
-    hDC_beads["N3 C2 O2"] =          "H6"
-    hDC_beads["C5 C4 N4"] =          "H7"
-
-    DA_beads = collections.OrderedDict()
-    DA_beads["P OP1 OP2 O5' O3'"] =  "nB0"
-    DA_beads["C5' O4' C4'"] =        "nB1"
-    DA_beads["C3' C2' C1'"] =        "nB2"
-    DA_beads["N9 C4"] =              "S4"
-    DA_beads["C2 N3"] =              "S0"
-    DA_beads["C6 N6 N1"] =           "S1"
-    DA_beads["C8 N7 C5"] =           "S5"
-
-    hDA_beads = collections.OrderedDict()
-    hDA_beads["P OP1 OP2 O5' O3'"] = "nB0"
-    hDA_beads["P OP1 OP2 O5' O3'"] = "nB0"
-    hDA_beads["C5' O4' C4'"] =       "nB1"
-    hDA_beads["N9 C4"] =             "S4"
-    hDA_beads["C2 N3"] =             "H0"
-    hDA_beads["C6 N6 N1"] =          "H1"
-
-    DG_beads = collections.OrderedDict()
-    DG_beads["P OP1 OP2 O5' O3'"] =  "nB0"
-    DG_beads["C5' O4' C4'"] =        "nB1"
-    DG_beads["C3' C2' C1'"] =        "nB2"
-    DG_beads["N9 C4"] =              "S4"
-    DG_beads["C2 N2 N3"] =           "S2"
-    DG_beads["C6 O6 N1"] =           "S3"
-    DG_beads["C8 N7 C5"] =           "S5"
-
-    hDG_beads = collections.OrderedDict()
-    hDG_beads["P OP1 OP2 O5' O3'"] = "nB0"
-    hDG_beads["C5' O4' C4'"] =       "nB1"
-    hDG_beads["C3' C2' C1'"] =       "nB2"
-    hDG_beads["N9 C4"] =             "S4"
-    hDG_beads["C2 N2 N3"] =          "H2"
-    hDG_beads["C6 O6 N1"] =          "H3"
-    hDG_beads["C8 N7 C5"] =          "S5"
-
-    DT_beads = collections.OrderedDict()
-    DT_beads["P OP1 OP2 O5' O3'"] =  "nB1"
-    DT_beads["C5' O4' C4'"] =        "nB2"
-    DT_beads["C3' C2' C1'"] =        "nB3"
-    DT_beads["N1 C6"] =              "S4"
-    DT_beads["N3 C2 O2"] =           "S6"
-    DT_beads["C5 C4 O4 C7"] =        "S7"
-
-    hDT_beads = collections.OrderedDict()
-    hDT_beads["P OP1 OP2 O5' O3'"] = "nB1"
-    hDT_beads["C5' O4' C4'"] =       "nB2"
-    hDT_beads["C3' C2' C1'"] =       "nB3"
-    hDT_beads["N1 C6"] =             "S4"
-    hDT_beads["N3 C2 O2"] =          "H4"
-    hDT_beads["C5 C4 O4 C7"] =       "H5"
-
-
-    cg_mapping['DA'] = DA_beads
-    cg_mapping['DC'] = DC_beads
-    cg_mapping['DT'] = DT_beads
-    cg_mapping['DG'] = DG_beads
-    cg_mapping['hDA'] = hDA_beads
-    cg_mapping['hDC'] = hDC_beads
-    cg_mapping['hDT'] = hDT_beads
-    cg_mapping['hDG'] = hDG_beads
- 
-    resn = aares.resname
-    segid = aares.segid.strip() 
-    resi = aares.id[1]
-
-    beads = []
-    cg_to_aa_restraints = []
-
-    for atom_segment in cg_mapping[resn]:
-        bead = cg_mapping[resn][atom_segment]
-        atoms = [aares[a] for a in atom_segment.split() if a in aares.child_dict]
-        if not atoms:
-            resi = aares.id[1]
-            chain = aares.parent.id
-            print 'Residue %(resn)s%(resi)s of chain %(chain)s cannot be processed: missing atoms (%(atom_segment)s)\n' %locals()
-            continue
-        bcom = center_of_mass(atoms)
-        beads.append((bead, bcom))
-        cg_to_aa_restraints.append("assign (segid %sCG and resid %i and name %s) (segid %s and resid %i and (name %s)) 0 0 0" %(segid, resi, bead, segid, resi, ' or name '.join(atom_segment[0].split(' '))))
-
-    if len(beads) > 1 and resn in polar:
-        beads = add_dummy(beads, dist=0.14, n=2)
-    if len(beads) > 1 and resn in charged:  
-        beads = add_dummy(beads, dist=0.11, n=1)
-
-    return (cg_to_aa_restraints, beads)
-
-
-def determine_hbonds(structure):
-    nuc = ['DA', 'DC', 'DG', 'DT']
-    hb_nuc = ['hDA', 'hDC', 'hDG', 'hDT']
-    aa = ["ALA", "CYS", "ASP", "GLU", "PHE", "GLY", "HIS", "ILE", "LYS", "LEU", "MET", "ASN", "PRO", "GLN", "ARG", "SER", "THR", "VAL", "TRP", "TYR"]
-    pairing = {'A':'T', 'C':'G', 'T':'A', 'G':'C'}
-    #
-    # for model in structure:
-    model = structure[0]
-    #
-    dna_chain_l = []
-    for chain in model:
-        # print chain
-        prot_comp = len([r for r in chain.get_residues() if r.resname.split()[0] in aa])
-        dna_comp =  len([r for r in chain.get_residues() if r.resname.split()[0] in nuc])
-        hbond_dna_comp = len([r for r in chain.get_residues() if r.resname.split()[0] in hb_nuc])
-        #
-        if prot_comp:
-            # print chain, 'is protein'
-            pass
-        if dna_comp:
-            # print chain, 'is nucleic'
-            dna_chain_l.append(chain)
-        if hbond_dna_comp:
-            # print chain, 'is hbond nucleic'
-            pass
-        if dna_comp and prot_comp:
-            print chain, 'is mixed nucleic/protein, investigate'
-            exit()
-    #
-    # check distances!
-    ## list sizes could be different, this might be improvable
-    distance_cutoff = 3.
-    for chainA, chainB in itertools.combinations(dna_chain_l, 2):
-        #
-        reslistA = [r for r in chainA.get_residues()]
-        reslistB = [r for r in chainB.get_residues()]
-        #
-        for rA in reslistA:
-            #
-            atomlistA = rA.child_dict.values()
-            #
-            for rB in reslistB:
-                #
-                atomlistB = rB.child_dict.values()
-                #
-                baseA = rA.resname.split()[0][-1]
-                baseB = rB.resname.split()[0][-1]
-                #
-                # do all calculations so we can check if there's an incorrect pairing
-                distance_list = [a-b for a in atomlistA for b in atomlistB]
-                if min(distance_list) <= distance_cutoff:
-                    #
-                    if not 'h' in rA.resname:
-                        rA.resname = 'h' + rA.resname.split()[0]
-                    if not 'h' in rB.resname:
-                        rB.resname = 'h' + rB.resname.split()[0]
-                    #
-                    if pairing[baseA] != baseB:
-                        print 'warning, incorrect pairing!'
-                        exit()
-    return structure 
-
-## SECONDARY STRUCTURE DEFINITION  ## 
-##  CODE TAKEN FROM MARTINIZE 1.1  ##
 
 # Function to reformat pattern strings                                        
 def pat(x,c="."):                                                             
@@ -339,103 +407,8 @@ def hash(x,y):
 def spl(x):                                                                   
     return x.split()
 
-#############################
-## 5 # SECONDARY STRUCTURE ##  -> @SS <-
-#############################
-
-
-#----+--------------------------------------+
-## A | SECONDARY STRUCTURE TYPE DEFINITIONS |
-#----+--------------------------------------+
-
-# This table lists all coarse grained secondary structure types
-# The following are matched lists. Make sure they stay matched.
-# The lists do not need to be of the same length. The longer list
-# will be truncated when combined with a shorter list, e.g. with
-# dihedral definitions, which are not present for coil and termini
-#
-ss_names = {
- "F": "Collagenous Fiber",                                                                  #@#
- "E": "Extended structure (beta sheet)",                                                    #@#
- "H": "Helix structure",                                                                    #@#
- "1": "Helix start (H-bond donor)",                                                         #@#
- "2": "Helix end (H-bond acceptor)",                                                        #@#
- "3": "Ambivalent helix type (short helices)",                                              #@#
- "T": "Turn",                                                                               #@#
- "S": "Bend",                                                                               #@#
- "C": "Coil",                                                                               #@#
-}
-
-bbss = ss_names.keys()
-bbss     =    spl("  F     E     H     1     2     3     T     S     C")  # SS one letter 
-
-
-# The following dictionary contains secondary structure types as assigned by
-# different programs. The corresponding Martini secondary structure types are               
-# listed in cgss                                                                            
-#                                                                                           
-# NOTE:                                                                                     
-#  Each list of letters in the dictionary ss should exactly match the list                  
-#  in cgss.                                                                                 
-#                                                                                           
-ssdefs = {
-    "dssp":  list(".HGIBETSC~"),             # DSSP one letter secondary structure code     #@#
-    "pymol": list(".H...S...L"),             # Pymol one letter secondary structure code    #@# 
-    "gmx":   list(".H...ETS.C"),             # Gromacs secondary structure dump code        #@#    
-    "self":  list("FHHHEETSCC")              # Internal CG secondary structure codes        #@#
-}
-cgss     =   list("FHHHEETSCC")              # Corresponding CG secondary structure types   #@#
-
-#----+-------------------------------------------+
-## B | SECONDARY STRUCTURE PATTERN SUBSTITUTIONS |
-#----+-------------------------------------------+
-
-
-# For all structure types specific dihedrals may be used if four or
-# more consecutive residues are assigned that type.                
-
-# Helix start and end regions are special and require assignment of
-# specific types. The following pattern substitutions are applied 
-# (in the given order). A dot matches any other type.             
-# Patterns can be added to the dictionaries. This only makes sense
-# if for each key in patterns there is a matching key in pattypes.
-patterns = {
-    "H": pat(".H. .HH. .HHH. .HHHH. .HHHHH. .HHHHHH. .HHHHHHH. .HHHH HHHH.")                #@#
-}
-pattypes = {
-    "H": pat(".3. .33. .333. .3333. .13332. .113322. .1113222. .1111 2222.")                #@#
-}
-
-# List of programs for which secondary structure definitions can be processed
-programs = ssdefs.keys()                                                                    
-
-
-# Dictionaries mapping ss types to the CG ss types                                          
-ssd = dict([ (i, hash(ssdefs[i],cgss)) for i in programs ])                             
-
-
-# From the secondary structure dictionaries we create translation tables
-# with which all secondary structure types can be processed. Anything
-# not listed above will be mapped to C (coil).
-# Note, a translation table is a list of 256 characters to map standard  
-# ascii characters to.
 def tt(program):                                                                            
-    return  "".join([ssd[program].get(chr(i),"C") for i in range(256)])                     
-
-
-# The translation table depends on the program used to obtain the 
-# secondary structure definitions
-sstt = dict([(i,tt(i)) for i in programs])                                                  
-
-
-# The following translation tables are used to identify stretches of 
-# a certain type of secondary structure. These translation tables have
-# every character, except for the indicated secondary structure, set to
-# \x00. This allows summing the sequences after processing to obtain
-# a single sequence summarizing all the features.
-null = "\x00"                                                                               
-sstd = dict([ (i,ord(i)*null+i+(255-ord(i))*null) for i in cgss ])                          
-
+    return  "".join([ssd[program].get(chr(i),"C") for i in range(256)])     
 
 # Pattern substitutions
 def typesub(seq,patterns,types):                                                            
@@ -465,8 +438,41 @@ def ssClassification(ss,program="dssp"):
     # Return both the actual as well as the fully typed sequence                             
     return ss, typ
 
+#----+--------------------------------------+
+## A | SECONDARY STRUCTURE TYPE DEFINITIONS |
+#----+--------------------------------------+
 
-# Above shamelessly copied from martinize. Apologies...
+ss_names = {
+ "F": "Collagenous Fiber",                                                                  #@#
+ "E": "Extended structure (beta sheet)",                                                    #@#
+ "H": "Helix structure",                                                                    #@#
+ "1": "Helix start (H-bond donor)",                                                         #@#
+ "2": "Helix end (H-bond acceptor)",                                                        #@#
+ "3": "Ambivalent helix type (short helices)",                                              #@#
+ "T": "Turn",                                                                               #@#
+ "S": "Bend",                                                                               #@#
+ "C": "Coil",                                                                               #@#
+}
+
+bbss = ss_names.keys()
+bbss     =    spl("  F     E     H     1     2     3     T     S     C")  # SS one letter 
+                                                                              
+#                                                                                           
+ssdefs = {
+    "dssp":  list(".HGIBETSC~"),             # DSSP one letter secondary structure code     #@#
+    "pymol": list(".H...S...L"),             # Pymol one letter secondary structure code    #@# 
+    "gmx":   list(".H...ETS.C"),             # Gromacs secondary structure dump code        #@#    
+    "self":  list("FHHHEETSCC")              # Internal CG secondary structure codes        #@#
+}
+cgss     =   list("FHHHEETSCC")              # Corresponding CG secondary structure types   #@#
+
+
+patterns = {
+    "H": pat(".H. .HH. .HHH. .HHHH. .HHHHH. .HHHHHH. .HHHHHHH. .HHHH HHHH.")                #@#
+}
+pattypes = {
+    "H": pat(".3. .33. .333. .3333. .13332. .113322. .1113222. .1111 2222.")                #@#
+}
 
 ss_to_code = {'C': 1, # Free,
               'S': 2,
@@ -481,83 +487,199 @@ ss_to_code = {'C': 1, # Free,
 
 ss_eq = list("CBHHHHBTF")
 
-# Load things
-P = PDBParser()
-# P = PDBParser()
-io = PDBIO()
+# List of programs for which secondary structure definitions can be processed
+programs = ssdefs.keys()                                                                    
 
+
+# Dictionaries mapping ss types to the CG ss types                                          
+ssd = dict([ (i, hash(ssdefs[i],cgss)) for i in programs ])                             
+
+# The translation table depends on the program used to obtain the 
+# secondary structure definitions
+sstt = dict([(i,tt(i)) for i in programs])                                                  
+
+
+# The following translation tables are used to identify stretches of 
+# a certain type of secondary structure.
+null = "\x00"                                                                               
+sstd = dict([ (i,ord(i)*null+i+(255-ord(i))*null) for i in cgss ])                          
+
+#==========================================================================================#
+#==========================================================================================#
+#==========================================================================================#
+
+# CG MAPPING INFORMATION
+
+bb = "CA C N O "
+prot_atoms = {      "ALA":  [bb + "CB"],
+                    "CYS":  [bb, "CB SG"],
+                    "ASP":  [bb, "CB CG OD1 OD2"],
+                    "GLU":  [bb, "CB CG CD OE1 OE2"],
+                    "PHE":  [bb, "CB CG CD1","CD2 CE2","CE1 CZ"],
+                    "GLY":  [bb],
+                    "HIS":  [bb, "CB CG","CD2 NE2","ND1 CE1"],
+                    "ILE":  [bb, "CB CG1 CG2 CD1"],
+                    "LYS":  [bb, "CB CG CD","CE NZ"],
+                    "LEU":  [bb, "CB CG CD1 CD2"],
+                    "MET":  [bb, "CB CG SD CE"],
+                    "ASN":  [bb, "CB CG ND1 ND2 OD1 OD2"], #ND1?
+                    "PRO":  [bb, "CB CG CD"],
+                    "GLN":  [bb, "CB CG CD OE1 OE2 NE1 NE2"],
+                    "ARG":  [bb, "CB CG CD","NE CZ NH1 NH2"],    
+                    "SER":  [bb, "CB OG"],
+                    "THR":  [bb, "CB OG1 CG2"],
+                    "VAL":  [bb, "CB CG1 CG2"],
+                    "TRP":  [bb, "CB CG CD2","CD1 NE1 CE2","CE3 CZ3","CZ2 CH2"],
+                    "TYR":  [bb, "CB CG CD1","CD2 CE2","CE1 CZ OH"]}
+
+bead_names = ["BB", "SC1", "SC2", "SC3", "SC4"]
+
+# insert beads into the data structure
+cg_mapping = {}
+for res in prot_atoms:
+    cg_mapping[res] = collections.OrderedDict()
+    for i, atom_l in enumerate(prot_atoms[res]):
+        bead = bead_names[i]
+        cg_mapping[res][atom_l] = bead
+
+
+######################################
+# Nucleotide mapping,
+## This is a custom naming convetion
+##  but the atom mapping is defined in
+##   10.1021/acs.jctc.5b00286 -  S1
+######################################
+
+DA_beads = collections.OrderedDict()
+DA_beads["O3'* P O1P O2P O5' OP1 OP2"] = "BB1"
+DA_beads["C5' O4' C4'"] =        "BB2"
+DA_beads["C3' C2' C1'"] =        "BB3"
+DA_beads["N9 C4"] =              "SC1"
+DA_beads["C2 N3"] =              "SC2"
+DA_beads["C6 N6 N1"] =           "SC3"
+DA_beads["C8 N7 C5"] =           "SC4"
+
+DC_beads = collections.OrderedDict()
+DC_beads["O3'* P O1P O2P O5' OP1 OP2"] = "BB1"
+DC_beads["C5' O4' C4'"] =        "BB2"
+DC_beads["C3' C2' C1'"] =        "BB3"
+DC_beads["N1 C6"] =              "SC1"
+DC_beads["N3 C2 O2"] =           "SC2" 
+DC_beads["C5 C4 N4"] =           "SC3"
+
+DG_beads = collections.OrderedDict()
+DG_beads["O3'* P O1P O2P O5' OP1 OP2"] = "BB1"
+DG_beads["C5' O4' C4'"] =        "BB2"
+DG_beads["C3' C2' C1'"] =        "BB3"
+DG_beads["N9 C4"] =              "SC1"
+DG_beads["C2 N2 N3"] =           "SC2"
+DG_beads["C6 O6 N1"] =           "SC3"
+DG_beads["C8 N7 C5"] =           "SC4"
+
+DT_beads = collections.OrderedDict()
+DT_beads["O3'* P O1P O2P O5' OP1 OP2"] = "BB1"
+DT_beads["C5' O4' C4'"] =        "BB2"
+DT_beads["C3' C2' C1'"] =        "BB3"
+DT_beads["N1 C6"] =              "SC1"
+DT_beads["N3 C2 O2"] =           "SC2"
+DT_beads["C5 C4 O4 C7"] =        "SC3"
+
+cg_mapping['DA'] = DA_beads
+cg_mapping['DC'] = DC_beads
+cg_mapping['DT'] = DT_beads
+cg_mapping['DG'] = DG_beads
+
+pairing = {
+    ('DG','DC'): [('N2', 'O2'), ('N1', 'N3'), ('O6', 'N4')],
+    ('DC','DG'): [('O2', 'N2'), ('N3', 'N1'), ('N4', 'O6')],
+    #
+    ('DA','DT'): [('N6', 'O4'), ('N1', 'N3')],
+    ('DT','DA'): [('O4', 'N6'), ('N3', 'N1')]
+}
+
+polar   = ["GLN","ASN","SER","THR"]
+charged = ["ARG", "LYS","ASP","GLU"]
+
+#==========================================================================================#
+#==========================================================================================#
+#==========================================================================================#
+
+P = PDBParser()
+io = PDBIO()
 
 # Parse PDB and run DSSP
 pdbf_path = os.path.abspath(sys.argv[1])
 aa_model = P.get_structure('aa_model', pdbf_path)
 
-aa_model = determine_hbonds(aa_model)
+# set ALL bfactors to 0
+for model in aa_model:
+    for chain in model:
+        for residue in chain:
+            for atom in residue:
+                atom.bfactor = 0.0
 
-# Convert to MARTINI types
-# Assign by chain and build the cg structure already
+# Assign HADDOCK code according to SS (1-9)
+determine_ss(aa_model)
+
+# Strandardize naming
+rename_nucbases(aa_model)
+
+# Assign HADDOCK code for hydrogen bonding capable nucleotides (0-1)
+determine_hbonds(aa_model) 
+
+# Map CG beads to AA structure
 structure_builder=StructureBuilder()
 structure_builder.init_structure("cg_model")
 structure_builder.init_seg(' ') # Empty SEGID
 
-nbeads = 0
+tbl_cg_to_aa = []
+restrain_counter = 0
 for model in aa_model:
-
+    
     structure_builder.init_model(model.id)
-
-    dssp = DSSP(model, pdbf_path)
-
+    
     for chain in model:
+        
         structure_builder.init_chain(chain.id)
-
-        # Get SS information and translate it to MARTINI
-        dssp_ss = []
-        for residue in chain:
-          if residue.id[0] != ' ':
-            continue
-          if "SS_DSSP" in residue.xtra:
-            dssp_ss.append(residue.xtra["SS_DSSP"])
-          else:
-            dssp_ss.append('-')
-        dssp_ss = ''.join(dssp_ss)
-
-        #dssp_ss = ''.join([ residue.xtra["SS_DSSP"] for residue in chain if residue.id[0] == ' '])
-        martini_ss, martini_types = ssClassification(dssp_ss)
-        # exit()
-        # aa_seq = ''.join([ protein_letters_3to1[residue.resname] for residue in chain if residue.id[0] == ' '])    
-
-        tbl_cg_to_aa = []
-
-        for residue, sstype in zip(chain.child_list, martini_types):
-
+        
+        mapping_dic = map_cg(chain)
+        
+        ordered_mapping_dic = collections.OrderedDict(sorted(mapping_dic.items()))
+        
+        for residue in ordered_mapping_dic:
             if residue.id[0] != ' ': # filter HETATMS
               continue
             
-            # Convert SS to bfactor code
-            sscode = ss_to_code[sstype]
-            #print sscode
-            # Coarse grain residue
-            # exit()
-            # residue_restraints, beads = MARTINI(residue)
-            residue_restraints, beads = mapcg(residue)
             structure_builder.init_residue(residue.resname, residue.id[0], residue.id[1], residue.id[2])
-            # Populate residue
-            for name,coord in beads:
-                structure_builder.init_atom(name, coord, sscode, 1.00, " ", name, nbeads, ss_eq[int(sscode)-1])
-                nbeads += 1
-            # Save restraints
-            tbl_cg_to_aa.extend(residue_restraints)
 
+            for i, bead in enumerate(ordered_mapping_dic[residue]):
+
+                bead_name = bead
+                bead_coord = ordered_mapping_dic[residue][bead_name][0]
+                haddock_code = ordered_mapping_dic[residue][bead_name][1]
+                restrain = ordered_mapping_dic[residue][bead_name][2]
+
+                structure_builder.init_atom(
+                        bead_name, 
+                        bead_coord, 
+                        haddock_code, 
+                        1.00, 
+                        " ", 
+                        bead_name, 
+                        i)
+
+                tbl_cg_to_aa.append(restrain)
+                restrain_counter += 1
+                
 cg_model = structure_builder.get_structure()
 
-# output sequence and ss information
-# print "%s:\t" %chain.id, aa_seq
-print "%s:\t" %chain.id, martini_types
-print "%s:\t" %chain.id, ''.join(map(lambda x: str(ss_to_code[x]), martini_types))
-
-# Write coarse grained structure
+# Write CG structure
 io.set_structure(cg_model)
-io.save('%s_cg_dbg.pdb' %(pdbf_path[:-4]), write_end=1)
+io.save('%s_cg.pdb' %(pdbf_path[:-4]), write_end=1)
+
 # Write Restraints
-tbl_file = open('%s_cg_to_aa_dbg.tbl' %pdbf_path[:-4], 'w')
-tbl_file.write('\n'.join(tbl_cg_to_aa))
+tbl_file = open('%s_cg_to_aa.tbl' %pdbf_path[:-4], 'w')
+tbl_file.write('\n'.join([tbl for tbl in tbl_cg_to_aa if tbl]))
 tbl_file.close()
+
+# end

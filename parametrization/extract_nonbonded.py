@@ -25,7 +25,8 @@ for haddock_bead in bead_dic:
 	sig = sigma * 10 # nm to aa
 	eps = epsilon / 4.178 # kJ to kCal
 	#
-	selfterms.append('NONBONded\t%s\t%.3f\t%.1f\t%.3f\t%.1f' % (haddock_bead, sig, eps, sig, eps))
+	print 'NONBONded\t%s\t%.3f\t%.1f\t%.3f\t%.1f' % (haddock_bead, sig, eps, sig, eps)
+	# selfterms.append('NONBONded\t%s\t%.3f\t%.1f\t%.3f\t%.1f' % (haddock_bead, sig, eps, sig, eps))
 
 
 # get crossterms
@@ -48,7 +49,8 @@ for e in bead_combinations:
 	attr = (4 * (sigma*10)**12) * (epsilon / 4.178) # cns takes of the rest of the formula
 	rep = (4 * (sigma*10)**6) * (epsilon / 4.178) # cns takes care of the rest of the formula
 	if any( [attr, rep] ):
-		crossterms.append('NBFIx\t%s\t%s\t%.3f\t%.3f\t%.3f\t%.3f' % (haddock_beadA, haddock_beadB, attr, rep, attr, rep))
+		# crossterms.append('NBFIx\t%s\t%s\t%.3f\t%.3f\t%.3f\t%.3f' % (haddock_beadA, haddock_beadB, attr, rep, attr, rep))
+		print 'NBFIx\t%s\t%s\t%.3f\t%.3f\t%.3f\t%.3f' % (haddock_beadA, haddock_beadB, attr, rep, attr, rep)
 
 
 # format!
