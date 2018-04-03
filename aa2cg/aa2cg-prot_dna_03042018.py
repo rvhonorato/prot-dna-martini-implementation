@@ -303,43 +303,6 @@ def identify_pairing(rA, rB):
 
     return pair
 
-def output_cg_restraints(pair_list):
-    out = open('cg_restraints.def','w')
-    for i, e in enumerate(pair_list):
-        idx = i + 1
-        resA = e[0][0]
-        segidA = e[0][1]
-        resB = e[1][0]
-        segidB = e[1][1]
-        out.write('{===>} base_a_%i=(resid %i and segid %s);\n{===>} base_b_%i=(resid %i and segid %s);\n\n' % (idx, resA, segidA, idx, resB, segidB))
-    out.close()
-
-def extract_groups(pair_list):
-    # this will be used to define AA restraints
-    out = open('dna-aa_groups.dat','w')
-    # extract groups
-    groupA = [a[0][0] for a in pair_list]
-    segidA = list(set([a[0][1] for a in pair_list]))
-
-    groupB = [a[1][0] for a in pair_list]
-    segidB = list(set([a[0][1] for a in pair_list]))
-
-    if len(segidA) != 1:
-        print 'Something is wrong with SEGID A'
-        exit()
-
-    if len(segidB) != 1:
-        print 'Something is wrong with SEGID B'
-        exit()
-
-    segidA = segidA[0]
-    segidB = segidB[0]
-    groupA.sort()
-    groupB.sort()
-
-    out.write('%i:%i\n%s\n%i:%i\n%s' % (groupA[0], groupA[-1], segidA, groupB[0], groupB[-1], segidB))
-    out.close
-
 def determine_ss(structure):
     # calculate SS
     ss_dic = {}
@@ -641,10 +604,7 @@ determine_ss(aa_model)
 rename_nucbases(aa_model)
 
 # Assign HADDOCK code for hydrogen bonding capable nucleotides (0-1)
-pair_list = determine_hbonds(aa_model)
-if pair_list:
-    output_cg_restraints(pair_list)
-    extract_groups(pair_list)
+pair_list = determine_hbonds(aa_model) 
 
 # Map CG beads to AA structure
 structure_builder=StructureBuilder()

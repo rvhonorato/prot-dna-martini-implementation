@@ -5,15 +5,6 @@ from Bio.PDB import PDBParser
 from Bio.PDB import PDBIO
 from Bio.PDB.StructureBuilder import StructureBuilder
 
-def get_anchor(r):
-	if 'CA' in r.child_dict.keys():
-		atom = 'CA'
-	elif 'P' in r.child_dict.keys():
-		atom = 'P'
-	else:
-		atom = None
-	return atom
-
 
 P = PDBParser()
 io = PDBIO()
@@ -29,8 +20,6 @@ structure_builder=StructureBuilder()
 # structure_builder.init_seg(' ') # Empty SEGID
 
 target_chains = [c for c in sys.argv[2:]]
-# chainA = 'A'
-# chainB = 'B'
 
 selected_structures = {}
 for model in structure:
