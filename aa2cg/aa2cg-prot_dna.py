@@ -74,30 +74,32 @@ def map_cg(chain):
         for atom_segment in cg_mapping[resn]:
             atoms = [aares[a] for a in atom_segment.split() if a in aares.child_dict]
 
-            if '*' in atom_segment: # this is important to correctly place CG DNA beads
+            if atoms:
+                if '*' in atom_segment: # this is important to correctly place CG DNA beads
 
-                # this * means it belongs to the previous residue... find it!
-                target_previous_atom_list = [a for a in atom_segment.split() if '*' in a]
+                    # this * means it belongs to the previous residue... find it!
+                    target_previous_atom_list = [a for a in atom_segment.split() if '*' in a]
+                    # print target_previous_atom_list
 
-                for target_atom in target_previous_atom_list:
-                    # does it exist?
-                    target_atom_name = target_atom.split('*')[0]
-                    try:
-                        previous_atom = chain[resi-1][target_atom_name]
-                        # how far away the previous atom is from this atom segment? 
-                        #  if it is too far away this could be the next chain...!
-                        minimum_dist = min([(a-previous_atom) for a in atoms])
-                        if minimum_dist < 2.0: # 2.0 A is very permissive
-                            atoms.append(previous_atom) 
-                    except KeyError:
-                        # previous atom not found, move on
-                        pass
-
-            bead_name = cg_mapping[resn][atom_segment]
+                    for target_atom in target_previous_atom_list:
+                        # does it exist?
+                        target_atom_name = target_atom.split('*')[0]
+                        try:
+                            previous_atom = chain[resi-1][target_atom_name]
+                            # how far away the previous atom is from this atom segment? 
+                            #  if it is too far away this could be the next chain...!
+                            minimum_dist = min([(a-previous_atom) for a in atoms])
+                            if minimum_dist < 2.0: # 2.0 A is very permissive
+                                atoms.append(previous_atom) 
+                        except KeyError:
+                            # previous atom not found, move on
+                            pass
             
             if not atoms:
                 print 'Residue %s %i of chain %s cannot be processed: missing atoms %s ' % (resn, resi, aares.parent.id, atom_segment)
                 continue
+
+            bead_name = cg_mapping[resn][atom_segment]
 
             # get center of mass
             code = list(set([a.bfactor for a in aares if a.bfactor != 0]))
@@ -290,6 +292,7 @@ def identify_pairing(rA, rB):
         ######
             resnumA = rA.id[1]
             resnumB = rB.id[1]
+            # note: 
             segidA = rA.get_segid().split()[0]
             segidB = rB.get_segid().split()[0]
             pair = (resnumA, segidA), (resnumB, segidB)
@@ -304,7 +307,7 @@ def identify_pairing(rA, rB):
     return pair
 
 def output_cg_restraints(pair_list):
-    out = open('cg_restraints.def','w')
+    out = open('dna_restraints.def','w')
     for i, e in enumerate(pair_list):
         idx = i + 1
         resA = e[0][0]
@@ -360,7 +363,14 @@ def determine_ss(structure):
         for chain in model:
             if chain.id in calculated_chains:
                 # if ss_dic[model]:
-                # get DSSP value for each residue            
+                # get DSSP value for each residue
+                for r in chain:
+                    try:
+                        r.xtra["SS_DSSP"]
+                    except KeyError:
+                        print " WARNING: No SS definition found for residue: %s %s %i" % (chain.id, r.resname, r.id[1])
+                        # pass
+                        r.xtra["SS_DSSP"] = '-'
                 dssp_dic = collections.OrderedDict([(r, r.xtra["SS_DSSP"]) for r in chain])
                 # transform DSSP > MARTINI
                 dssp_ss = ''.join(dssp_dic.values())
@@ -376,6 +386,26 @@ def determine_ss(structure):
                         # print residue, atom, code, atom.bfactor
                         # exit()
     return structure
+
+# |  >>> p = PDBParser()                                                                                                                                                                    
+#  |  >>> structure = p.get_structure("1MOT", "1mot.pdb")                                                                                                                                    
+#  |  >>> model = structure[0]                                                                                                                                                               
+#  |  >>> dssp = DSSP(model, "1mot.pdb")                                                                                                                                                     
+#  |  >>> # DSSP data is accessed by a tuple (chain_id, res_id)                                                                                                                              
+#  |  >>> a_key = list(dssp.keys())[2]                                                                                                                                                       
+#  |  >>> # (dssp index, amino acid, secondary structure, relative ASA, phi, psi,                                                                                                            
+#  |  >>> # NH_O_1_relidx, NH_O_1_energy, O_NH_1_relidx, O_NH_1_energy,                                                                                                                      
+#  |  >>> # NH_O_2_relidx, NH_O_2_energy, O_NH_2_relidx, O_NH_2_energy)                                                                                                                      
+#  |  >>> dssp[a_key]                                                                                                                                                                        
+#  |  (3, 'A', 'H', 0.7075471698113207, -61.2, -42.4,                                                                                                                                        
+#  |   -2, -0.7, 4, -3.0, 1, -0.2, 5, -0.2)       
+# for r in chain:
+#     try:
+#         print r.xtra["SS_DSSP"]
+#     except:
+#         print r.xtra
+#         break
+
 
 def rename_nucbases(structure):
     dna_nuc = {'CYT': 'DC', 'THY': 'DT', 'ADE': 'DA', 'GUA': 'DG'}
@@ -698,7 +728,7 @@ io.save('%s_cg.pdb' %(pdbf_path[:-4]), write_end=1)
 
 # Write Restraints
 tbl_file = open('%s_cg_to_aa.tbl' %pdbf_path[:-4], 'w')
-tbl_file.write('\n'.join([tbl for tbl in tbl_cg_to_aa if tbl]))
+tbl_file.write('\n%s' % '\n'.join([tbl for tbl in tbl_cg_to_aa if tbl]))
 tbl_file.close()
 
 # end

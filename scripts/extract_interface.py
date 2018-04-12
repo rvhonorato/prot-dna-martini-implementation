@@ -5,10 +5,8 @@ from Bio.PDB import PDBParser
 from Bio.PDB import PDBIO
 from Bio.PDB.StructureBuilder import StructureBuilder
 
-
 P = PDBParser()
 io = PDBIO()
-
 
 pdbf = sys.argv[1]
 pdb_name = pdbf.split('.pdb')[0]
@@ -87,22 +85,16 @@ for c in interface_dic:
 out.close()
 
 out = open('%s.tbl' % pdb_name, 'w')
-for e in itertools.permutations(target_chains, 2):
-	a, b = e
-	for i in list(set(interface_dic[a])):
-		tbwA = 'resid %i and segid %s' % (i, a)
+for a in target_chains:
+	for rA in list(set(interface_dic[a])):
+		tbwA = 'resid %i and segid %s' % (rA, a)
 		tbwB = []
-		for j in list(set(interface_dic[b])):
-			tbwB.append('( resid %i and segid %s )' % (j, b))
-			# print '( resid %i and segid %s )' % (j, b)
-		#
+		for b in target_chains:
+			if b != a:
+				for rB in list(set(interface_dic[b])):
+					tbwB.append('( resid %i and segid %s )' % (rB, b))
 		out.write('assign ( %s ) \n(\n %s \n) 2.0 2.0 0.0\n' % (tbwA, '\n or '.join(tbwB)))
-		# exit()
 out.close()
-
-
-
-
 
 
 
