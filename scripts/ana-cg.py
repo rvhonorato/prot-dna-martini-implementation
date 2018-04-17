@@ -96,10 +96,10 @@ haddocktools_path = os.environ["HADDOCKTOOLS"]
 
 pdbf = sys.argv[1]
 pdbf_cg = pdbf.replace('.pdb','_cg.pdb')
-# pdbf = '1BY4_complex.pdb'
 
-# pdbf_ub = '1BY4_ubcomplex.pdb'
-# pdbf_cg = '1BY4_complex_cg.pdb'
+runf = sys.argv[2]
+
+# pdbf = '1BY4_complex.pdb'
 
 pdb_name = pdbf.split('.pdb')[0]
 
@@ -108,15 +108,20 @@ fix_chain_segid(pdbf)
 fix_chain_segid(pdbf_cg)
 
 # get pdb lists
-it0_l = glob.glob('run1/structures/it0/*pdb')
-it1_l = glob.glob('run1/structures/it1/*pdb')
-water_l = glob.glob('run1/structures/it1/water/*pdb')
+it0_l = glob.glob('%s/structures/it0/*pdb' % runf)
+it1_l = glob.glob('%s/structures/it1/*pdb' % runf)
+water_l = glob.glob('%s/structures/it1/water/*pdb' % runf)
 
 stage_ref_dic = {
 	'it0':   [it0_l, pdbf_cg, ("BB,BB1,BB2,BB3")],
 	'it1':   [it1_l, pdbf_cg, ("BB,BB1,BB2,BB3")],
 	'water': [water_l, pdbf, ("CA,C,N,O,P,O3\*,C3\*,C4\*,C5\*,O5\*")]
 }
+# stage_ref_dic = {
+# 	'it0':   [it0_l, pdbf, ("CA,C,N,O,P,O3\*,C3\*,C4\*,C5\*,O5\*")],
+# 	'it1':   [it1_l, pdbf, ("CA,C,N,O,P,O3\*,C3\*,C4\*,C5\*,O5\*")],
+# 	'water': [water_l, pdbf, ("CA,C,N,O,P,O3\*,C3\*,C4\*,C5\*,O5\*")]
+# }
 
 # create and populate residue lists
 result_dic = {}
@@ -182,7 +187,6 @@ for ref in [pdbf, pdbf_cg]:
 
 	izone_dic[ref] = izone_l
 
-
 for stage in stage_ref_dic:
 	####
 	pdb_l = stage_ref_dic[stage][0] 
@@ -201,93 +205,119 @@ for stage in stage_ref_dic:
 		fix_chain_segid(conformation)
 
 		# prepare cmd for PROFIT
-		cmd = 'refe %s\nmobi %s\nATOMS %s\nZONE CLEAR\n%s\nFIT\nquit' % (ref, conformation, atoms, '\n'.join(izone_l))
+		cmd = 'refe %s\nmobi %s\nATOMS %s\nZONE CLEAR\n%s\nstatus\nFIT\nquit' % (ref, conformation, atoms, '\n'.join(izone_l))
+		# open('idbg','w').write(cmd)
+		# exit()
 		# run!
 		output = os.popen('echo "%s" | profit' % cmd)
 		# parse result
 		result = [l for l in output if 'RMS' in l][0]
-		# print result
+		#
 		irms = float(result.split()[-1])
-		# (:
+		#
 		irms_dic[conformation] = irms
 		result_dic[stage][conformation]['irms'] = irms
 
 	#
-	# irms_out = open('%s.irmsd' % stage,'w')
-	# sorted_irms_dic = sorted(irms_dic.items(), key=operator.itemgetter(1))
-	# for e in sorted_irms_dic:
-	# 	conformation = e[0]
-	# 	irms = e[1]
-	# 	irms_out.write('%s\t%.3f\n' % (conformation, irms))
-	# irms_out.close()
+	if stage == 'water':
+		outputf = '%s/structures/it1/%s/i-RMSD.dat' % (runf, stage)
+	else:
+		outputf = '%s/structures/%s/i-RMSD.dat' % (runf, stage)
+	#
+	irms_out = open(outputf,'w')
+	irms_out.write('#struc i-RMSD\n')
+	sorted_irms_dic = sorted(irms_dic.items(), key=operator.itemgetter(1))
+	for e in sorted_irms_dic:
+		conformation = e[0]
+		pdb_name = conformation.split('/')[-1]
+		irms = e[1]
+		irms_out.write('%s %.3f\n' % (pdb_name, irms))
+	irms_out.close()
+	#
+	os.system('cp %s %s' % (outputf, outputf.replace('.dat', '-sorted.dat')))
+
+
+
+# set rmsfile=$i/structures/it0/i-RMSD.dat
+# set rmsbestfile=$i/structures/it0/i-RMSD-sorted.dat
+# set fnatfile=$i/structures/it0/file.nam_fnat
 
 
 #=========================================================================================#
 ## Ligand RMSD
 #=========================================================================================#
 
-print '> l-rmsd'
+# print '> l-rmsd'
 
-ligand_zone = {}
-for chain in numbering_dic:
-	ligand_zone[chain] = []
-	for bound_res in numbering_dic[chain]:
-		unbound_res = numbering_dic[chain][bound_res]
-		#
-		ligand_zone[chain].append('ZONE %s%s-%s%i:%s%i-%s%i' % (chain, bound_res, chain, bound_res, chain, unbound_res, chain, unbound_res))
+# ligand_zone = {}
+# for chain in numbering_dic:
+# 	ligand_zone[chain] = []
+# 	for bound_res in numbering_dic[chain]:
+# 		unbound_res = numbering_dic[chain][bound_res]
+# 		#
+# 		ligand_zone[chain].append('ZONE %s%s-%s%i:%s%i-%s%i' % (chain, bound_res, chain, bound_res, chain, unbound_res, chain, unbound_res))
 
-# generate command
-lrms_cmd = ''
-lrms_cmd += '\n'.join(ligand_zone[receptor_chain])
-lrms_cmd += '\n'
-lrms_cmd += 'FIT'
-lrms_cmd += '\n'
-for ligand in ligand_zone:
-	if ligand != receptor_chain:
-		l_tbw = ''
-		for zone in ligand_zone[ligand]:
-			l_tbw += ' R%s\n' % zone
-		lrms_cmd += l_tbw[1:]
-		lrms_cmd += '\n'
-lrms_cmd += 'ZONE CLEAR'
-lrms_cmd += '\n'
+# # generate command
+# lrms_cmd = ''
+# lrms_cmd += '\n'.join(ligand_zone[receptor_chain])
+# lrms_cmd += '\n'
+# lrms_cmd += 'FIT'
+# lrms_cmd += '\n'
+# for ligand in ligand_zone:
+# 	if ligand != receptor_chain:
+# 		l_tbw = ''
+# 		for zone in ligand_zone[ligand]:
+# 			l_tbw += ' R%s\n' % zone
+# 		lrms_cmd += l_tbw[1:]
+# 		lrms_cmd += '\n'
+# lrms_cmd += 'ZONE CLEAR'
+# lrms_cmd += '\n'
 
-# ready?
-for stage in stage_ref_dic:
-	print '>>> stage %s' % stage
+# # ready?
+# for stage in stage_ref_dic:
+# 	print '>>> stage %s' % stage
 
-	pdb_l = stage_ref_dic[stage][0] 
-	ref = stage_ref_dic[stage][1]
-	atoms = stage_ref_dic[stage][2]
+# 	pdb_l = stage_ref_dic[stage][0] 
+# 	ref = stage_ref_dic[stage][1]
+# 	atoms = stage_ref_dic[stage][2]
 
-	lrms_dic = {}
-	for conformation in pdb_l:
+# 	lrms_dic = {}
+# 	for conformation in pdb_l:
 
-		# segid_output = 'segid.temp'
-		fix_chain_segid(conformation)
+# 		# segid_output = 'segid.temp'
+# 		fix_chain_segid(conformation)
 
-		# os.system('%s/pdb_segid-to-chain %s > %s' % (haddocktools_path, conformation, segid_output))
-		# os.system('cp segid.temp %s' % conformation)
-		cmd = 'refe %s\nmobi %s\nATOMS %s\n%s\nquit' % (ref, conformation, atoms, lrms_cmd)
+# 		# os.system('%s/pdb_segid-to-chain %s > %s' % (haddocktools_path, conformation, segid_output))
+# 		# os.system('cp segid.temp %s' % conformation)
+# 		cmd = 'refe %s\nmobi %s\nATOMS %s\n%s\nquit' % (ref, conformation, atoms, lrms_cmd)
 
-		output = os.popen('echo "%s" | profit' % cmd)
+# 		output = os.popen('echo "%s" | profit' % cmd)
 
-		# parse result
-		result = [l for l in output if 'RMS' in l][-1]
-		lrms = float(result.split()[-1])
+# 		# parse result
+# 		result = [l for l in output if 'RMS' in l][-1]
+# 		lrms = float(result.split()[-1])
 
-		lrms_dic[conformation] = lrms
-		result_dic[stage][conformation]['lrms'] = lrms
-		#
-		# os.system('rm %s' % segid_output)
+# 		lrms_dic[conformation] = lrms
+# 		result_dic[stage][conformation]['lrms'] = lrms
+# 		#
+# 		# os.system('rm %s' % segid_output)
 
-	# lrms_out = open('%s.lrms' % stage,'w')
-	# sorted_lrms_dic = sorted(lrms_dic.items(), key=operator.itemgetter(1))
-	# for e in sorted_lrms_dic:
-	# 	conformation = e[0]
-	# 	lrms = e[1]
-	# 	lrms_out.write('%s\t%.3f\n' % (conformation, lrms))
-	# lrms_out.close()
+# 	if stage == 'water':
+# 		outputf = 'run2/structures/it1/%s/l-RMSD.dat' % stage
+# 	else:
+# 		outputf = 'run2/structures/%s/l-RMSD.dat' % stage
+# 	#
+# 	lrms_out = open(outputf,'w')
+# 	lrms_out.write('#struc l-RMSD\n')
+# 	sorted_lrms_dic = sorted(lrms_dic.items(), key=operator.itemgetter(1))
+# 	for e in sorted_lrms_dic:
+# 		conformation = e[0]
+# 		pdb_name = conformation.split('/')[-1]
+# 		lrms = e[1]
+# 		lrms_out.write('%s %.3f\n' % (conformation, lrms))
+# 	lrms_out.close()
+# 	#
+# 	os.system('cp %s %s' % (outputf, outputf.replace('.dat', '-sorted.dat')))
 
 #=========================================================================================#
 ## Fnat
@@ -363,13 +393,21 @@ for stage in stage_ref_dic:
 		fnat_dic[conformation] = fnat
 		result_dic[stage][conformation]['fnat'] = fnat
 
-	# fnat_out = open('%s.fnat' % stage,'w')
-	# sorted_fnat_dic = sorted(fnat_dic.items(), key=operator.itemgetter(1))
-	# for e in sorted_fnat_dic:
-	# 	conformation = e[0]
-	# 	fnat = e[1]
-	# 	fnat_out.write('%s\t%.3f\n' % (conformation, fnat))
-	# fnat_out.close()
+	if stage == 'water':
+		outputf = '%s/structures/it1/%s/file.nam_fnat' % (runf, stage)
+	else:
+		outputf = '%s/structures/%s/file.nam_fnat' % (runf, stage)
+	#
+	fnat_out = open(outputf,'w')
+	sorted_fnat_dic = sorted(fnat_dic.items(), key=operator.itemgetter(1))
+	for e in sorted_fnat_dic:
+		conformation = e[0]
+		pdb_name = conformation.split('/')[-1]
+		fnat = e[1]
+		fnat_out.write('%s %.3f\n' % (pdb_name, fnat))
+	fnat_out.close()
+	#
+	# os.system('cp %s %s' % (outputf, outputf.replace('.dat', '-sorted.dat')))
 
 #==========#
 
@@ -379,14 +417,14 @@ for stage in stage_ref_dic:
 	haddock_score_dic[stage] = {}
 
 	if stage == 'water':
-		haddock_s_f = 'run1/structures/it1/%s/file.list' % stage	
+		haddock_s_f = '%s/structures/it1/%s/file.list' % (runf, stage)
 	else:
-		haddock_s_f = 'run1/structures/%s/file.list' % stage
+		haddock_s_f = '%s/structures/%s/file.list' % (runf,  stage)
 
 	for l in open(haddock_s_f):
 		pdb_name = l.split(':')[-1].split()[0].split('"')[0]
 		score = float(l.split()[2])
-		# full_name = 'run1/structures/%s/%s'% (stage, pdb_name)
+		# full_name = 'run2/structures/%s/%s'% (stage, pdb_name)
 		full_name = haddock_s_f.replace('file.list', pdb_name)
 		haddock_score_dic[stage][full_name] = score
 
@@ -421,7 +459,7 @@ for stage in stage_ref_dic:
 
 
 for stage in result_dic:
-	out = open('%s.dat' % stage,'w')
+	out = open('%s/%s.dat' % (runf, stage),'w')
 	out.write('stage\tpdb_name\trank\tscore\tfnat\tlrms\tirms\tbinding\tdesolv\tbinding\ttotal\tbonds\tangles\timproper\tdihe\tvdw\telec\tair\tcdih\tcoup\trdcs\tvean\tdani\txpcs\trg\n')
 	# out = open('%s.capri' % stage, 'w')
 	# out.write('conformation\tfnat\tlrms\tirms\n')

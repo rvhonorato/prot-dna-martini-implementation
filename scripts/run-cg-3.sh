@@ -85,6 +85,8 @@ sed -i 's/{===>} cg_C=false;/{===>} cg_C=true;/g' run.cns
 
 sed -i 's/{===>} dna_C=false;/{===>} dna_C=true;/g' run.cns
 
+sed -i 's/{===>} solvshell=true;/{===>} solvshell=false;/g' run.cns
+
 sed -i 's/{===>} prot_top_C="protein-allhdg5-4.top";/{===>} prot_top_C="dna-rna-allatom-hj-opls-1.3.top";/g' run.cns
 sed -i 's/{===>} prot_link_C="protein-allhdg5-4-noter.link";/{===>} prot_link_C="dna-rna-1.3.link";/g' run.cns
 sed -i 's/{===>} prot_par_C="protein-allhdg5-4.param";/{===>} prot_par_C="dna-rna-allatom-hj-opls-1.3.param";/g' run.cns

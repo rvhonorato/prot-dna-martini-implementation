@@ -78,6 +78,9 @@ cp $PARAM_FOLDER/dna-cg-break.cns protocols/
 sed -i 's/{===>} cg_A=false;/{===>} cg_A=true;/g' run.cns
 sed -i 's/{===>} cg_B=false;/{===>} cg_B=true;/g' run.cns
 sed -i 's/{===>} dna_B=false;/{===>} dna_B=true;/g' run.cns
+
+sed -i 's/{===>} solvshell=true;/{===>} solvshell=false;/g' run.cns
+
 sed -i 's/{===>} prot_top_B="protein-allhdg5-4.top";/{===>} prot_top_B="dna-rna-allatom-hj-opls-1.3.top";/g' run.cns
 sed -i 's/{===>} prot_link_B="protein-allhdg5-4-noter.link";/{===>} prot_link_B="dna-rna-1.3.link";/g' run.cns
 sed -i 's/{===>} prot_par_B="protein-allhdg5-4.param";/{===>} prot_par_B="dna-rna-allatom-hj-opls-1.3.param";/g' run.cns
