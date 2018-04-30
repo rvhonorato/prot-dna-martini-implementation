@@ -4,12 +4,14 @@
 # INPUT
 #----------------------------------------------------------------------------------------------------------------#
 
-CGTOAA_RESTRAIN=aa2cg.tbl
+CGTOAA_RESTRAIN=cg2aa.tbl
 AMBIG_RESTRAIN=ambig.tbl
 
 PDBA_AA=$1
 PDBB_AA=$2
 PDBC_AA=$3
+
+DNA_CHAIN=$4
 
 #----------------------------------------------------------------------------------------------------------------#
 #
@@ -79,20 +81,27 @@ cp $PARAM_FOLDER/dna-cg-break.cns protocols/
 #
 #----------------------------------------------------------------------------------------------------------------#
 
-sed -i 's/{===>} cg_A=false;/{===>} cg_A=true;/g' run.cns
-sed -i 's/{===>} cg_B=false;/{===>} cg_B=true;/g' run.cns
-sed -i 's/{===>} cg_C=false;/{===>} cg_C=true;/g' run.cns
+# sed -i 's/{===>} cg_A=false;/{===>} cg_A=true;/g' run.cns
+# sed -i 's/{===>} cg_B=false;/{===>} cg_B=true;/g' run.cns
+# sed -i 's/{===>} cg_C=false;/{===>} cg_C=true;/g' run.cns
 
-sed -i 's/{===>} dna_C=false;/{===>} dna_C=true;/g' run.cns
+sed -i "s/{===>} dna_$DNA_CHAIN=false;/{===>} dna_$DNA_CHAIN=true;/g" run.cns
 
 sed -i 's/{===>} solvshell=true;/{===>} solvshell=false;/g' run.cns
 
-sed -i 's/{===>} prot_top_C="protein-allhdg5-4.top";/{===>} prot_top_C="dna-rna-allatom-hj-opls-1.3.top";/g' run.cns
-sed -i 's/{===>} prot_link_C="protein-allhdg5-4-noter.link";/{===>} prot_link_C="dna-rna-1.3.link";/g' run.cns
-sed -i 's/{===>} prot_par_C="protein-allhdg5-4.param";/{===>} prot_par_C="dna-rna-allatom-hj-opls-1.3.param";/g' run.cns
-sed -i 's/{===>} prot_cg_top_C="protein-CG-Martini-2-2.top";/{===>} prot_cg_top_C="dna-cg.top";/g' run.cns
-sed -i 's/{===>} prot_cg_link_C="protein-CG-Martini-2-2.link";/{===>} prot_cg_link_C="dna-cg.link";/g' run.cns
-sed -i 's/{===>} prot_cg_par_C="protein-CG-Martini-2-2.param";/{===>} prot_cg_par_C="dna-cg.param";/g' run.cns
+sed -i "s/{===>} prot_top_$DNA_CHAIN=\"protein-allhdg5-4.top\";/{===>} prot_top_$DNA_CHAIN=\"dna-rna-allatom-hj-opls-1.3.top\";/g" run.cns
+sed -i "s/{===>} prot_link_$DNA_CHAIN=\"protein-allhdg5-4-noter.link\";/{===>} prot_link_$DNA_CHAIN=\"dna-rna-1.3.link\";/g" run.cns
+sed -i "s/{===>} prot_par_$DNA_CHAIN=\"protein-allhdg5-4.param\";/{===>} prot_par_$DNA_CHAIN=\"dna-rna-allatom-hj-opls-1.3.param\";/g" run.cns
+sed -i "s/{===>} prot_cg_top_$DNA_CHAIN=\"protein-CG-Martini-2-2.top\";/{===>} prot_cg_top_$DNA_CHAIN=\"dna-cg.top\";/g" run.cns
+sed -i "s/{===>} prot_cg_link_$DNA_CHAIN=\"protein-CG-Martini-2-2.link\";/{===>} prot_cg_link_$DNA_CHAIN=\"dna-cg.link\";/g" run.cns
+sed -i "s/{===>} prot_cg_par_$DNA_CHAIN=\"protein-CG-Martini-2-2.param\";/{===>} prot_cg_par_$DNA_CHAIN=\"dna-cg.param\";/g" run.cns
+
+# sed -i 's/{===>} prot_top_C="protein-allhdg5-4.top";/{===>} prot_top_C="dna-rna-allatom-hj-opls-1.3.top";/g' run.cns
+# sed -i 's/{===>} prot_link_C="protein-allhdg5-4-noter.link";/{===>} prot_link_C="dna-rna-1.3.link";/g' run.cns
+# sed -i 's/{===>} prot_par_C="protein-allhdg5-4.param";/{===>} prot_par_C="dna-rna-allatom-hj-opls-1.3.param";/g' run.cns
+# sed -i 's/{===>} prot_cg_top_C="protein-CG-Martini-2-2.top";/{===>} prot_cg_top_C="dna-cg.top";/g' run.cns
+# sed -i 's/{===>} prot_cg_link_C="protein-CG-Martini-2-2.link";/{===>} prot_cg_link_C="dna-cg.link";/g' run.cns
+# sed -i 's/{===>} prot_cg_par_C="protein-CG-Martini-2-2.param";/{===>} prot_cg_par_C="dna-cg.param";/g' run.cns
 
 sed -i '/{===>} dnarest_on=false;/a {===>} dnacgrest_on=true;' run.cns
 sed -i '/evaluate (&Data.dnarest = &dnarest_on)/a evaluate (&Data.dnacgrest = &dnacgrest_on)' run.cns
@@ -107,16 +116,16 @@ sed -i 's/{===>} dnarest_on=false;/{===>} dnarest_on=true;/g' run.cns
 
 # cp protocols/generate_B-cg.inp protocols/generate_B-cg.inp-bak
 
-sed -i '/patch-bb-cg.cns/a \ inline @RUN:protocols/patch-types-cg-hbond-dna.cns' protocols/generate_C-cg.inp
-sed -i '/inline @RUN:protocols\/dna_break.cns/a \ \ \ inline @RUN:protocols\/dna-cg-break.cns' protocols/generate_C-cg.inp
-sed -i '/pcgbreak_cutoff/a {===>} dnacgbreak_cutoff=10.0;' protocols/generate_C-cg.inp
-sed -i '/dna_break.top/a {===>} cgdna_break_infile="RUN:toppar/dna-cg-break.top";' protocols/generate_C-cg.inp
-sed -i '/@@&dna_break_infile/a \ \ \ \ \ @@&cgdna_break_infile' protocols/generate_C-cg.inp
+sed -i '/patch-bb-cg.cns/a \ inline @RUN:protocols/patch-types-cg-hbond-dna.cns' protocols/generate_$DNA_CHAIN-cg.inp
+sed -i '/inline @RUN:protocols\/dna_break.cns/a \ \ \ inline @RUN:protocols\/dna-cg-break.cns' protocols/generate_$DNA_CHAIN-cg.inp
+sed -i '/pcgbreak_cutoff/a {===>} dnacgbreak_cutoff=10.0;' protocols/generate_$DNA_CHAIN-cg.inp
+sed -i '/dna_break.top/a {===>} cgdna_break_infile="RUN:toppar/dna-cg-break.top";' protocols/generate_$DNA_CHAIN-cg.inp
+sed -i '/@@&dna_break_infile/a \ \ \ \ \ @@&cgdna_break_infile' protocols/generate_$DNA_CHAIN-cg.inp
 
 # change the default parameters from AA to CG to prevent 3TER/5TER patching
-sed -i 's/dna-rna-allatom-hj-opls-1.3.top/dna-cg.top/g' protocols/generate_C-cg.inp
-sed -i 's/dna-rna-1.3.link/dna-cg.link/g' protocols/generate_C-cg.inp
-sed -i 's/dna-rna-allatom-hj-opls-1.3.param/dna-cg.param/g' protocols/generate_C-cg.inp
+sed -i 's/dna-rna-allatom-hj-opls-1.3.top/dna-cg.top/g' protocols/generate_$DNA_CHAIN-cg.inp
+sed -i 's/dna-rna-1.3.link/dna-cg.link/g' protocols/generate_$DNA_CHAIN-cg.inp
+sed -i 's/dna-rna-allatom-hj-opls-1.3.param/dna-cg.param/g' protocols/generate_$DNA_CHAIN-cg.inp
 
 #----------------------------------------------------------------------------------------------------------------#
 #

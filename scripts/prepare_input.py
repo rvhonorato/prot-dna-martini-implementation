@@ -215,23 +215,44 @@ for chain in pdb_dic:
 # 3. Extract true interface from reference (xtal)
 #================================================================================================#
 
+# # get accessibilities
+# # exit()
+# cmd = 'naccess %s' % reference
+# run(cmd, 'nacess.log')
 
-# reference = '1BY4_complex_cg.pdb'
-# fix_chain_segid(reference_cg)
+# rsaf = reference.replace('.pdb','.rsa')
 
-# bb_list = ['BB', 'BB1', 'BB2', 'BB3']
-# for distance_threshold in range(1,10+1):
-# 	contact_outf = 'ref_%i.contacts' % distance_threshold
-# 	cmd = '%s/contact %s %i' % (haddocktools_path, reference, distance_threshold)
-# 	run(cmd, contact_outf)
-# 	c = 0
-# 	for l in open(contact_outf):
-# 		resA, chainA, atomA, resB, chainB, atomB, dist = l.split()
+# accessibilites_blacklist = []
+# for l in open(rsaf):
+# 	if 'RES' in l[:3]:
+# 		data = l.split()
+# 		resname = data[1]
+# 		chain = data[2]
+# 		resnum = int(data[3])
+# 		# #
+# 		# aa_abs = data[4]
+# 		# aa_res = data[5]
 # 		#
-# 		if atomA not in bb_list and atomB not in bb_list:
-# 			c += 1
+# 		tot_side_abs = data[6]
+# 		tot_side_rel = float(data[7])
+# 		#
+# 		# bb_abs = data[8]
+# 		bb_rel = float(data[9])
+# 		# #
+# 		# np_abs = data[10]
+# 		# np_res = data[11]
+# 		# #
+# 		# p_abs = data[12]
+# 		# p_rel = data[13]
+# 		#
+# 		if tot_side_rel <= 30.0 or bb_rel <= 30.0:
+# 			# print resname, chain, resnum, tot_side_rel, bb_rel
+# 			if chain != dna_chain:
+# 				print l
+# 				accessibilites_blacklist.append( (chain, resnum) )
 # 			# print l
-# 	print distance_threshold, c
+# 			# break
+
 
 
 distance_threshold = 4.0
@@ -239,74 +260,105 @@ contact_outf = 'ref_%i.contacts' % distance_threshold
 cmd = '%s/contact %s %i' % (haddocktools_path, reference, distance_threshold)
 run(cmd, contact_outf)
 
-# # find out where is the DNA
-# moltype = dict([(c, []) for c in chain_list])
-# for l in open(contact_outf):
-# 	resA, chainA, atomA, resB, chainB, atomB, dist = l.split()
-# 	if atomA == 'BB':
-# 		moltype[chainA].append('protein')
-# 	if atomA in ['BB1', 'BB2','BB3']:
-# 		moltype[chainA].append('DNA')
-# 	#
-# 	if atomB == 'BB':
-# 		moltype[chainB].append('protein')
-# 	if atomB in ['BB1', 'BB2','BB3']:
-# 		moltype[chainB].append('DNA')
-
-# moldic = dict([(c, list(set(moltype[c]))) for c in moltype])
-
 # crate a dictionary and populate with 
-interface_res_dic = dict([(c, {}) for c in chain_list])
+
 unpaired_interface_res_dic = dict([(c, []) for c in chain_list])
 # active_sidechain_dic = dict([(c, {}) for c in chain_list])
+
+bb_atoms = ['CA','C','O','N','P','O1P','O2P','O5\'','OP1','OP2','C5\'','O4\'','C4\'','C3\'','C2\'','C1\'']
+
+# categorize contacts...!
+# bb-bb, bb-sc, sc-sc
+# atag = ''
+# btag = ''
+# t_dic = dict([(c, []) for c in chain_list])
+# contact_type_dic = {'bb-bb': t_dic, 
+	# 'bb-sc': t_dic, 
+	# 'sc-sc': t_dic}
+
+# contact_type_dic = {'bb-bb':{}, 'bb-sc':{}, 'sc-sc':{}}
+contact_type_dic = {}
 for l in open(contact_outf):
+	#
 	resA, chainA, atomA, resB, chainB, atomB, dist = l.split()
 	#
 	resA = int(resA)
 	resB = int(resB)
 	#
-	# molA = moldic[chainA][0]
-	# molB = moldic[chainB][0]
-	if (chainA == dna_chain and chainB != dna_chain) or (chainB == dna_chain and chainA != dna_chain):
-		# first set
-		try:
-			interface_res_dic[chainA][resA].append(chainB)
-		except:
-			interface_res_dic[chainA][resA] = []
-			interface_res_dic[chainA][resA].append(chainB)
-		# second set
-		try:
-			interface_res_dic[chainB][resB].append(chainA)
-		except:
-			interface_res_dic[chainB][resB] = []
-			interface_res_dic[chainB][resB].append(chainA)
-		# unpaired
-		unpaired_interface_res_dic[chainA].append(resA)
-		unpaired_interface_res_dic[chainB].append(resB)
-		# print l
-		# exit() 
+	# check if this contact is bb-bb or bb-sc or sc-sc
+	# which atoms are involved?
+	###
+	if atomA in bb_atoms:
+		atype = 'bb'
+	else:
+		atype = 'sc'
+	###
+	if atomB in bb_atoms:
+		btype = 'bb'
+	else:
+		btype = 'sc'
+	###
 	#
-	# print l, molA, molB
+	try:
+		contact_type_dic[ (chainA, resA) ].append(atype)
+	except:
+		contact_type_dic[ (chainA, resA) ] = []
+		contact_type_dic[ (chainA, resA) ].append(atype)
 	#
-	## select only protein-dna
-	# if (molA == 'protein' and molB == 'DNA') or (molB == 'protein' and molA == 'DNA'):
-		## is any DNA sidechain in contact with protein sidechain?
-		# if atomA not in bb_list and atomB not in bb_list:
-		#
-		# try:
-		# 	active_sidechain_dic[chainA][resA].append(atomA)
-		# except:
-		# 	active_sidechain_dic[chainA][resA] = []
-		# 	active_sidechain_dic[chainA][resA].append(atomA)
-		# #
-		# try:
-		# 	active_sidechain_dic[chainB][resB].append(atomB)
-		# except:
-		# 	active_sidechain_dic[chainB][resB] = []
-		# 	active_sidechain_dic[chainB][resB].append(atomB)
+	try:
+		contact_type_dic[ (chainB, resB) ].append(btype)
+	except:
+		contact_type_dic[ (chainB, resB) ] = []
+		contact_type_dic[ (chainB, resB) ].append(btype)
+	
 
-out = open('ambig.tbl','w')
-out_aa = open('ambig-aa.tbl','w')
+# for contact in contact_type_dic:
+# 	print contact, list(set(contact_type_dic[contact]))
+# 	chain = contact[0]
+# 	if len(set(contact_type_dic[contact])) == 1:
+# 		t = list(set(contact_type_dic[contact]))[0]
+# 		if t == 'sc-sc':
+# 			# if chain == dna_chain:
+# 			print '*'*10, '(name SC*)'
+# 		if t == 'bb-bb':
+# 			print '*'*10, '(name BB*)'
+# 	# print '-'*42
+
+
+
+interface_res_dic = dict([(c, {}) for c in chain_list])
+for l in open(contact_outf):
+	#
+	resA, chainA, atomA, resB, chainB, atomB, dist = l.split()
+	###
+	#
+	resA = int(resA)
+	resB = int(resB)
+	#
+	#
+	# if (chainA, resA) in accessibilites_blacklist or (chainB, resB) in accessibilites_blacklist:
+	# 	continue
+	#
+	# if (chainA == dna_chain and chainB != dna_chain) or (chainB == dna_chain and chainA != dna_chain):
+	# first set
+	try:
+		interface_res_dic[chainA][resA].append(chainB)
+	except:
+		interface_res_dic[chainA][resA] = []
+		interface_res_dic[chainA][resA].append(chainB)
+	# second set
+	try:
+		interface_res_dic[chainB][resB].append(chainA)
+	except:
+		interface_res_dic[chainB][resB] = []
+		interface_res_dic[chainB][resB].append(chainA)
+	# unpaired
+	unpaired_interface_res_dic[chainA].append(resA)
+	unpaired_interface_res_dic[chainB].append(resB)
+
+
+out = open('ambig-autom.tbl','w')
+# out_aa = open('ambig-aa.tbl','w')
 
 for chainA in interface_res_dic:
 	# print interface_res_dic[chainA]
@@ -319,46 +371,73 @@ for chainA in interface_res_dic:
 		except KeyError:
 			print 'WARNING: Reference Res %i not found in unbound chain %s' % (bound_resA, chain)
 			continue
-		tbwA = 'resid %i and segid %s' % (unbound_resA, chainA)
-		tbwB = []
-		tbwB_aa = []
 		#
-		for chainB in list(set(interface_res_dic[chainA][bound_resA])):
+		contact_type_l = list(set(contact_type_dic[ (chainA, bound_resA) ]))
+		if len(contact_type_l) == 1:
+			contact_t_A = contact_type_l[0]
+			if contact_t_A == 'sc':
+				tbwAtoms = '(name SC*)'
+			elif contact_t_A == 'bb':
+				tbwAtoms = '(name BB*)'
+			else: # sc-bb
+				tbwAtoms = None
 			#
-			numbering_refB =  dict([map(int, a.split(',')) for a in open('%s-numbering.ref' % chainB)])
-			#
-			active_reslist = interface_res_dic[chainB].keys()
-			for bound_resB in active_reslist:
-				try:
-					unbound_resB = numbering_refB[bound_resB]
-					# unbound_resA_l.append(unbound_resA)
-				except KeyError:
-					print 'WARNING: Reference Res %i not found in unbound chain %s' % (bound_resB, chain)
-					continue
-				#
-				for candidate_chain in list(set(interface_res_dic[chainB][bound_resB])):
-					if candidate_chain == chainA:
+			if tbwAtoms:
+				tbwA = 'resid %i and segid %s and %s' % (unbound_resA, chainA, tbwAtoms)
+				tbwB = []
+				for chainB in list(set(interface_res_dic[chainA][bound_resA])):
+					#
+					numbering_refB =  dict([map(int, a.split(',')) for a in open('%s-numbering.ref' % chainB)])
+					#
+					active_reslist = interface_res_dic[chainB].keys()
+					for bound_resB in active_reslist:
+						try:
+							unbound_resB = numbering_refB[bound_resB]
+							# unbound_resA_l.append(unbound_resA)
+						except KeyError:
+							print 'WARNING: Reference Res %i not found in unbound chain %s' % (bound_resB, chain)
+							exit()
+							continue
 						#
-						## which atoms?
-						# atom_list = list(set(active_sidechain_dic[chainB][bound_resB]))
-						# # print atom_list
-						# # exit()
-						# if atom_list:
-						# 	tbwAtom = ''
-						# 	for atom in atom_list:
-						# 		tbwAtom += ' name %s or' % atom
-						# 	tbwB.append('( resid %i and segid %s and (%s ) )' % (unbound_resB, chainB, tbwAtom[:-2]))
-						# else:
-						# 	tbwB.append('( resid %i and segid %s )' % (unbound_resB, chainB))
-						#
-						tbwB.append('( resid %i and segid %s and name SC* )' % (unbound_resB, chainB))
-						tbwB_aa.append('( resid %i and segid %s )' % (unbound_resB, chainB))
+						for candidate_chain in list(set(interface_res_dic[chainB][bound_resB])):
+							if candidate_chain == chainA:
+								#
+								## which atoms?
+								contact_type_l = list(set(contact_type_dic[ (chainB, bound_resB) ]))
+								tbwAtoms = None
+								if len(contact_type_l) == 1:
+									contact_t_B = contact_type_l[0]
+									if contact_t_A == contact_t_B:
+										if contact_t_B == 'sc':
+											tbwAtoms = '(name SC*)'
+										elif contact_t_B == 'bb':
+											tbwAtoms = '(name BB*)'
+									# print contact_t
+								# print contact_type_l
+								# atom_list = list(set(active_sidechain_dic[chainB][bound_resB]))
+								# # print atom_list
+								# # exit()
+								# if atom_list:
+								# 	tbwAtom = ''
+								# 	for atom in atom_list:
+								# 		tbwAtom += ' name %s or' % atom
+								# 	tbwB.append('( resid %i and segid %s and (%s ) )' % (unbound_resB, chainB, tbwAtom[:-2]))
+								# else:
+								# 	tbwB.append('( resid %i and segid %s )' % (unbound_resB, chainB))
+								#
+								# tbwB.append('( resid %i and segid %s and (name SC*) )' % (unbound_resB, chainB))
+								# print tbwAtoms
+								if tbwAtoms:
+									tbwB.append('( resid %i and segid %s and %s )' % (unbound_resB, chainB, tbwAtoms))
+								# else:
+									# tbwB.append('( resid %i and segid %s )' % (unbound_resB, chainB))
 						# print resA, chainA, resB, chainB
 		# print '\nassign ( %s ) \n(\n %s \n) 2.0 2.0 0.0\n' % (tbwA, '\n or '.join(tbwB))
-		out.write('\nassign ( %s ) \n(\n %s \n) 2.0 2.0 0.0\n' % (tbwA, '\n or '.join(tbwB)))
-		out_aa.write('\nassign ( %s ) \n(\n %s \n) 2.0 2.0 0.0\n' % (tbwA, '\n or '.join(tbwB_aa)))
+				if tbwB:
+					out.write('\nassign ( %s ) \n(\n %s \n) 2.0 2.0 0.0\n' % (tbwA, '\n or '.join(tbwB)))
+		# out_aa.write('\nassign ( %s ) \n(\n %s \n) 2.0 2.0 0.0\n' % (tbwA, '\n or '.join(tbwB_aa)))
 out.close()
-out_aa.close()
+# out_aa.close()
 
 # exit()
 
@@ -371,7 +450,7 @@ for chain in active_res_dic:
 	#
 	unbound_res_l = []
 	for bound_res in active_res_dic[chain]:
-	 	try:
+		try:
 			unbound_res = numbering_ref[bound_res]
 			unbound_res_l.append(unbound_res)
 		except KeyError:
@@ -487,11 +566,14 @@ out.close()
 #================================================================================================#
 # 4. Convert from AA to CG
 #================================================================================================#
-aa2cgf = 'aa2cg.tbl'
+aa2cgf = 'cg2aa.tbl'
 if os.path.isfile(aa2cgf):
 	os.system('rm %s' % aa2cgf)
 
-for chain in pdb_dic: 
+sorted_chains = pdb_dic.keys()
+sorted_chains.sort()
+
+for chain in sorted_chains: 
 	pdbf = pdb_dic[chain]
 	cg_outf = pdbf.replace('.pdb','_cg.pdb')
 	backmap_outf = pdbf.replace('.pdb','_cg_to_aa.tbl')
@@ -533,9 +615,9 @@ for chain in pdb_dic:
 
 os.system('cp dna_restraints.def input/')
 os.system('cp dna-aa_groups.dat input/')
-os.system('cp aa2cg.tbl input/')
-os.system('cp ambig.tbl input/')
-os.system('cp ambig-aa.tbl input/')
+os.system('cp cg2aa.tbl input/')
+os.system('cp ambig-autom.tbl input/')
+# os.system('cp ambig-aa.tbl input/')
 
 # this might be usefull for the analysis
 os.system('cp *-numbering.ref input/')
@@ -549,9 +631,7 @@ tbw = ''
 for chain in chain_list:
 	tbw += ' %s' % pdb_dic[chain]
 
-open('input/prepare-run.sh', 'w').write('%s' % (cmd + tbw))
-
-#
+open('input/prepare-run.sh', 'w').write('%s %s' % (cmd + tbw, dna_chain))
 
 for chain in unbound_active_res_dic:
 	pymol_tbw += 'cmd.select(\'%s\', \'chain %s and resid %s\')\n' % (chain, chain, '+'.join(map(str, unbound_active_res_dic[chain])))
@@ -569,6 +649,8 @@ run(cmd, 'log')
 os.system('cp %s input/' % referencecgf)
 os.system('cp %s input/' % reference)
 
+#
+print 'DONE - you still need to prepare the ambig.tbl (or rename ambig-autom.tbl)'
 
 
 

@@ -1,6 +1,6 @@
 # the script that will evaluate all results in a docking run
 
-import sys, os, glob, operator, subprocess
+import sys, os, glob, operator, subprocess, argparse
 from operator import itemgetter
 from itertools import groupby
 
@@ -94,12 +94,25 @@ global haddocktools_path
 haddocktools_path = os.environ["HADDOCKTOOLS"]
 #======#
 
-pdbf = sys.argv[1]
+parser = argparse.ArgumentParser()
+
+parser.add_argument("pdbf", type=str,
+                    help="Reference PDB (xtal)")
+
+parser.add_argument("runf", type=str,
+                    help="run number (ex. run1)")
+
+parser.add_argument("--aa", help="do AA analysis",
+                    action="store_true")
+
+args = parser.parse_args()
+
+pdbf = args.pdbf
+# pdbf = sys.argv[1]
 pdbf_cg = pdbf.replace('.pdb','_cg.pdb')
 
-runf = sys.argv[2]
-
-# pdbf = '1BY4_complex.pdb'
+# runf = sys.argv[2]
+runf = args.runf
 
 pdb_name = pdbf.split('.pdb')[0]
 
@@ -112,16 +125,18 @@ it0_l = glob.glob('%s/structures/it0/*pdb' % runf)
 it1_l = glob.glob('%s/structures/it1/*pdb' % runf)
 water_l = glob.glob('%s/structures/it1/water/*pdb' % runf)
 
-stage_ref_dic = {
-	'it0':   [it0_l, pdbf_cg, ("BB,BB1,BB2,BB3")],
-	'it1':   [it1_l, pdbf_cg, ("BB,BB1,BB2,BB3")],
-	'water': [water_l, pdbf, ("CA,C,N,O,P,O3\*,C3\*,C4\*,C5\*,O5\*")]
+if args.aa:
+	stage_ref_dic = {
+		'it0':   [it0_l, pdbf, ("CA,C,N,O,P,C1,C9")],
+		'it1':   [it1_l, pdbf, ("CA,C,N,O,P,C1,C9")],
+		'water': [water_l, pdbf, ("CA,C,N,O,P,C1,C9")]
+	}
+else:
+	stage_ref_dic = {
+		'it0':   [it0_l, pdbf_cg, ("BB,BB1,BB2,BB3")],
+		'it1':   [it1_l, pdbf_cg, ("BB,BB1,BB2,BB3")],
+		'water': [water_l, pdbf, ("CA,C,N,O,P,C1,C9")]
 }
-# stage_ref_dic = {
-# 	'it0':   [it0_l, pdbf, ("CA,C,N,O,P,O3\*,C3\*,C4\*,C5\*,O5\*")],
-# 	'it1':   [it1_l, pdbf, ("CA,C,N,O,P,O3\*,C3\*,C4\*,C5\*,O5\*")],
-# 	'water': [water_l, pdbf, ("CA,C,N,O,P,O3\*,C3\*,C4\*,C5\*,O5\*")]
-# }
 
 # create and populate residue lists
 result_dic = {}
@@ -157,15 +172,18 @@ print '> i-rmsd'
 # define contact for AA and for CG
 izone_dic = {}
 for ref in [pdbf, pdbf_cg]:
-
 	distance_threshold = 10.
 	ref_contactf = ref.split('.')[0] + '_%i.contacts' % distance_threshold
 	cmd = '%s/contact %s %i' % (haddocktools_path, ref, distance_threshold)
 	run(cmd, ref_contactf)
 
-	contact_listA = list(set([(l.split()[1], int(l.split()[0])) for l in open(ref_contactf)]))
-	contact_listB = list(set([(l.split()[4], int(l.split()[3])) for l in open(ref_contactf)]))
-	contact_list = list(set(contact_listA + contact_listB))
+	contact_list = []
+	for l in open(ref_contactf):
+		resnumA,chainA,atomA,resnumB,chainB,atomB,distance = l.split()
+		contact_list.append( (chainA,int(resnumA)) )
+		contact_list.append( (chainB,int(resnumB)) )
+
+	contact_list = list(set(contact_list))
 	contact_list.sort()
 
 	# create and populate a dictionary
@@ -174,17 +192,19 @@ for ref in [pdbf, pdbf_cg]:
 		contact_dic[e[0]].append(e[1])
 
 	# match izones
+	out = open('%s.izone' % ref.split('.pdb')[0],'w')
 	izone_l = []
 	for chain in contact_dic:
 		for bound_res in contact_dic[chain]:
 			try:
 				unbound_res = numbering_dic[chain][bound_res]
 				izone_l.append('ZONE %s%i-%s%i:%s%i-%s%i' % (chain, bound_res, chain, bound_res, chain, unbound_res, chain,unbound_res))
+				out.write('ZONE %s%i-%s%i:%s%i-%s%i\n' % (chain, bound_res, chain, bound_res, chain, unbound_res, chain,unbound_res))
 				# print 'ZONE %s%i-%s%i:%s%i-%s%i' % (chain, bound_res, chain, bound_res, chain, unbound_res, chain,unbound_res)
 			except:
 				print 'Res %i not found in unbound' % bound_res
 			# print res
-
+	out.close()
 	izone_dic[ref] = izone_l
 
 for stage in stage_ref_dic:
@@ -235,12 +255,6 @@ for stage in stage_ref_dic:
 	irms_out.close()
 	#
 	os.system('cp %s %s' % (outputf, outputf.replace('.dat', '-sorted.dat')))
-
-
-
-# set rmsfile=$i/structures/it0/i-RMSD.dat
-# set rmsbestfile=$i/structures/it0/i-RMSD-sorted.dat
-# set fnatfile=$i/structures/it0/file.nam_fnat
 
 
 #=========================================================================================#
@@ -326,10 +340,20 @@ for stage in stage_ref_dic:
 print '> fnat'
 
 # define contact for AA and for CG
+
+def get_contact_list(contactf):
+	contact_list = []
+	for l in open(contactf):
+		resnumA,chainA,atomA,resnumB,chainB,atomB,distance = l.split()
+		contact_list.append( ((int(resnumA),chainA,atomA), (int(resnumB),chainB,atomB)) )
+		contact_list.append( ((int(resnumB),chainB,atomB), (int(resnumA),chainA,atomA)) )
+	return contact_list
+
+distance_threshold = 5.0
+
 contact_dic = {}
 for ref in [pdbf, pdbf_cg]:
 	#
-	distance_threshold = 5.0
 	contact_outf = ref.replace('.pdb', '.contacts')
 	cmd = '%s/contact %s %i' % (haddocktools_path, ref, distance_threshold)
 	run(cmd, contact_outf)
@@ -378,10 +402,10 @@ for stage in stage_ref_dic:
 
 	fnat_dic = {}
 	for conformation in pdb_l:
-
+		###
 		fix_chain_segid(conformation)
 
-		distance_threshold = 10.0
+		# distance_threshold = 5.0
 		contact_outf = conformation.replace('.pdb', '.contacts')
 		cmd = '%s/contact %s %i' % (haddocktools_path, conformation, distance_threshold)
 		run(cmd, contact_outf)
@@ -400,6 +424,7 @@ for stage in stage_ref_dic:
 	#
 	fnat_out = open(outputf,'w')
 	sorted_fnat_dic = sorted(fnat_dic.items(), key=operator.itemgetter(1))
+	sorted_fnat_dic.reverse()
 	for e in sorted_fnat_dic:
 		conformation = e[0]
 		pdb_name = conformation.split('/')[-1]
@@ -505,12 +530,27 @@ for stage in result_dic:
 	out.close()
 
 
+#=========================================================================================#
+# Clustering
+#=========================================================================================#
 
+# water
 
-
-
-
-
+os.chdir('%s/structures/it1/water/analysis' % runf)
+if not os.path.isfile('cluster.out'):
+	os.system('gunzip cluster.out.gz')
+os.chdir('../')
+os.system('~/ana_clusters.csh -best 4 analysis/cluster.out')
+# it1
+os.chdir('../analysis')
+if not os.path.isfile('cluster.out'):
+	os.system('gunzip cluster.out.gz')
+os.chdir('../')
+os.system('~/ana_clusters.csh -best 4 analysis/cluster.out')
+os.chdir('../../../')
+os.system('~/results-stats.csh %s' % runf)
+# cmd = '/home/rodrigo/results-stats.csh %s' % runf
+# run(cmd, '%s.stats' % runf)
 
 
 

@@ -293,6 +293,7 @@ def identify_pairing(rA, rB):
             resnumA = rA.id[1]
             resnumB = rB.id[1]
             # note: 
+            # print rA.get_segid
             segidA = rA.get_segid().split()[0]
             segidB = rB.get_segid().split()[0]
             pair = (resnumA, segidA), (resnumB, segidB)
