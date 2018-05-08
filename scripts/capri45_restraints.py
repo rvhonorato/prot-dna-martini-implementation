@@ -1,8 +1,11 @@
 # generate restraints for the 10mer
+import sys
 
+pdbf = sys.argv[1]
+contactf = sys.argv[2]
 
-pdbf = 'ensemble_1.pdb'
-contactf = 'ensemble_1_3.0.contacts'
+# pdbf = 'ensemble_1.pdb'
+# contactf = 'ensemble_1_3.0.contacts'
 # outf = 'ambig-new-3.0.tbl'
 
 # get chains

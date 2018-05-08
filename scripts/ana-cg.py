@@ -1,6 +1,6 @@
 # the script that will evaluate all results in a docking run
 
-import sys, os, glob, operator, subprocess, argparse
+import sys, os, glob, operator, subprocess, argparse, math
 from operator import itemgetter
 from itertools import groupby
 
@@ -28,7 +28,6 @@ def fix_numbering(contact_list, offset_dic):
 	return edited_list
 
 def fix_chain_segid(pdb_f):
-#
 	for l in open(pdb_f).readlines():
 		if 'ATOM' in l[:4]:
 			break
@@ -51,7 +50,6 @@ def fix_chain_segid(pdb_f):
 		cmd = '%s/pdb_chain-to-segid %s' % (haddocktools_path, pdb_f)
 		run(cmd, segidf)
 		os.rename(segidf, pdb_f)
-
 
 def get_range(data):
 	### shamelessly copied from https://stackoverflow.com/a/2154437
@@ -84,10 +82,13 @@ def retrieve_seqs(aln):
 	return seq_dic
 
 def run(cmd, outputf):
-	with open("./%s" % outputf, "w") as f:
+	with open(outputf, "w") as f:
 	    process = subprocess.Popen(cmd.split(), shell=False, stdout=f)
 	    process.wait()
 
+def find_key(dic, val):
+	'''return the key of dictionary dic given the value'''
+	return [k for k, v in dic.iteritems() if v == val][0]
 
 global haddocktools_path
 # haddocktools_path = '/Users/rvhonorato/tools'
@@ -111,6 +112,8 @@ pdbf = args.pdbf
 # pdbf = sys.argv[1]
 pdbf_cg = pdbf.replace('.pdb','_cg.pdb')
 
+path = os.getcwd()
+
 # runf = sys.argv[2]
 runf = args.runf
 
@@ -121,9 +124,12 @@ fix_chain_segid(pdbf)
 fix_chain_segid(pdbf_cg)
 
 # get pdb lists
-it0_l = glob.glob('%s/structures/it0/*pdb' % runf)
-it1_l = glob.glob('%s/structures/it1/*pdb' % runf)
-water_l = glob.glob('%s/structures/it1/water/*pdb' % runf)
+it0_l = ['%s/%s/structures/it0/%s' % (path,runf,p.split()[0]) for p in open('%s/%s/structures/it0/file.nam' % (path,runf)).readlines() if 'pdb' in p]
+it1_l = ['%s/%s/structures/it1/%s' % (path,runf,p.split()[0]) for p in open('%s/%s/structures/it1/file.nam' % (path,runf)).readlines() if 'pdb' in p]
+water_l = ['%s/%s/structures/it1/water/%s' % (path,runf,p.split()[0]) for p in open('%s/%s/structures/it1/water/file.nam' % (path,runf)).readlines() if 'pdb' in p]
+# it0_l = glob.glob('%s/%s/structures/it0/*pdb' % (path, runf))
+# it1_l = glob.glob('%s/%s/structures/it1/*pdb' % (path, runf))
+# water_l = glob.glob('%s/%s/structures/it1/water/*pdb' % (path, runf))
 
 if args.aa:
 	stage_ref_dic = {
@@ -168,7 +174,7 @@ receptor_chain = size_l[0][0]
 ## Interface RMSD
 #=========================================================================================#
 
-print '> i-rmsd'
+# print '> i-rmsd'
 # define contact for AA and for CG
 izone_dic = {}
 for ref in [pdbf, pdbf_cg]:
@@ -194,16 +200,61 @@ for ref in [pdbf, pdbf_cg]:
 	# match izones
 	out = open('%s.izone' % ref.split('.pdb')[0],'w')
 	izone_l = []
+
+	######################
+	# new method
+
+	# crate a bound-unbound reference of the residues that are in contact
 	for chain in contact_dic:
+		ref_dic = {} 
 		for bound_res in contact_dic[chain]:
 			try:
-				unbound_res = numbering_dic[chain][bound_res]
-				izone_l.append('ZONE %s%i-%s%i:%s%i-%s%i' % (chain, bound_res, chain, bound_res, chain, unbound_res, chain,unbound_res))
-				out.write('ZONE %s%i-%s%i:%s%i-%s%i\n' % (chain, bound_res, chain, bound_res, chain, unbound_res, chain,unbound_res))
-				# print 'ZONE %s%i-%s%i:%s%i-%s%i' % (chain, bound_res, chain, bound_res, chain, unbound_res, chain,unbound_res)
+				ub = numbering_dic[chain][bound_res]
+				ref_dic[bound_res] = ub
 			except:
-				print 'Res %i not found in unbound' % bound_res
-			# print res
+				pass
+		
+		# define the bound ranges ex (1-20)
+		for bound_range in get_range(ref_dic.keys()):
+			# for each bound range
+			#  check which is the unbound range that matches
+			unbound_res_l = []
+			for bound_res in range(bound_range[0], bound_range[1]+1):
+				unbound_res = ref_dic[bound_res] 
+				unbound_res_l.append(ref_dic[bound_res])
+
+			# use unbound_res_l to build zones
+			for unbound_range in get_range(unbound_res_l):
+				bound_res_l = []
+				for unbound_res in range(unbound_range[0],unbound_range[1]+1):
+					# find what it the bound res that correspond to this unbound
+					bound_res_l.append(find_key(ref_dic, unbound_res))
+				#
+				rangeA = get_range(bound_res_l)[0] # bound
+				rangeB = unbound_range
+				#
+				# print chain, rangeA, rangeB
+				#
+				izone_str = 'ZONE %s%i-%s%i:%s%i-%s%i' % (chain, rangeA[0], chain, rangeA[1], chain, rangeB[0], chain, rangeB[1])
+				# print izone_str
+				izone_l.append(izone_str)
+				out.write(izone_str)
+	# exit()
+	######################
+
+	######################
+	# old method
+	# for chain in contact_dic:
+	# 	for bound_res in contact_dic[chain]:
+	# 		try:
+	# 			unbound_res = numbering_dic[chain][bound_res]
+	# 			izone_l.append('ZONE %s%i-%s%i:%s%i-%s%i' % (chain, bound_res, chain, bound_res, chain, unbound_res, chain,unbound_res))
+	# 			out.write('ZONE %s%i-%s%i:%s%i-%s%i\n' % (chain, bound_res, chain, bound_res, chain, unbound_res, chain,unbound_res))
+	# 			# print 'ZONE %s%i-%s%i:%s%i-%s%i' % (chain, bound_res, chain, bound_res, chain, unbound_res, chain,unbound_res)
+	# 		except:
+	# 			print 'Res %i not found in unbound' % bound_res
+	######################
+
 	out.close()
 	izone_dic[ref] = izone_l
 
@@ -214,20 +265,20 @@ for stage in stage_ref_dic:
 	atoms = stage_ref_dic[stage][2]
 	izone_l = izone_dic[ref]
 
-	print '>> stage %s' % stage
+	# print '>> stage %s' % stage
 
 	# prepare structural input
 	irms_dic = {}
 	for conformation in pdb_l:
 		#####
 		# fix chain
-
 		fix_chain_segid(conformation)
 
 		# prepare cmd for PROFIT
 		cmd = 'refe %s\nmobi %s\nATOMS %s\nZONE CLEAR\n%s\nstatus\nFIT\nquit' % (ref, conformation, atoms, '\n'.join(izone_l))
-		# open('idbg','w').write(cmd)
-		# exit()
+		open('idbg','w').write(cmd)
+		# if stage == 'water':
+		# 	exit()
 		# run!
 		output = os.popen('echo "%s" | profit' % cmd)
 		# parse result
@@ -240,9 +291,9 @@ for stage in stage_ref_dic:
 
 	#
 	if stage == 'water':
-		outputf = '%s/structures/it1/%s/i-RMSD.dat' % (runf, stage)
+		outputf = '%s/%s/structures/it1/%s/i-RMSD.dat' % (path, runf, stage)
 	else:
-		outputf = '%s/structures/%s/i-RMSD.dat' % (runf, stage)
+		outputf = '%s/%s/structures/%s/i-RMSD.dat' % (path, runf, stage)
 	#
 	irms_out = open(outputf,'w')
 	irms_out.write('#struc i-RMSD\n')
@@ -337,7 +388,7 @@ for stage in stage_ref_dic:
 ## Fnat
 #=========================================================================================#
 
-print '> fnat'
+# print '> fnat'
 
 # define contact for AA and for CG
 
@@ -398,7 +449,7 @@ for stage in stage_ref_dic:
 	pdb_l = stage_ref_dic[stage][0] 
 	ref = stage_ref_dic[stage][1]
 
-	print '>>> stage %s' % stage
+	# print '>>> stage %s' % stage
 
 	fnat_dic = {}
 	for conformation in pdb_l:
@@ -442,13 +493,15 @@ for stage in stage_ref_dic:
 	haddock_score_dic[stage] = {}
 
 	if stage == 'water':
-		haddock_s_f = '%s/structures/it1/%s/file.list' % (runf, stage)
+		haddock_s_f = '%s/%s/structures/it1/%s/file.list' % (path, runf, stage)
 	else:
-		haddock_s_f = '%s/structures/%s/file.list' % (runf,  stage)
+		haddock_s_f = '%s/%s/structures/%s/file.list' % (path, runf,  stage)
 
 	for l in open(haddock_s_f):
 		pdb_name = l.split(':')[-1].split()[0].split('"')[0]
 		score = float(l.split()[2])
+		# if math.isnan(score):
+		# 	print l
 		# full_name = 'run2/structures/%s/%s'% (stage, pdb_name)
 		full_name = haddock_s_f.replace('file.list', pdb_name)
 		haddock_score_dic[stage][full_name] = score
@@ -460,9 +513,19 @@ for stage in stage_ref_dic:
 		data = open(conformation).readlines()
 		energies_l = map(float, data[7].split(':')[-1].split(','))
 		total, bonds, angles, improper, dihe, vdw, elec, air, cdih, coup, rdcs, vean, dani, xpcs, rg = energies_l
-		buried = float(data[32].split(':')[-1])
-		desolv = float(data[27].split(':')[-1])
-		binding = float(data[30].split(':')[-1])
+
+		##
+		# implement regex to get these values
+		## the index method does not work when mixing server/local runs
+		##
+		# buried = float(data[32].split(':')[-1])
+		# desolv = float(data[27].split(':')[-1])
+		# binding = float(data[30].split(':')[-1])
+
+		buried = float('nan')
+		desolv = float('nan')
+		binding = float('nan')
+
 		result_dic[stage][conformation]['total'] = total
 		result_dic[stage][conformation]['bonds'] = bonds
 		result_dic[stage][conformation]['angles'] = angles
@@ -529,6 +592,23 @@ for stage in result_dic:
 	#
 	out.close()
 
+# input for melquiplot
+# At least two arguments are expected through STDIN. 
+# A CSV file (with at least two columns) with RMSD values in the first column and HADDOCK scores on the second. 
+# All the columns from the input file will be ploted. Second argument must be a single column 
+# file with the identifiers (e.g 1AYZ), which will be used as x_label.
+
+# for stage in result_dic:
+# 	sorted_haddock_score_list = sorted(haddock_score_dic[stage].items(), key=operator.itemgetter(1))
+# 	out = open('minput_%s.csv' % stage,'w')
+# 	for e in sorted_haddock_score_list:
+# 		conformation = e[0]
+# 		irms = result_dic[stage][conformation]['irms']
+# 		haddock_score = haddock_score_dic[stage][conformation]
+# 		# if not math.isnan(haddock_score):
+# 		out.write('%.4f,%.4f\n' % (irms, haddock_score))
+# 		# rank = i+1
+# 	out.close()
 
 #=========================================================================================#
 # Clustering
@@ -536,19 +616,19 @@ for stage in result_dic:
 
 # water
 
-os.chdir('%s/structures/it1/water/analysis' % runf)
-if not os.path.isfile('cluster.out'):
-	os.system('gunzip cluster.out.gz')
-os.chdir('../')
-os.system('~/ana_clusters.csh -best 4 analysis/cluster.out')
-# it1
-os.chdir('../analysis')
-if not os.path.isfile('cluster.out'):
-	os.system('gunzip cluster.out.gz')
-os.chdir('../')
-os.system('~/ana_clusters.csh -best 4 analysis/cluster.out')
-os.chdir('../../../')
-os.system('~/results-stats.csh %s' % runf)
+# os.chdir('%s/structures/it1/water/analysis' % runf)
+# if not os.path.isfile('cluster.out'):
+# 	os.system('gunzip cluster.out.gz')
+# os.chdir('../')
+# os.system('~/ana_clusters.csh -best 4 analysis/cluster.out')
+# # it1
+# os.chdir('../analysis')
+# if not os.path.isfile('cluster.out'):
+# 	os.system('gunzip cluster.out.gz')
+# os.chdir('../')
+# os.system('~/ana_clusters.csh -best 4 analysis/cluster.out')
+# os.chdir('../../../')
+# os.system('~/results-stats.csh %s' % runf)
 # cmd = '/home/rodrigo/results-stats.csh %s' % runf
 # run(cmd, '%s.stats' % runf)
 

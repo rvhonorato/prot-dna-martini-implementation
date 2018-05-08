@@ -1,4 +1,3 @@
-#!/usr/bin/env python2.6
 """
 Uses Biopython to parse the structure and DSSP output.
 Uses pieces of the martinize-1.1.py script to convert the SS types
@@ -33,360 +32,374 @@ try:
   from Bio.PDB import protein_letters_3to1
   from Bio.PDB.StructureBuilder import StructureBuilder
 except ImportError, emsg:
-    sys.stderr.write('Error: %s\n' %emsg)
-    sys.stderr.write("Error loading Biopython. Make sure it's on your PYTHONPATH\n")
-    sys.exit(1)
+	sys.stderr.write('Error: %s\n' %emsg)
+	sys.stderr.write("Error loading Biopython. Make sure it's on your PYTHONPATH\n")
+	sys.exit(1)
+
+if os.environ.get('DSSP_X') is None:
+	sys.stderr.write('Error: DSSP not found in path ($DSSP_X)\n')
+	sys.exit(1)
 
 
 def add_dummy(bead_list, dist=0.11, n=2):
 
-    new_bead_dic = {}
+	new_bead_dic = {}
 
-    # Generate a random vector in a sphere of -1 to +1, to add to the bead position
-    v  = [random.random()*2.-1, random.random()*2.-1, random.random()*2.-1]
+	# Generate a random vector in a sphere of -1 to +1, to add to the bead position
+	v  = [random.random()*2.-1, random.random()*2.-1, random.random()*2.-1]
 
-    # Calculated the length of the vector and divide by the final distance of the dummy bead
-    norm_v = norm(v)/dist
+	# Calculated the length of the vector and divide by the final distance of the dummy bead
+	norm_v = norm(v)/dist
 
-    # Resize the vector
-    vn = [i/norm_v for i in v]
+	# Resize the vector
+	vn = [i/norm_v for i in v]
 
-    # m sets the direction of the added vector, currently only works when adding one or two beads.
-    m = 1
-    for j in range(n): # create two new beads
-        newName = 'SCD' + str(j+1) # set the name of the new bead
-        new_bead_dic[newName] = [i+(m*j) for i, j in zip(bead_list[-1][1], vn)]
-        m *= -2
-    return new_bead_dic
+	# m sets the direction of the added vector, currently only works when adding one or two beads.
+	m = 1
+	for j in range(n): # create two new beads
+		newName = 'SCD' + str(j+1) # set the name of the new bead
+		new_bead_dic[newName] = [i+(m*j) for i, j in zip(bead_list[-1][1], vn)]
+		m *= -2
+	return new_bead_dic
 
 def map_cg(chain):
 
-    m_dic = collections.OrderedDict()
+	m_dic = collections.OrderedDict()
 
-    for aares in chain: 
-        m_dic[aares] = collections.OrderedDict()
+	for aares in chain: 
+		m_dic[aares] = collections.OrderedDict()
 
-        resn = aares.resname.split()[0] # resname
-        segid = aares.segid.strip() 
-        resi = aares.id[1]
+		resn = aares.resname.split()[0] # resname
+		segid = aares.segid.strip() 
+		resi = aares.id[1]
 
-        # for each atom segment, calculate its center of mass and map the correct bead
-        for atom_segment in cg_mapping[resn]:
-            atoms = [aares[a] for a in atom_segment.split() if a in aares.child_dict]
+		# for each atom segment, calculate its center of mass and map the correct bead
+		for atom_segment in cg_mapping[resn]:
+			atoms = [aares[a] for a in atom_segment.split() if a in aares.child_dict]
 
-            if atoms:
-                if '*' in atom_segment: # this is important to correctly place CG DNA beads
+			if atoms:
+				if '*' in atom_segment: # this is important to correctly place CG DNA beads
 
-                    # this * means it belongs to the previous residue... find it!
-                    target_previous_atom_list = [a for a in atom_segment.split() if '*' in a]
-                    # print target_previous_atom_list
+					# this * means it belongs to the previous residue... find it!
+					target_previous_atom_list = [a for a in atom_segment.split() if '*' in a]
+					# print target_previous_atom_list
 
-                    for target_atom in target_previous_atom_list:
-                        # does it exist?
-                        target_atom_name = target_atom.split('*')[0]
-                        try:
-                            previous_atom = chain[resi-1][target_atom_name]
-                            # how far away the previous atom is from this atom segment? 
-                            #  if it is too far away this could be the next chain...!
-                            minimum_dist = min([(a-previous_atom) for a in atoms])
-                            if minimum_dist < 2.0: # 2.0 A is very permissive
-                                atoms.append(previous_atom) 
-                        except KeyError:
-                            # previous atom not found, move on
-                            pass
-            
-            if not atoms:
-                print 'Residue %s %i of chain %s cannot be processed: missing atoms %s ' % (resn, resi, aares.parent.id, atom_segment)
-                continue
+					for target_atom in target_previous_atom_list:
+						# does it exist?
+						target_atom_name = target_atom.split('*')[0]
+						try:
+							previous_atom = chain[resi-1][target_atom_name]
+							# how far away the previous atom is from this atom segment? 
+							#  if it is too far away this could be the next chain...!
+							minimum_dist = min([(a-previous_atom) for a in atoms])
+							if minimum_dist < 2.0: # 2.0 A is very permissive
+								atoms.append(previous_atom) 
+						except KeyError:
+							# previous atom not found, move on
+							pass
+			
+			if not atoms:
+				print 'Residue %s %i of chain %s cannot be processed: missing atoms %s ' % (resn, resi, aares.parent.id, atom_segment)
+				continue
 
-            bead_name = cg_mapping[resn][atom_segment]
+			bead_name = cg_mapping[resn][atom_segment]
 
-            # get center of mass
-            code = list(set([a.bfactor for a in aares if a.bfactor != 0]))
+			# get center of mass
+			code = list(set([a.bfactor for a in aares if a.bfactor != 0]))
 
-            if len(code) > 1:
-                print 'Something is wrong with HADDOCK codes'
-                exit()
-            if not code:
-                code = 0.0
-            else:
-                code = code[0]
+			if len(code) > 1:
+				print 'Something is wrong with HADDOCK codes'
+				exit()
+			if not code:
+				code = 0.0
+			else:
+				code = code[0]
 
-            bead_coord = center_of_mass(atoms)
+			bead_coord = center_of_mass(atoms)
 
-            # restrain for backmapping
-            restrain = "assign (segid %sCG and resid %i and name %s) (segid %s and resid %i and (name %s)) 0 0 0" % (segid, resi, bead_name, segid, resi, ' or name '.join(atom_segment.split()))
+			atom_segment = ' '.join([a for a in atom_segment.split() if not '*' in a])
 
-            m_dic[aares][bead_name] = bead_coord, code, restrain
-    
-    # add dummy beads whenever its needed
-    for r in m_dic:
-        
-        if r.resname in polar:
-            d = 0.14 # distance
-            n = 2 # number of dummy beads to be placed
+			# restrain for backmapping
+			restrain = "assign (segid %sCG and resid %i and name %s) (segid %s and resid %i and (name %s)) 0 0 0" % (segid, resi, bead_name, segid, resi, ' or name '.join(atom_segment.split()))
 
-        elif r.resname in charged:
-            d = 0.11 # distance
-            n = 1 # number of dummy beads to be placed
+			m_dic[aares][bead_name] = bead_coord, code, restrain
+	
+	# add dummy beads whenever its needed
+	for r in m_dic:
+		
+		if r.resname in polar:
+			d = 0.14 # distance
+			n = 2 # number of dummy beads to be placed
 
-        else:
-            continue
-        
-        # add to data structure
-        ## this special beads have no HADDOCK code
-        bead_list = [(b, m_dic[r][b][0]) for b in m_dic[r]]
-        dummy_bead_dic = add_dummy(bead_list, dist=d, n=n)
-        for dB in dummy_bead_dic:
-            dB_coords = dummy_bead_dic[dB]
-            # code should be the same as the residue
-            code = m_dic[r][m_dic[r].keys()[0]][1]
-            # exit()
-            m_dic[r][dB] = (dB_coords, code, None)
+		elif r.resname in charged:
+			d = 0.11 # distance
+			n = 1 # number of dummy beads to be placed
 
-    return m_dic
+		else:
+			continue
+		
+		# add to data structure
+		## this special beads have no HADDOCK code
+		bead_list = [(b, m_dic[r][b][0]) for b in m_dic[r]]
+		dummy_bead_dic = add_dummy(bead_list, dist=d, n=n)
+		for dB in dummy_bead_dic:
+			dB_coords = dummy_bead_dic[dB]
+			# code should be the same as the residue
+			code = m_dic[r][m_dic[r].keys()[0]][1]
+
+			m_dic[r][dB] = (dB_coords, code, None)
+
+	return m_dic
 
 def center_of_mass(entity, geometric=False):
-    """
-    Returns gravitic [default] or geometric center of mass of an Entity.
-    Geometric assumes all masses are equal (geometric=True)
-    """
+	"""
+	Returns gravitic [default] or geometric center of mass of an Entity.
+	Geometric assumes all masses are equal (geometric=True)
+	"""
 
-    # Structure, Model, Chain, Residue
-    if isinstance(entity, Entity.Entity):
-        atom_list = entity.get_atoms()
-    # List of Atoms
-    elif hasattr(entity, '__iter__') and [x for x in entity if x.level == 'A']:
-        atom_list = entity
-    else: # Some other weirdo object
-        raise ValueError("Center of Mass can only be calculated from the following objects:\n"
-                            "Structure, Model, Chain, Residue, list of Atoms.")
-    
-    masses = []
-    positions = [ [], [], [] ] # [ [X1, X2, ..] , [Y1, Y2, ...] , [Z1, Z2, ...] ]
-    
-    for atom in atom_list:
-        masses.append(atom.mass)
-        
-        for i, coord in enumerate(atom.coord.tolist()):
-            positions[i].append(coord)
+	# Structure, Model, Chain, Residue
+	if isinstance(entity, Entity.Entity):
+		atom_list = entity.get_atoms()
+	# List of Atoms
+	elif hasattr(entity, '__iter__') and [x for x in entity if x.level == 'A']:
+		atom_list = entity
+	else: # Some other weirdo object
+		raise ValueError("Center of Mass can only be calculated from the following objects:\n"
+							"Structure, Model, Chain, Residue, list of Atoms.")
+	
+	masses = []
+	positions = [ [], [], [] ] # [ [X1, X2, ..] , [Y1, Y2, ...] , [Z1, Z2, ...] ]
+	
+	for atom in atom_list:
+		masses.append(atom.mass)
+		
+		for i, coord in enumerate(atom.coord.tolist()):
+			positions[i].append(coord)
 
-    # If there is a single atom with undefined mass complain loudly.
-    if 'ukn' in set(masses) and not geometric:
-        raise ValueError("Some Atoms don't have an element assigned.\n"
-                         "Try adding them manually or calculate the geometrical center of mass instead.")
-    
-    if geometric:
-        return [sum(coord_list)/len(masses) for coord_list in positions]
-    else:       
-        w_pos = [ [], [], [] ]
-        for atom_index, atom_mass in enumerate(masses):
-            w_pos[0].append(positions[0][atom_index]*atom_mass)
-            w_pos[1].append(positions[1][atom_index]*atom_mass)
-            w_pos[2].append(positions[2][atom_index]*atom_mass)
+	# If there is a single atom with undefined mass complain loudly.
+	if 'ukn' in set(masses) and not geometric:
+		raise ValueError("Some Atoms don't have an element assigned.\n"
+						 "Try adding them manually or calculate the geometrical center of mass instead.")
+	
+	if geometric:
+		return [sum(coord_list)/len(masses) for coord_list in positions]
+	else:       
+		w_pos = [ [], [], [] ]
+		for atom_index, atom_mass in enumerate(masses):
+			w_pos[0].append(positions[0][atom_index]*atom_mass)
+			w_pos[1].append(positions[1][atom_index]*atom_mass)
+			w_pos[2].append(positions[2][atom_index]*atom_mass)
 
-        return [sum(coord_list)/sum(masses) for coord_list in w_pos]
+		return [sum(coord_list)/sum(masses) for coord_list in w_pos]
 
 def determine_hbonds(structure):
 
-    nuc = ['DA', 'DC', 'DG', 'DT']
-    aa = ["ALA", "CYS", "ASP", "GLU", "PHE", 
-        "GLY", "HIS", "ILE", "LYS", "LEU", 
-        "MET", "ASN", "PRO", "GLN", "ARG", 
-        "SER", "THR", "VAL", "TRP", "TYR"] 
+	nuc = ['DA', 'DC', 'DG', 'DT']
+	aa = ["ALA", "CYS", "ASP", "GLU", "PHE", 
+		"GLY", "HIS", "ILE", "LYS", "LEU", 
+		"MET", "ASN", "PRO", "GLN", "ARG", 
+		"SER", "THR", "VAL", "TRP", "TYR"] 
 
-    pair_list = []
-    for model in structure:
+	pair_list = []
+	for model in structure:
 
-        dna_chain_l = []
+		dna_chain_l = []
 
-        for chain in model:
+		for chain in model:
 
-            prot_comp = len([r for r in chain.get_residues() if r.resname.split()[0] in aa])
-            dna_comp =  len([r for r in chain.get_residues() if r.resname.split()[0] in nuc])
+			prot_comp = len([r for r in chain.get_residues() if r.resname.split()[0] in aa])
+			dna_comp =  len([r for r in chain.get_residues() if r.resname.split()[0] in nuc])
 
-            if prot_comp:
-                # print chain, 'is protein'
-                pass
+			if prot_comp:
+				# protein
+				pass
 
-            if dna_comp:
-                # print chain, 'is nucleic'
-                dna_chain_l.append(chain)
+			if dna_comp:
+				# nucleic
+				dna_chain_l.append(chain)
 
-            if dna_comp and prot_comp:
-                print chain, 'is mixed nucleic/protein, not supported. split into different chains and try again'
-                exit()
+			if dna_comp and prot_comp:
+				print chain, 'is mixed nucleic/protein, not supported. split into different chains and try again'
+				exit()
 
-        if len(dna_chain_l) == 1:
-            print ' WARNING: Only one DNA chain detected, is this correct?'
+		if len(dna_chain_l) == 1:
+			print ' WARNING: Only one DNA chain detected, is this correct?'
 
-            chainA = dna_chain_l[0]
-            reslistA = [r for r in chainA.get_residues()]
+			chainA = dna_chain_l[0]
+			reslistA = [r for r in chainA.get_residues()]
 
-            for rA, rB in itertools.combinations(reslistA, 2):
-                # print rA.id[1], rB.id[1]
-                pair = identify_pairing(rA, rB)
-                pair_list.append(pair)
+			for rA, rB in itertools.combinations(reslistA, 2):
+				# print rA.id[1], rB.id[1]
+				pair = identify_pairing(rA, rB)
+				pair_list.append(pair)
 
-
-
-        if len(dna_chain_l) > 1:   ## list sizes could be different, this might be improvable
-            for chainA, chainB in itertools.combinations(dna_chain_l, 2):
-                reslistA = [r for r in chainA.get_residues()]
-                reslistB = [r for r in chainB.get_residues()]
-                for rA in reslistA:
-                    atomlistA = rA.child_dict.values()
-                    for rB in reslistB:
-                        pair = identify_pairing(rA, rB)
-                        pair_list.append(pair)
-         
-    return [p for p in pair_list if p]
+		if len(dna_chain_l) > 1:   ## list sizes could be different, this might be improvable
+			for chainA, chainB in itertools.combinations(dna_chain_l, 2):
+				reslistA = [r for r in chainA.get_residues()]
+				reslistB = [r for r in chainB.get_residues()]
+				for rA in reslistA:
+					atomlistA = rA.child_dict.values()
+					for rB in reslistB:
+						pair = identify_pairing(rA, rB)
+						pair_list.append(pair)
+		 
+	return [p for p in pair_list if p]
 
 def identify_pairing(rA, rB):
-    renumber_dic = {}
-    pair = []
+	renumber_dic = {}
+	pair = []
 
-    # check if the pairing is correct
-    rA_name = rA.resname
-    rB_name = rB.resname
-    
-    try:
-        atom_pair_list = pairing[rA_name, rB_name]
-    except KeyError:
-        # pairing not possible
-        return
+	# check if the pairing is correct
+	rA_name = rA.resname
+	rB_name = rB.resname
+	
+	try:
+		atom_pair_list = pairing[rA_name, rB_name]
+	except KeyError:
+		# pairing not possible
+		return
 
-    # check if distances are ok
-    # print atom_pair_list
-    distance_l = []
-    for atom_list in atom_pair_list:
-        a = rA[atom_list[0]]
-        b = rB[atom_list[1]]
-        distance_l.append(a-b)
+	# check if distances are ok
+	distance_l = []
 
-    # check P-P distances to make sure its the opposite base
-    ## for the perfect DNA:
-    ##  opposite distance = 18.8A
-    ##  sequential distance = 6.6A
-    #
-    # 10.0A should be sufficient
-    P_cutoff = 10.0 
-    #
-    Basedist_cutoff = 3.5
-    try:
-        pA = rA.child_dict['P']
-        pB = rB.child_dict['P']
-        Pdistance = pA-pB
-    except KeyError:
-        # some base is missing its P, use the geometric center instead
-        cenA = center_of_mass(rA.child_dict.values())
-        cenB = center_of_mass(rB.child_dict.values())
-        Pdistance = math.sqrt(sum([(a - b) ** 2 for a, b in zip(cenA, cenB)]))
+	for atom_list in atom_pair_list:
 
-    if Pdistance > P_cutoff:
-        
-        if all( e < Basedist_cutoff for e in distance_l): # if ALL bonds are within range
-        ######
-        # KEEP IN MIND THAT this will not account for badly paired DNA
-        ## Implement a way to search for the closest possible pair? ##
-        ######
-            resnumA = rA.id[1]
-            resnumB = rB.id[1]
-            # note: 
-            # print rA.get_segid
-            segidA = rA.get_segid().split()[0]
-            segidB = rB.get_segid().split()[0]
-            pair = (resnumA, segidA), (resnumB, segidB)
-            
-            # special atoms, mark them!
-            for atom_pair in atom_pair_list:
-                atomA, atomB = atom_pair
-                #
-                rA[atomA].bfactor = 1
-                rB[atomB].bfactor = 1
+		try:
+			a = rA[atom_list[0]]
+			b = rB[atom_list[1]]
+			distance_l.append(a-b)
+		except KeyError:
+			# residue does not have the necessary sidechain atoms
+			#  assume its not a pair
+			return
 
-    return pair
+	# check P-P distances to make sure its the opposite base
+	## distances for perfect DNA:
+	##  opposite = 18.8A
+	##  sequential = 6.6A
+	#
+	## 10.0A should be sufficient
+	P_cutoff = 10.0 
+
+	Basedist_cutoff = 3.5
+	try:
+		pA = rA.child_dict['P']
+		pB = rB.child_dict['P']
+		Pdistance = pA-pB
+	except KeyError:
+		# some base is missing its P, use the geometric center instead
+		cenA = center_of_mass(rA.child_dict.values())
+		cenB = center_of_mass(rB.child_dict.values())
+		Pdistance = math.sqrt(sum([(a - b) ** 2 for a, b in zip(cenA, cenB)]))
+
+	if Pdistance > P_cutoff:
+		
+		if all( e < Basedist_cutoff for e in distance_l): # if ALL bonds are within range
+		######
+		# KEEP IN MIND THAT this will not account for badly paired DNA
+		## Implement a way to search for the closest possible pair? ##
+		######
+			resnumA = rA.id[1]
+			resnumB = rB.id[1]
+
+			segidA = rA.get_segid().split()[0]
+			segidB = rB.get_segid().split()[0]
+			pair = (resnumA, segidA), (resnumB, segidB)
+			
+			# special atoms, mark them!
+			for atom_pair in atom_pair_list:
+				atomA, atomB = atom_pair
+
+				rA[atomA].bfactor = 1
+				rB[atomB].bfactor = 1
+
+	return pair
 
 def output_cg_restraints(pair_list):
-    out = open('dna_restraints.def','w')
-    for i, e in enumerate(pair_list):
-        idx = i + 1
-        resA = e[0][0]
-        segidA = e[0][1]
-        resB = e[1][0]
-        segidB = e[1][1]
-        out.write('{===>} base_a_%i=(resid %i and segid %s);\n{===>} base_b_%i=(resid %i and segid %s);\n\n' % (idx, resA, segidA, idx, resB, segidB))
-    out.close()
+	out = open('dna_restraints.def','w')
+	for i, e in enumerate(pair_list):
+		idx = i + 1
+		resA = e[0][0]
+		segidA = e[0][1]
+		resB = e[1][0]
+		segidB = e[1][1]
+		out.write('{===>} base_a_%i=(resid %i and segid %s);\n{===>} base_b_%i=(resid %i and segid %s);\n\n' % (idx, resA, segidA, idx, resB, segidB))
+	out.close()
 
 def extract_groups(pair_list):
-    # this will be used to define AA restraints
-    out = open('dna-aa_groups.dat','w')
-    # extract groups
-    groupA = [a[0][0] for a in pair_list]
-    segidA = list(set([a[0][1] for a in pair_list]))
+	# this will be used to define AA restraints
+	out = open('dna-aa_groups.dat','w')
+	# extract groups
+	groupA = [a[0][0] for a in pair_list]
+	segidA = list(set([a[0][1] for a in pair_list]))
 
-    groupB = [a[1][0] for a in pair_list]
-    segidB = list(set([a[0][1] for a in pair_list]))
+	groupB = [a[1][0] for a in pair_list]
+	segidB = list(set([a[0][1] for a in pair_list]))
 
-    if len(segidA) != 1:
-        print 'Something is wrong with SEGID A'
-        exit()
+	if len(segidA) != 1:
+		print 'Something is wrong with SEGID A'
+		exit()
 
-    if len(segidB) != 1:
-        print 'Something is wrong with SEGID B'
-        exit()
+	if len(segidB) != 1:
+		print 'Something is wrong with SEGID B'
+		exit()
 
-    segidA = segidA[0]
-    segidB = segidB[0]
-    groupA.sort()
-    groupB.sort()
+	segidA = segidA[0]
+	segidB = segidB[0]
+	groupA.sort()
+	groupB.sort()
 
-    out.write('%i:%i\n%s\n%i:%i\n%s' % (groupA[0], groupA[-1], segidA, groupB[0], groupB[-1], segidB))
-    out.close
+	out.write('%i:%i\n%s\n%i:%i\n%s' % (groupA[0], groupA[-1], segidA, groupB[0], groupB[-1], segidB))
+	out.close
 
 def determine_ss(structure):
-    # calculate SS
-    ss_dic = {}
-    for model in structure:
-        try:
-            dssp = DSSP(model, pdbf_path)
-        except:
-            # no seconday structure detected for this model
-            ## does it have contain proteins?
-            continue #
+	# calculate SS
+	ss_dic = {}
+	for model in structure:
+		try:
+			dssp = DSSP(model, pdbf_path)
+		except:
+			# no seconday structure detected for this model
+			## does it have contain proteins?
+			print 'no ss?'
+			# exit()
+			continue #
 
-        calculated_chains = list(set([e[0] for e in dssp.keys()]))
-        # print calculated_chains
+		calculated_chains = list(set([e[0] for e in dssp.keys()]))
+		# print calculated_chains
 
-        # Get SS information and translate it:
-        # DSSP > MARTINI > HADDOCK
-        ## this could still be improved
-        for chain in model:
-            if chain.id in calculated_chains:
-                # if ss_dic[model]:
-                # get DSSP value for each residue
-                for r in chain:
-                    try:
-                        r.xtra["SS_DSSP"]
-                    except KeyError:
-                        print " WARNING: No SS definition found for residue: %s %s %i" % (chain.id, r.resname, r.id[1])
-                        # pass
-                        r.xtra["SS_DSSP"] = '-'
-                dssp_dic = collections.OrderedDict([(r, r.xtra["SS_DSSP"]) for r in chain])
-                # transform DSSP > MARTINI
-                dssp_ss = ''.join(dssp_dic.values())
-                _, martini_types = ssClassification(dssp_ss) # ancestral function, keep it there
+		# Get SS information and translate it:
+		# DSSP > MARTINI > HADDOCK
+		## this could still be improved
+		for chain in model:
+			if chain.id in calculated_chains:
+				# if ss_dic[model]:
+				# get DSSP value for each residue
+				for r in chain:
+					try:
+						r.xtra["SS_DSSP"]
+					except KeyError:
+						print " WARNING: No SS definition found for residue: %s %s %i" % (chain.id, r.resname, r.id[1])
+						# pass
+						r.xtra["SS_DSSP"] = '-'
+				dssp_dic = collections.OrderedDict([(r, r.xtra["SS_DSSP"]) for r in chain])
+				# transform DSSP > MARTINI
+				dssp_ss = ''.join(dssp_dic.values())
+				# print dssp_ss
+				# exit()
+				_, martini_types = ssClassification(dssp_ss) # ancestral function, keep it there
 
-                # transform MARTINI > HADDOCK
-                ## and add it to the bfactor col
-                for residue, ss in zip(dssp_dic, martini_types):
-                    code = ss_to_code[ss]
-                    for atom in residue.get_atoms():
-                        # print residue, atom, code, atom.bfactor
-                        atom.bfactor = code
-                        # print residue, atom, code, atom.bfactor
-                        # exit()
-    return structure
+				# transform MARTINI > HADDOCK
+				## and add it to the bfactor col
+				for residue, ss in zip(dssp_dic, martini_types):
+					code = ss_to_code[ss]
+					# for atom in residue.get_atoms():
+					for atom in residue.get_atom():
+						# print residue, atom, code, atom.bfactor
+						atom.bfactor = code
+						# print residue, atom, code, atom.bfactor
+						# exit()
+	return structure
 
 # |  >>> p = PDBParser()                                                                                                                                                                    
 #  |  >>> structure = p.get_structure("1MOT", "1mot.pdb")                                                                                                                                    
@@ -409,13 +422,13 @@ def determine_ss(structure):
 
 
 def rename_nucbases(structure):
-    dna_nuc = {'CYT': 'DC', 'THY': 'DT', 'ADE': 'DA', 'GUA': 'DG'}
-    for model in structure:
-        for chain in model:
-            for r in chain.get_residues():
-                if r.resname in dna_nuc.keys():
-                    # rename!
-                    r.resname = dna_nuc[r.resname]
+	dna_nuc = {'CYT': 'DC', 'THY': 'DT', 'ADE': 'DA', 'GUA': 'DG'}
+	for model in structure:
+		for chain in model:
+			for r in chain.get_residues():
+				if r.resname in dna_nuc.keys():
+					# rename!
+					r.resname = dna_nuc[r.resname]
 
 
 #==========================================================================================#
@@ -437,53 +450,53 @@ Martinize Script from Tserk Wassenaar
 ## SECONDARY STRUCTURE DEFINITION  ## 
 
 def norm(a):
-    return math.sqrt(norm2(a))
+	return math.sqrt(norm2(a))
 
 def norm2(a):
-    return sum([i*i for i in a])
+	return sum([i*i for i in a])
 
 # Function to reformat pattern strings                                        
 def pat(x,c="."):                                                             
-    return x.replace(c,"\x00").split()
+	return x.replace(c,"\x00").split()
 
 # Make a dictionary from two lists                                            
 def hash(x,y):                                                                
-    return dict(zip(x,y))
+	return dict(zip(x,y))
 
 # Split a string                                                              
 def spl(x):                                                                   
-    return x.split()
+	return x.split()
 
 def tt(program):                                                                            
-    return  "".join([ssd[program].get(chr(i),"C") for i in range(256)])     
+	return  "".join([ssd[program].get(chr(i),"C") for i in range(256)])     
 
 # Pattern substitutions
 def typesub(seq,patterns,types):                                                            
-    for i,j in zip(patterns,types):                                                         
-        seq = seq.replace(i,j)                                                              
-    return seq
+	for i,j in zip(patterns,types):                                                         
+		seq = seq.replace(i,j)                                                              
+	return seq
 
 # The following function translates a string encoding the secondary structure
 # to a string of corresponding Martini types, taking the origin of the 
 # secondary structure into account, and replacing termini if requested.
 def ssClassification(ss,program="dssp"):      
-                 
-    # Translate dssp/pymol/gmx ss to Martini ss                                             
-    ss  = ss.translate(sstt[program])                                                       
-    # Separate the different secondary structure types                                      
-    sep = dict([(i,ss.translate(sstd[i])) for i in sstd.keys()])       
-    # Do type substitutions based on patterns                                               
-    # If the ss type is not in the patterns lists, do not substitute                        
-    # (use empty lists for substitutions) 
+				 
+	# Translate dssp/pymol/gmx ss to Martini ss                                             
+	ss  = ss.translate(sstt[program])                                                       
+	# Separate the different secondary structure types                                      
+	sep = dict([(i,ss.translate(sstd[i])) for i in sstd.keys()])       
+	# Do type substitutions based on patterns                                               
+	# If the ss type is not in the patterns lists, do not substitute                        
+	# (use empty lists for substitutions) 
 
-    typ = [ typesub(sep[i],patterns.get(i,[]),pattypes.get(i,[]))                           
-            for i in sstd.keys()]                                                           
-    # Translate all types to numerical values  
-    typ = [ [ord(j) for j in list(i)] for i in typ ]                                        
-    # Sum characters back to get a full typed sequence                                      
-    typ = "".join([chr(sum(i)) for i in zip(*typ)])                                         
-    # Return both the actual as well as the fully typed sequence                             
-    return ss, typ
+	typ = [ typesub(sep[i],patterns.get(i,[]),pattypes.get(i,[]))                           
+			for i in sstd.keys()]                                                           
+	# Translate all types to numerical values  
+	typ = [ [ord(j) for j in list(i)] for i in typ ]                                        
+	# Sum characters back to get a full typed sequence                                      
+	typ = "".join([chr(sum(i)) for i in zip(*typ)])                                         
+	# Return both the actual as well as the fully typed sequence                             
+	return ss, typ
 
 #----+--------------------------------------+
 ## A | SECONDARY STRUCTURE TYPE DEFINITIONS |
@@ -503,34 +516,34 @@ ss_names = {
 
 bbss = ss_names.keys()
 bbss     =    spl("  F     E     H     1     2     3     T     S     C")  # SS one letter 
-                                                                              
+																			  
 #                                                                                           
 ssdefs = {
-    "dssp":  list(".HGIBETSC~"),             # DSSP one letter secondary structure code     #@#
-    "pymol": list(".H...S...L"),             # Pymol one letter secondary structure code    #@# 
-    "gmx":   list(".H...ETS.C"),             # Gromacs secondary structure dump code        #@#    
-    "self":  list("FHHHEETSCC")              # Internal CG secondary structure codes        #@#
+	"dssp":  list(".HGIBETSC~"),             # DSSP one letter secondary structure code     #@#
+	"pymol": list(".H...S...L"),             # Pymol one letter secondary structure code    #@# 
+	"gmx":   list(".H...ETS.C"),             # Gromacs secondary structure dump code        #@#    
+	"self":  list("FHHHEETSCC")              # Internal CG secondary structure codes        #@#
 }
 cgss     =   list("FHHHEETSCC")              # Corresponding CG secondary structure types   #@#
 
 
 patterns = {
-    "H": pat(".H. .HH. .HHH. .HHHH. .HHHHH. .HHHHHH. .HHHHHHH. .HHHH HHHH.")                #@#
+	"H": pat(".H. .HH. .HHH. .HHHH. .HHHHH. .HHHHHH. .HHHHHHH. .HHHH HHHH.")                #@#
 }
 pattypes = {
-    "H": pat(".3. .33. .333. .3333. .13332. .113322. .1113222. .1111 2222.")                #@#
+	"H": pat(".3. .33. .333. .3333. .13332. .113322. .1113222. .1111 2222.")                #@#
 }
 
 ss_to_code = {'C': 1, # Free,
-              'S': 2,
-              'H': 3,
-              '1': 4,
-              '2': 5,
-              '3': 6,
-              'E': 7, # Extended
-              'T': 8, # Turn
-              'F': 9  # Fibril 
-              }
+			  'S': 2,
+			  'H': 3,
+			  '1': 4,
+			  '2': 5,
+			  '3': 6,
+			  'E': 7, # Extended
+			  'T': 8, # Turn
+			  'F': 9  # Fibril 
+			  }
 
 ss_eq = list("CBHHHHBTF")
 
@@ -559,35 +572,35 @@ sstd = dict([ (i,ord(i)*null+i+(255-ord(i))*null) for i in cgss ])
 
 bb = "CA C N O "
 prot_atoms = {      "ALA":  [bb + "CB"],
-                    "CYS":  [bb, "CB SG"],
-                    "ASP":  [bb, "CB CG OD1 OD2"],
-                    "GLU":  [bb, "CB CG CD OE1 OE2"],
-                    "PHE":  [bb, "CB CG CD1","CD2 CE2","CE1 CZ"],
-                    "GLY":  [bb],
-                    "HIS":  [bb, "CB CG","CD2 NE2","ND1 CE1"],
-                    "ILE":  [bb, "CB CG1 CG2 CD1"],
-                    "LYS":  [bb, "CB CG CD","CE NZ"],
-                    "LEU":  [bb, "CB CG CD1 CD2"],
-                    "MET":  [bb, "CB CG SD CE"],
-                    "ASN":  [bb, "CB CG ND1 ND2 OD1 OD2"], #ND1?
-                    "PRO":  [bb, "CB CG CD"],
-                    "GLN":  [bb, "CB CG CD OE1 OE2 NE1 NE2"],
-                    "ARG":  [bb, "CB CG CD","NE CZ NH1 NH2"],    
-                    "SER":  [bb, "CB OG"],
-                    "THR":  [bb, "CB OG1 CG2"],
-                    "VAL":  [bb, "CB CG1 CG2"],
-                    "TRP":  [bb, "CB CG CD2","CD1 NE1 CE2","CE3 CZ3","CZ2 CH2"],
-                    "TYR":  [bb, "CB CG CD1","CD2 CE2","CE1 CZ OH"]}
+					"CYS":  [bb, "CB SG"],
+					"ASP":  [bb, "CB CG OD1 OD2"],
+					"GLU":  [bb, "CB CG CD OE1 OE2"],
+					"PHE":  [bb, "CB CG CD1","CD2 CE2","CE1 CZ"],
+					"GLY":  [bb],
+					"HIS":  [bb, "CB CG","CD2 NE2","ND1 CE1"],
+					"ILE":  [bb, "CB CG1 CG2 CD1"],
+					"LYS":  [bb, "CB CG CD","CE NZ"],
+					"LEU":  [bb, "CB CG CD1 CD2"],
+					"MET":  [bb, "CB CG SD CE"],
+					"ASN":  [bb, "CB CG ND1 ND2 OD1 OD2"], #ND1?
+					"PRO":  [bb, "CB CG CD"],
+					"GLN":  [bb, "CB CG CD OE1 OE2 NE1 NE2"],
+					"ARG":  [bb, "CB CG CD","NE CZ NH1 NH2"],    
+					"SER":  [bb, "CB OG"],
+					"THR":  [bb, "CB OG1 CG2"],
+					"VAL":  [bb, "CB CG1 CG2"],
+					"TRP":  [bb, "CB CG CD2","CD1 NE1 CE2","CE3 CZ3","CZ2 CH2"],
+					"TYR":  [bb, "CB CG CD1","CD2 CE2","CE1 CZ OH"]}
 
 bead_names = ["BB", "SC1", "SC2", "SC3", "SC4"]
 
 # insert beads into the data structure
 cg_mapping = {}
 for res in prot_atoms:
-    cg_mapping[res] = collections.OrderedDict()
-    for i, atom_l in enumerate(prot_atoms[res]):
-        bead = bead_names[i]
-        cg_mapping[res][atom_l] = bead
+	cg_mapping[res] = collections.OrderedDict()
+	for i, atom_l in enumerate(prot_atoms[res]):
+		bead = bead_names[i]
+		cg_mapping[res][atom_l] = bead
 
 
 ######################################
@@ -637,11 +650,11 @@ cg_mapping['DT'] = DT_beads
 cg_mapping['DG'] = DG_beads
 
 pairing = {
-    ('DG','DC'): [('N2', 'O2'), ('N1', 'N3'), ('O6', 'N4')],
-    ('DC','DG'): [('O2', 'N2'), ('N3', 'N1'), ('N4', 'O6')],
-    #
-    ('DA','DT'): [('N6', 'O4'), ('N1', 'N3')],
-    ('DT','DA'): [('O4', 'N6'), ('N3', 'N1')]
+	('DG','DC'): [('N2', 'O2'), ('N1', 'N3'), ('O6', 'N4')],
+	('DC','DG'): [('O2', 'N2'), ('N3', 'N1'), ('N4', 'O6')],
+	#
+	('DA','DT'): [('N6', 'O4'), ('N1', 'N3')],
+	('DT','DA'): [('O4', 'N6'), ('N3', 'N1')]
 }
 
 polar   = ["GLN","ASN","SER","THR"]
@@ -660,10 +673,10 @@ aa_model = P.get_structure('aa_model', pdbf_path)
 
 # set ALL bfactors to 0
 for model in aa_model:
-    for chain in model:
-        for residue in chain:
-            for atom in residue:
-                atom.bfactor = 0.0
+	for chain in model:
+		for residue in chain:
+			for atom in residue:
+				atom.bfactor = 0.0
 
 # Assign HADDOCK code according to SS (1-9)
 determine_ss(aa_model)
@@ -674,8 +687,8 @@ rename_nucbases(aa_model)
 # Assign HADDOCK code for hydrogen bonding capable nucleotides (0-1)
 pair_list = determine_hbonds(aa_model)
 if pair_list:
-    output_cg_restraints(pair_list)
-    extract_groups(pair_list)
+	output_cg_restraints(pair_list)
+	extract_groups(pair_list)
 
 # Map CG beads to AA structure
 structure_builder=StructureBuilder()
@@ -685,42 +698,42 @@ structure_builder.init_seg(' ') # Empty SEGID
 tbl_cg_to_aa = []
 restrain_counter = 0
 for model in aa_model:
-    
-    structure_builder.init_model(model.id)
-    
-    for chain in model:
-        
-        structure_builder.init_chain(chain.id)
-        
-        mapping_dic = map_cg(chain)
-        
-        ordered_mapping_dic = collections.OrderedDict(sorted(mapping_dic.items()))
-        
-        for residue in ordered_mapping_dic:
-            if residue.id[0] != ' ': # filter HETATMS
-              continue
-            
-            structure_builder.init_residue(residue.resname, residue.id[0], residue.id[1], residue.id[2])
+	
+	structure_builder.init_model(model.id)
+	
+	for chain in model:
+		
+		structure_builder.init_chain(chain.id)
+		
+		mapping_dic = map_cg(chain)
+		
+		ordered_mapping_dic = collections.OrderedDict(sorted(mapping_dic.items()))
+		
+		for residue in ordered_mapping_dic:
+			if residue.id[0] != ' ': # filter HETATMS
+			  continue
+			
+			structure_builder.init_residue(residue.resname, residue.id[0], residue.id[1], residue.id[2])
 
-            for i, bead in enumerate(ordered_mapping_dic[residue]):
+			for i, bead in enumerate(ordered_mapping_dic[residue]):
 
-                bead_name = bead
-                bead_coord = ordered_mapping_dic[residue][bead_name][0]
-                haddock_code = ordered_mapping_dic[residue][bead_name][1]
-                restrain = ordered_mapping_dic[residue][bead_name][2]
+				bead_name = bead
+				bead_coord = ordered_mapping_dic[residue][bead_name][0]
+				haddock_code = ordered_mapping_dic[residue][bead_name][1]
+				restrain = ordered_mapping_dic[residue][bead_name][2]
 
-                structure_builder.init_atom(
-                        bead_name, 
-                        bead_coord, 
-                        haddock_code, 
-                        1.00, 
-                        " ", 
-                        bead_name, 
-                        i)
+				structure_builder.init_atom(
+						bead_name, 
+						bead_coord, 
+						haddock_code, 
+						1.00, 
+						" ", 
+						bead_name, 
+						i)
 
-                tbl_cg_to_aa.append(restrain)
-                restrain_counter += 1
-                
+				tbl_cg_to_aa.append(restrain)
+				restrain_counter += 1
+				
 cg_model = structure_builder.get_structure()
 
 # Write CG structure
