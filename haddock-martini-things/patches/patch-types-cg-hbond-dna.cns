@@ -1,0 +1,69 @@
+! patch-types-hbond-dna.cns
+
+! patch residue according to its hbond capability (bfactor = 1)
+
+! encode for adenine
+evaluate ($bdnum = 0)
+for $id in id (name SC2 and resn DA) loop cgda
+  evaluate ($bdnum = $bdnum + 1)
+  show (name) (id $id)
+  evaluate ($bdname_$bdnum = $result)
+  show (resid) (id $id)
+  evaluate ($bdresi_$bdnum = $result)
+  show (b) (id $id)
+  evaluate ($bfactor_$bdnum = $result)
+  if ($bfactor_$bdnum = 1 ) then  
+    evaluate ($ptype= "DA"+encode($bfactor_$bdnum)) 
+    patch $ptype refe=NIL=(resid $bdresi_$bdnum) end
+  end if
+end loop cgda
+
+! encode for cysotine
+evaluate ($bdnum = 0)
+for $id in id (name SC2 and resn DC) loop cgdc
+  evaluate ($bdnum = $bdnum + 1)
+  show (name) (id $id)
+  evaluate ($bdname_$bdnum = $result)
+  show (resid) (id $id)
+  evaluate ($bdresi_$bdnum = $result)
+  show (b) (id $id)
+  evaluate ($bfactor_$bdnum = $result)
+  if ($bfactor_$bdnum = 1 ) then  
+    evaluate ($ptype= "DC"+encode($bfactor_$bdnum)) 
+    patch $ptype refe=NIL=(resid $bdresi_$bdnum) end
+  end if
+end loop cgdc
+
+! encode for guanine
+evaluate ($bdnum = 0)
+for $id in id (name SC2 and resn DG) loop cgdc
+  evaluate ($bdnum = $bdnum + 1)
+  show (name) (id $id)
+  evaluate ($bdname_$bdnum = $result)
+  show (resid) (id $id)
+  evaluate ($bdresi_$bdnum = $result)
+  show (b) (id $id)
+  evaluate ($bfactor_$bdnum = $result)
+  if ($bfactor_$bdnum = 1 ) then  
+    evaluate ($ptype= "DG"+encode($bfactor_$bdnum)) 
+    patch $ptype refe=NIL=(resid $bdresi_$bdnum) end
+  end if
+end loop cgdc
+
+! encode for thymine
+evaluate ($bdnum = 0)
+for $id in id (name SC2 and resn DT) loop cgdt
+  evaluate ($bdnum = $bdnum + 1)
+  show (name) (id $id)
+  evaluate ($bdname_$bdnum = $result)
+  show (resid) (id $id)
+  evaluate ($bdresi_$bdnum = $result)
+  show (b) (id $id)
+  evaluate ($bfactor_$bdnum = $result)
+  if ($bfactor_$bdnum = 1 ) then  
+    evaluate ($ptype= "DT"+encode($bfactor_$bdnum)) 
+    patch $ptype refe=NIL=(resid $bdresi_$bdnum) end
+  end if
+end loop cgdt
+
+
