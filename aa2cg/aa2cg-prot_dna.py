@@ -231,7 +231,11 @@ def determine_hbonds(structure):
 			for rA, rB in itertools.combinations(reslistA, 2):
 				# print rA.id[1], rB.id[1]
 				pair = identify_pairing(rA, rB)
-				pair_list.append(pair)
+				if pair:
+					pair_list.append(pair)
+					# print pair
+					# print len(dna_chain_l)
+					# exit()
 
 		if len(dna_chain_l) > 1:   ## list sizes could be different, this might be improvable
 			for chainA, chainB in itertools.combinations(dna_chain_l, 2):
@@ -243,7 +247,8 @@ def determine_hbonds(structure):
 						pair = identify_pairing(rA, rB)
 						pair_list.append(pair)
 		 
-	return [p for p in pair_list if p]
+	# return [p for p in pair_list if p]
+	return pair_list
 
 def identify_pairing(rA, rB):
 	renumber_dic = {}

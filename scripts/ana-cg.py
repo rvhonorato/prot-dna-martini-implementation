@@ -155,7 +155,7 @@ for stage in stage_ref_dic:
 		'bonds': float('nan'), 'angles': float('nan'), 'improper': float('nan'), 'dihe': float('nan'), 'vdw': float('nan'), 
 		'elec': float('nan'), 'air': float('nan'), 'cdih': float('nan'), 'coup': float('nan'), 'rdcs': float('nan'), 
 		'vean': float('nan'), 'dani': float('nan'), 'xpcs': float('nan'), 'rg': float('nan'),
-		'buried' : float('nan'),
+		'bsa' : float('nan'),
 		'desolv' : float('nan'),
 		'binding' : float('nan')}
 
@@ -282,7 +282,7 @@ for stage in stage_ref_dic:
 		# run!
 		output = os.popen('echo "%s" | profit' % cmd)
 		# parse result
-		result = [l for l in output if 'RMS' in l][0]
+		result = [l for l in output if 'RMS:' in l][0]
 		#
 		irms = float(result.split()[-1])
 		#
@@ -514,17 +514,16 @@ for stage in stage_ref_dic:
 		energies_l = map(float, data[7].split(':')[-1].split(','))
 		total, bonds, angles, improper, dihe, vdw, elec, air, cdih, coup, rdcs, vean, dani, xpcs, rg = energies_l
 
-		##
-		# implement regex to get these values
-		## the index method does not work when mixing server/local runs
-		##
-		# buried = float(data[32].split(':')[-1])
-		# desolv = float(data[27].split(':')[-1])
-		# binding = float(data[30].split(':')[-1])
-
-		buried = float('nan')
-		desolv = float('nan')
-		binding = float('nan')
+		try:
+			# local run
+			bsa = float(data[32].split(':')[-1])
+			desolv = float(data[27].split(':')[-1])
+			binding = float(data[30].split(':')[-1])
+		except:
+			# server run
+			bsa = float(data[28].split(':')[-1])
+			binding = float(data[26].split(':')[-1])
+			desolv = float(data[23].split(':')[-1])
 
 		result_dic[stage][conformation]['total'] = total
 		result_dic[stage][conformation]['bonds'] = bonds
@@ -541,14 +540,14 @@ for stage in stage_ref_dic:
 		result_dic[stage][conformation]['dani'] = dani
 		result_dic[stage][conformation]['xpcs'] = xpcs
 		result_dic[stage][conformation]['rg'] = rg
-		result_dic[stage][conformation]['buried'] = buried
+		result_dic[stage][conformation]['bsa'] = bsa
 		result_dic[stage][conformation]['desolv'] = desolv
 		result_dic[stage][conformation]['binding'] = binding
 
 
 for stage in result_dic:
 	out = open('%s/%s.dat' % (runf, stage),'w')
-	out.write('stage\tpdb_name\trank\tscore\tfnat\tlrms\tirms\tbinding\tdesolv\tbinding\ttotal\tbonds\tangles\timproper\tdihe\tvdw\telec\tair\tcdih\tcoup\trdcs\tvean\tdani\txpcs\trg\n')
+	out.write('stage\tpdb_name\trank\tscore\tfnat\tlrms\tirms\tbinding\tdesolv\tbsa\ttotal\tbonds\tangles\timproper\tdihe\tvdw\telec\tair\tcdih\tcoup\trdcs\tvean\tdani\txpcs\trg\n')
 	# out = open('%s.capri' % stage, 'w')
 	# out.write('conformation\tfnat\tlrms\tirms\n')
 	# pdb_name = 
@@ -578,7 +577,7 @@ for stage in result_dic:
 		xpcs = result_dic[stage][conformation]['xpcs']
 		rg = result_dic[stage][conformation]['rg']
 		#
-		buried = result_dic[stage][conformation]['buried'] 
+		bsa = result_dic[stage][conformation]['bsa'] 
 		desolv = result_dic[stage][conformation]['desolv'] 
 		binding = result_dic[stage][conformation]['binding']
 		#
@@ -587,7 +586,7 @@ for stage in result_dic:
 		out.write('%s\t%s\t%i\t%.4f\t%.3f\t%.2f\t%.2f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\n' % (stage, conformation, rank, haddock_score, fnat, lrms, irms,
 			binding,
 			desolv,
-			binding, 
+			bsa, 
 			total, bonds, angles, improper, dihe, vdw, elec, air, cdih, coup, rdcs, vean, dani, xpcs, rg))
 	#
 	out.close()

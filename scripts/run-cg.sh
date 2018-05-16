@@ -86,7 +86,6 @@ sed -i '/evaluate (&Data.dnarest = &dnarest_on)/a evaluate (&Data.dnacgrest = &d
 sed -i "s/{===>} dnarest_on=false;/{===>} dnarest_on=true;/g" run.cns
 
 
-
 #----------------------------------------------------------------------------------------------------------------#
 #
 # Edit input generator
