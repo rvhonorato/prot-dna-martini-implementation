@@ -7,8 +7,6 @@ import glob, os, sys
 def calc_sucess(file_list, topN, tag):
 	hit_count = 0.
 	total = float(len(file_list))
-	print file_list
-	exit()
 	# score_dic = {}
 	for f in file_list:
 		# hit_count = 0.
@@ -29,24 +27,23 @@ def calc_sucess(file_list, topN, tag):
 phase = ['it0','it1','water']
 
 for p in phase:
-	file_listCG = glob.glob('*/run1/%s.dat' % p)
-	file_listAA = glob.glob('*/run2/%s.dat' % p)
+	f_list = glob.glob('run*/%s.dat' % p)
+	# file_listCG = glob.glob('*/run*/%s.dat' % p)
+	# file_listAA = glob.glob('*/run2/%s.dat' % p)
 
-	cg_names = [e.split('/')[0] for e in file_listCG]
-	aa_names = [e.split('/')[0] for e in file_listAA]
+	names = [e.split('/')[0] for e in f_list]
 
-	cg_file_list = ['%s/run1/%s.dat' % (e,p) for e in list(set(cg_names) & set(aa_names))]
-	aa_file_list = ['%s/run2/%s.dat' % (e,p) for e in list(set(cg_names) & set(aa_names))]
 
-	top_l = [1,4,10,15,20,25,100,200]
+	top_l = [1,4,10,20,50,100]
 	# top_l = [1,2,4,10]
 
 	d = {}
 	for t in top_l:
-		cgper = calc_sucess(cg_file_list, t, 'CG')
-		aaper = calc_sucess(aa_file_list, t, 'AA')
+		cgper = calc_sucess(f_list, t, 'CG')
+		print t, cgper
+		# aaper = calc_sucess(aa_file_list, t, 'AA')
 		# print '-'*20
-		d[t] = cgper, aaper
+		# d[t] = cgper, aaper
 
 	import matplotlib.pyplot as plt
 	import pandas as pd

@@ -8,7 +8,7 @@ df = df[,-1]
 barplot(as.matrix(df),beside=T,ylim=c(0,1), xlab='Top', ylab='Sucess rate',
         legend.text = c("CG","AA"),main='Prot-DNA benchmark (n=34)\nit0')
 
-df = read.csv('sr_it1.csv', check.names = F)
+df = read.csv('hitrate_it1.csv', check.names = F)
 df = df[,-1]
 
 barplot(as.matrix(df),beside=T,ylim=c(0,1), xlab='Top', ylab='Sucess rate',
@@ -19,3 +19,5 @@ df = df[,-1]
 
 barplot(as.matrix(df),beside=T,ylim=c(0,1), xlab='Top', ylab='Hit rate',
         legend.text = c("CG","AA"),main='Prot-DNA benchmark (n=34)\nwater')
+
+summary(df)

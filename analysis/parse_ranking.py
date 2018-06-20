@@ -22,17 +22,22 @@ for f in ls:
 			data_dic[pdbname][structure] = (rank, irms)
 
 # how many acceptable models are there in top200?
+# target_rank = 200
+target_rank = 25
 for pdb in data_dic:
 	counter = 0
 	total_acceptable = len([data_dic[pdb][e][1] for e in data_dic[pdb] if data_dic[pdb][e][1] <= 4.0])
 	for structure in data_dic[pdb]:
 		rank, irms = data_dic[pdb][structure]
 		#
-		if irms <= 4.0 and rank <= 200:
+		if irms <= 4.0 and rank <= target_rank:
 			counter += 1
 	#
-	if total_acceptable > 200 and counter < 200:
+	if total_acceptable > target_rank and counter < target_rank:
 		print pdb, total_acceptable, counter
+
+
+
 
 
 

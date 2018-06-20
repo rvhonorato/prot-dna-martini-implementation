@@ -23,7 +23,7 @@ for p in phases:
 		data_dic = dict((k, v) for k, v in data_dic.iteritems() if v)
 
 		r = max([len(data_dic[d]) for d in data_dic])
-
+		exit()
 		if run == 'run1':
 			out = open('%s_cg_bench.dat' % p,'w')
 		else:

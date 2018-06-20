@@ -194,7 +194,7 @@ def center_of_mass(entity, geometric=False):
 
 def determine_hbonds(structure):
 
-	nuc = ['DA', 'DC', 'DG', 'DT']
+	nuc = ['DA', 'DC', 'DG', 'DT', 'A','C','G','U']
 	aa = ["ALA", "CYS", "ASP", "GLU", "PHE", 
 		"GLY", "HIS", "ILE", "LYS", "LEU", 
 		"MET", "ASN", "PRO", "GLN", "ARG", 
@@ -223,7 +223,7 @@ def determine_hbonds(structure):
 				# exit()
 
 		if len(dna_chain_l) == 1:
-			print ' WARNING: Only one DNA chain detected, is this correct?'
+			print ' WARNING: Only one DNA/RNA chain detected, is this correct?'
 
 			chainA = dna_chain_l[0]
 			reslistA = [r for r in chainA.get_residues()]
@@ -262,7 +262,6 @@ def identify_pairing(rA, rB):
 		atom_pair_list = pairing[rA_name, rB_name]
 	except KeyError:
 		# pairing not possible
-
 		return
 
 	# check if distances are ok
@@ -288,7 +287,7 @@ def identify_pairing(rA, rB):
 	P_cutoff = 10.0 
 
 	# Basedist_cutoff = 3.5
-	Basedist_cutoff = 7.5
+	Basedist_cutoff = 3.5
 	try:
 		pA = rA.child_dict['P']
 		pB = rB.child_dict['P']
@@ -309,7 +308,7 @@ def identify_pairing(rA, rB):
 		# KEEP IN MIND THAT this will not account for badly paired DNA
 		## Implement a way to search for the closest possible pair? ##
 		######
-			
+			# print rA,rB
 			segidA = rA.get_segid().split()[0]
 			segidB = rB.get_segid().split()[0]
 			pair = (resnumA, segidA), (resnumB, segidB)
@@ -413,34 +412,30 @@ def determine_ss(structure):
 						# exit()
 	return structure
 
-# |  >>> p = PDBParser()                                                                                                                                                                    
-#  |  >>> structure = p.get_structure("1MOT", "1mot.pdb")                                                                                                                                    
-#  |  >>> model = structure[0]                                                                                                                                                               
-#  |  >>> dssp = DSSP(model, "1mot.pdb")                                                                                                                                                     
-#  |  >>> # DSSP data is accessed by a tuple (chain_id, res_id)                                                                                                                              
-#  |  >>> a_key = list(dssp.keys())[2]                                                                                                                                                       
-#  |  >>> # (dssp index, amino acid, secondary structure, relative ASA, phi, psi,                                                                                                            
-#  |  >>> # NH_O_1_relidx, NH_O_1_energy, O_NH_1_relidx, O_NH_1_energy,                                                                                                                      
-#  |  >>> # NH_O_2_relidx, NH_O_2_energy, O_NH_2_relidx, O_NH_2_energy)                                                                                                                      
-#  |  >>> dssp[a_key]                                                                                                                                                                        
-#  |  (3, 'A', 'H', 0.7075471698113207, -61.2, -42.4,                                                                                                                                        
-#  |   -2, -0.7, 4, -3.0, 1, -0.2, 5, -0.2)       
-# for r in chain:
-#     try:
-#         print r.xtra["SS_DSSP"]
-#     except:
-#         print r.xtra
-#         break
-
-
 def rename_nucbases(structure):
-	dna_nuc = {'CYT': 'DC', 'THY': 'DT', 'ADE': 'DA', 'GUA': 'DG'}
-	for model in structure:
-		for chain in model:
-			for r in chain.get_residues():
-				if r.resname in dna_nuc.keys():
-					# rename!
-					r.resname = dna_nuc[r.resname]
+	# this works...!
+	chainresdic = dict([(c.get_id(), [r.get_resname() for r in c.get_residues()]) for m in structure for c in m for r in c.get_residues()])
+
+	nucleotide_list = ['CYT', 'C', 'DC', 'THY','T', 'DT', 'ADE','A', 'DA','G', 'GUA', 'DG', 'U', 'URI']
+
+	if [True for c in chainresdic for e in chainresdic[c] if e in nucleotide_list]:
+
+		if [True for c in chainresdic for e in chainresdic[c] if e in ['U', 'URI']]:
+			# CG needs 1 letter for RNA
+			ref_dic = {'CYT': 'C', 'URI': 'U', 'ADE': 'A', 'GUA': 'G'}
+		else:
+			# CG needs 2 letters for DNA
+			ref_dic = {'CYT': 'DC', 'THY': 'DT', 'ADE': 'DA', 'GUA': 'DG'}
+
+		for model in structure:
+			for chain in model:	
+				for r in chain.get_residues():
+					if r.resname in ref_dic.keys():
+						# rename!
+						r.resname = ref_dic[r.resname]
+	else:
+		# not nucleotide, nothing to renumber
+		pass
 
 
 #==========================================================================================#
@@ -562,7 +557,6 @@ ss_eq = list("CBHHHHBTF")
 # List of programs for which secondary structure definitions can be processed
 programs = ssdefs.keys()                                                                    
 
-
 # Dictionaries mapping ss types to the CG ss types                                          
 ssd = dict([ (i, hash(ssdefs[i],cgss)) for i in programs ])                             
 
@@ -656,17 +650,61 @@ DT_beads["N1 C6"] =              "SC1"
 DT_beads["N3 C2 O2"] =           "SC2"
 DT_beads["C5 C4 O4 C7"] =        "SC3"
 
+A_beads = collections.OrderedDict()
+A_beads["O3'* P O1P O2P O5' OP1 OP2"] = "BB1"
+A_beads["C5' O4' C4'"] =        "BB2"
+A_beads["C3' C2' O2' C1'"] =    "BB3"
+A_beads["N9 C4"] =              "SC1"
+A_beads["C2 N3"] =              "SC2"
+A_beads["C6 N6 N1"] =           "SC3"
+A_beads["C8 N7 C5"] =           "SC4"
+
+C_beads = collections.OrderedDict()
+C_beads["O3'* P O1P O2P O5' OP1 OP2"] = "BB1"
+C_beads["C5' O4' C4'"] =        "BB2"
+C_beads["C3' C2' O2' C1'"] =    "BB3" 
+C_beads["N1 C6"] =              "SC1"
+C_beads["N3 C2 O2"] =           "SC2" 
+C_beads["C5 C4 N4"] =           "SC3"
+
+G_beads = collections.OrderedDict()
+G_beads["O3'* P O1P O2P O5' OP1 OP2"] = "BB1"
+G_beads["C5' O4' C4'"] =        "BB2"
+G_beads["C3' C2' O2' C1'"] =    "BB3"
+G_beads["N9 C4"] =              "SC1"
+G_beads["C2 N2 N3"] =           "SC2"
+G_beads["C6 O6 N1"] =           "SC3"
+G_beads["C8 N7 C5"] =           "SC4"
+
+U_beads = collections.OrderedDict()
+U_beads["O3'* P O1P O2P O5' OP1 OP2"] = "BB1"
+U_beads["C5' O4' C4'"] =        "BB2"
+U_beads["C3' C2' O2' C1'"] =    "BB3"
+U_beads["N1 C6"] =              "SC1"
+U_beads["N3 C2 O2"] =           "SC2"
+U_beads["C5 C4 O4"] =           "SC3"
+
 cg_mapping['DA'] = DA_beads
 cg_mapping['DC'] = DC_beads
 cg_mapping['DT'] = DT_beads
 cg_mapping['DG'] = DG_beads
 
+cg_mapping['A'] = A_beads
+cg_mapping['C'] = C_beads
+cg_mapping['U'] = U_beads
+cg_mapping['G'] = G_beads
+
 pairing = {
 	('DG','DC'): [('N2', 'O2'), ('N1', 'N3'), ('O6', 'N4')],
 	('DC','DG'): [('O2', 'N2'), ('N3', 'N1'), ('N4', 'O6')],
-	#
 	('DA','DT'): [('N6', 'O4'), ('N1', 'N3')],
-	('DT','DA'): [('O4', 'N6'), ('N3', 'N1')]
+	('DT','DA'): [('O4', 'N6'), ('N3', 'N1')],
+	#
+	('G','C'): [('N2', 'O2'), ('N1', 'N3'), ('O6', 'N4')],
+	('C','G'): [('O2', 'N2'), ('N3', 'N1'), ('N4', 'O6')],
+	('A','U'): [('N6', 'O4'), ('N1', 'N3')],
+	('U','A'): [('O4', 'N6'), ('N3', 'N1')],
+
 }
 
 polar   = ["GLN","ASN","SER","THR"]
@@ -694,6 +732,7 @@ for model in aa_model:
 determine_ss(aa_model)
 
 # Strandardize naming
+# WARNING, THIS ASSUMES THAT INPUT DNA/RNA IS 3-LETTER CODE
 rename_nucbases(aa_model)
 
 # Assign HADDOCK code for hydrogen bonding capable nucleotides (0-1)

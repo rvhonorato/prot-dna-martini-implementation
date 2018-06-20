@@ -90,6 +90,7 @@ def find_key(dic, val):
 	'''return the key of dictionary dic given the value'''
 	return [k for k, v in dic.iteritems() if v == val][0]
 
+
 global haddocktools_path
 # haddocktools_path = '/Users/rvhonorato/tools'
 haddocktools_path = os.environ["HADDOCKTOOLS"]
@@ -122,11 +123,17 @@ pdb_name = pdbf.split('.pdb')[0]
 # check if it needs chain/segid fixing
 fix_chain_segid(pdbf)
 fix_chain_segid(pdbf_cg)
+# fix_terms(pdbf)
 
 # get pdb lists
 it0_l = ['%s/%s/structures/it0/%s' % (path,runf,p.split()[0]) for p in open('%s/%s/structures/it0/file.nam' % (path,runf)).readlines() if 'pdb' in p]
 it1_l = ['%s/%s/structures/it1/%s' % (path,runf,p.split()[0]) for p in open('%s/%s/structures/it1/file.nam' % (path,runf)).readlines() if 'pdb' in p]
 water_l = ['%s/%s/structures/it1/water/%s' % (path,runf,p.split()[0]) for p in open('%s/%s/structures/it1/water/file.nam' % (path,runf)).readlines() if 'pdb' in p]
+
+it0_l.sort()
+it1_l.sort()
+water_l.sort()
+
 # it0_l = glob.glob('%s/%s/structures/it0/*pdb' % (path, runf))
 # it1_l = glob.glob('%s/%s/structures/it1/*pdb' % (path, runf))
 # water_l = glob.glob('%s/%s/structures/it1/water/*pdb' % (path, runf))
@@ -259,6 +266,7 @@ for ref in [pdbf, pdbf_cg]:
 	izone_dic[ref] = izone_l
 
 for stage in stage_ref_dic:
+
 	####
 	pdb_l = stage_ref_dic[stage][0] 
 	ref = stage_ref_dic[stage][1]
@@ -269,23 +277,42 @@ for stage in stage_ref_dic:
 
 	# prepare structural input
 	irms_dic = {}
+	# counter = 0
 	for conformation in pdb_l:
 		#####
 		# fix chain
 		fix_chain_segid(conformation)
 
+		#####################################
+		# WARNING                           #
+		# This will remove H5T/H3T atoms!   #
+		cmd = 'bash /home/rodrigo/Nostromo/scripts/fix_term.sh %s' % conformation
+		run(cmd, 'fix')
+		#####################################
+
+		#####################################
+		# WARNING                           #
+		# This will rename nucleotides      #
+		cmd = 'bash /home/rodrigo/Nostromo/scripts/rename_nuc.sh %s' % conformation
+		run(cmd, 'rename')
+		#####################################
+		
 		# prepare cmd for PROFIT
 		cmd = 'refe %s\nmobi %s\nATOMS %s\nZONE CLEAR\n%s\nstatus\nFIT\nquit' % (ref, conformation, atoms, '\n'.join(izone_l))
 		open('idbg','w').write(cmd)
-		# if stage == 'water':
+		# open('idbg_%i' % counter,'w').write(cmd)
+		# if counter == 2:
 		# 	exit()
+		# counter += 1
+		
 		# run!
-		output = os.popen('echo "%s" | profit' % cmd)
+		output = os.popen('echo "%s" | profit' % cmd) # if this fails, check the terminal atoms..
+
 		# parse result
 		result = [l for l in output if 'RMS:' in l][0]
-		#
+
 		irms = float(result.split()[-1])
-		#
+
 		irms_dic[conformation] = irms
 		result_dic[stage][conformation]['irms'] = irms
 
@@ -340,7 +367,7 @@ for stage in stage_ref_dic:
 
 # # ready?
 # for stage in stage_ref_dic:
-# 	print '>>> stage %s' % stage
+# 	# print '>>> stage %s' % stage
 
 # 	pdb_l = stage_ref_dic[stage][0] 
 # 	ref = stage_ref_dic[stage][1]
@@ -368,9 +395,10 @@ for stage in stage_ref_dic:
 # 		# os.system('rm %s' % segid_output)
 
 # 	if stage == 'water':
-# 		outputf = 'run2/structures/it1/%s/l-RMSD.dat' % stage
+# 		outputf = '%s/structures/it1/%s/l-RMSD.dat' % (runf, stage)
 # 	else:
-# 		outputf = 'run2/structures/%s/l-RMSD.dat' % stage
+# 		outputf = '%s/structures/%s/l-RMSD.dat' % (runf, stage)
+
 # 	#
 # 	lrms_out = open(outputf,'w')
 # 	lrms_out.write('#struc l-RMSD\n')

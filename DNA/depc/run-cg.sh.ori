@@ -16,7 +16,7 @@ DNA_CHAIN=$1
 PARAM_FOLDER=/home/rodrigo/cg-params
 
 # Add CG topology, parameters, link and patches
-PARAM_FOLDER=/home/rodrigo/cg-params/toppar
+PARAM_FOLDER=/home/rodrigo/cg-params/
 CG_TOP=$PARAM_FOLDER/dna-CG-MARTINI-2-1p.top
 CG_PARAM=$PARAM_FOLDER/dna-CG-MARTINI-2-1p.param
 CG_LINK=$PARAM_FOLDER/dna-CG-MARTINI-2-1p.link

@@ -1,5 +1,5 @@
 # this information is derived from the papers!
-# S1 in DNA and S3 for RNA
+# S1 in DNA
 
 # special hydrogen bonding beads have the same parameters 
 #  as the non bonding ones
@@ -29,9 +29,6 @@ bead_ref = {
 'TSC2': ['TNS4', 'NH5'],
 'TSC3': ['TNS2', 'NH6'],
 
-
-
-
 }
 
 bond_dic = {
@@ -40,39 +37,35 @@ bond_dic = {
 ('BB3','BB1'): (0.353, 10000),
 
 ('BB3','ASC1'): (0.300, 30000),
-('ASC1','ASC2'): (0.229, 'constrain'),
-('ASC2','ASC3'): (0.266, 'constrain'),
+('ASC1','ASC2'): (0.229, 'constraint'),
+('ASC2','ASC3'): (0.266, 'constraint'),
 ('ASC2','ASC4'): (0.326, 20000),
 
-('ASC3','ASC4'): (0.288, 'constrain'),
-('ASC4','ASC1'): (0.162, 'constrain'),
+('ASC3','ASC4'): (0.288, 'constraint'),
+('ASC4','ASC1'): (0.162, 'constraint'),
 
 ('BB3','CSC1'): (0.270, 30000),
-('CSC1','CSC2'): (0.220, 'constrain'),
-('CSC2','CSC3'): (0.285, 'constrain'),
-('CSC3','CSC1'): (0.268, 'constrain'),
+('CSC1','CSC2'): (0.220, 'constraint'),
+('CSC2','CSC3'): (0.285, 'constraint'),
+('CSC3','CSC1'): (0.268, 'constraint'),
 
 ('BB3','GSC1'): (0.300, 30000),
-('GSC1','GSC2'): (0.295, 'constrain'),
-('GSC2','GSC3'): (0.295, 'constrain'),
+('GSC1','GSC2'): (0.295, 'constraint'),
+('GSC2','GSC3'): (0.295, 'constraint'),
 ('GSC2','GSC4'): (0.389, 20000),
-('GSC3','GSC4'): (0.285, 'constrain'),
-('GSC4','GSC1'): (0.161, 'constrain'),
+('GSC3','GSC4'): (0.285, 'constraint'),
+('GSC4','GSC1'): (0.161, 'constraint'),
 
 ('BB3','TSC1'): (0.270, 30000),
-('TSC1','TSC2'): (0.217, 'constrain'),
-('TSC2','TSC3'): (0.322, 'constrain'),
-('TSC3','TSC1'): (0.265, 'constrain'),
-
-('BB4','USC1'): (0.286, 18000),
-('USC1','USC2'): (0.224, 'constrain'),
-('USC2','USC3'): (0.289, 'constrain'),
-('USC3','USC1'): (0.276, 'constrain')}
+('TSC1','TSC2'): (0.217, 'constraint'),
+('TSC2','TSC3'): (0.322, 'constraint'),
+('TSC3','TSC1'): (0.265, 'constraint')
+}
 
 for e in bond_dic:
 	l, eps = bond_dic[e]
 	l = l*10
-	if eps == 'constrain':
+	if eps == 'constraint':
 		eps = 500.
 	else:
 		eps = eps/417.8
