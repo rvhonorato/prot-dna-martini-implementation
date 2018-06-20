@@ -1,32 +1,40 @@
 # Implementing Martini DNA coarse grained forcefield in HADDOCK
 
-Most of this was based on the previous implementation done by <> and Jorge Roel for protein-protein docking.
+Most of this was based on the previous implementation done by Jorge Roel for CG protein-protein docking and Marc for Protein-DNA
 
 * Parmeters
-	dna-CG-MARTINI-2-1p.top
-	dna-CG-MARTINI-2-1p.param
-	dna-CG-MARTINI-2-1p.link
-	dna-CG-MARTINI-2-1p-break.top
+	dna-rna-CG-MARTINI-2-1p.top
+	dna-rna-CG-MARTINI-2-1p.param
+	dna-rna-CG-MARTINI-2-1p.link
+	dna-rna-CG-MARTINI-2-1p-break.top
 
 * Patches
-	patch-types-cg-hbond-dna.cns
-	dna-cg-break.cns
+	patch-breaks-cg-dna-rna.cns
+	patch-types-cg-hbond-dna-rna.cns
+
+* Templates
+	template-dna-rna-aa-restraints.def
+	template-dna-rna-cg-restraints.def
+
+***
 
 Step 1: Parameter and topology conversion
 Step 2: Implement DNA in aa2cg script
 Step 3: Patch HADDOCK to use new files
+Step 4: Benchmarking
+Step 5: Case studies
 
 ***
 
 ## Step 1: Parameter and topology conversion
 
-First step is to "convert" MARTINI parameter and write a topology file. The parameters were extracted from the martinize.py script provided by the MARTINI group, the martini_v2.1P-dna.itp forcefield file and the 10.1021/acs.jctc.5b00286 paper.
+First step is to convert MARTINI parameter and write a topology file. The parameters were extracted from the martinize.py script provided by the MARTINI group, the martini_v2.1P-dna.itp forcefield file and the DNA/RNA extension papers.
 
 ### Bead renaming
 
-Table S1 provides the MARTINI DNA bead mapping table; bead, bead type and mapped atoms. All nucleotides have TN0 as bead type, CNS cannot handle this type of repetition. In order to bypass this, new bead types were created <figure>. The MARTINI DNA forcefield also has eight special beads with different parameters to account for the hydrogen bonding of the bases, these beads were also renamed.
+Table S1 (DNA) and S2 (RNA) of its respective papers, providesthe MARTINI Nucleotide bead mapping table; bead, bead type and mapped atoms. All nucleotides like TN0 as bead type, CNS cannot handle this type of repetition. Also parameters obtained for RNA bases differ from DNA, so new bead types were created from them as well <figure>.  The MARTINI DNA/RNA forcefield also has eight special beads with different parameters to account for the hydrogen bonding of the bases, these beads were also renamed.
 
-### Topology - dna-CG-MARTINI-2-1.top
+### Topology - dna-rna-CG-MARTINI-2-1.top
 
 1. Masses
 	The atomic mass for each residue is extracted from the first section of the forcefield file, ex:
@@ -47,7 +55,7 @@ Table S1 provides the MARTINI DNA bead mapping table; bead, bead type and mapped
 	**PRESidue** are special definitions used later in the HADDOCK machinery to change bead types of the special hydrogen bonding nucleotides and create the connectivity across nucleotides.
 
 
-### Parametrization - dna-CG-MARTINI-2-1.param
+### Parametrization - dna-rna-CG-MARTINI-2-1.param
 
 MARTINI parameters are given in kJ and nanometers CNS needs kCal (divide by 4.178) and angstrom (multiply by 10). 
 
@@ -118,19 +126,19 @@ MARTINI parameters are given in kJ and nanometers CNS needs kCal (divide by 4.17
 	DIHEdral NB1 NB2 NB3 NB1	0.06	2	95
 	```
 
-### Link - dna-CG-MARTINI-2-1p.link
+### Link - dna-rna-CG-MARTINI-2-1p.link
 
 This file will be read later by CNS to connect the bases together.
 
-### Break - dna-CG-MARTINI-2-1p-break.top
+### Break - dna-rna-CG-MARTINI-2-1p-break.top
 
-This file contains a topology tthat will be used to break links that are too large to exist. The cutoff for this is specified in run.cns
+This file contains a topology tthat will be used to break links that are too large to exist. The cutoff for this is specified in `run.cns`
 
 ***
 
-## Step 2: Implement DNA in aa2cg script
+## Step 2: Implement DNA/RNA conversion in aa2cg script
 
-The implementation was based on the previous aa2cg which was based on the martinize script. MARTINI has different bead types for proteins depending on its secondary structure. The script identifies the secondary structure and assigns a (HADDOCK) code to te b-factor column of the converted structure. This code is later used in CNS to change the bead types. Same approach was used to account for the special hydrogen bonding beads for DNA. The new version of aa2cg script identifies if a given base is in a hydrogen bonding geometry and assigns it a code to be patched by CNS later (patch-types-cg-hbond-dna.cns).
+The implementation was based on the previous aa2cg which was based on the martinize script. MARTINI has different bead types for proteins depending on its secondary structure. The script identifies the secondary structure and assigns a (HADDOCK) code to te b-factor column of the converted structure. This code is later used in CNS to change the bead types. Same approach was used to account for the special hydrogen bonding beads for DNA. The new version of aa2cg script identifies if a given base is in a hydrogen bonding geometry and assigns it a code to be patched by CNS later (patch-types-cg-hbond-dna-rna.cns).
 
 It now also outputs two files; dna_restraints.def and dna-aa_groups.dat which can be used to automatically define DNA base pair restraints.
 
@@ -173,7 +181,20 @@ The parameters must also be copied to the toppar/ folder and changed in run.cns,
 	  end if
 	end if
 	```
+***
 
+## Step 4: Benchmarking
+
+In order to compare the perfomance and precision of the HADDOCK-MARTINI implementation both AA and CG runs must be compared. On a previous work, Marc benchmarked the AA protein-DNA HADDOCK perfomance and most of this data is available. Henceforth, the same restraints were used and a few runs were setup.
+
+	* run1: CG default values
+	* run2: AA default values
+	* run3: AA epsilon = 78, 
+	* run4: CG epsilon = 78, w_desol = 0.0
+
+Also as 
+
+### Step 4.1: Analysis
 
 
 
