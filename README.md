@@ -1,26 +1,24 @@
 # Implementing MARTINI DNA/RNA coarse grained forcefield in HADDOCK for protein-nucleic acid docking
 
 * Parmeters
-	dna-rna-CG-MARTINI-2-1p.top
-	dna-rna-CG-MARTINI-2-1p.param
-	dna-rna-CG-MARTINI-2-1p.link
-	dna-rna-CG-MARTINI-2-1p-break.top
+	- `dna-rna-CG-MARTINI-2-1p.top`
+	- `dna-rna-CG-MARTINI-2-1p.param`
+	- `dna-rna-CG-MARTINI-2-1p.link`
+	- `dna-rna-CG-MARTINI-2-1p-break.top`
 
 * Patches
-	patch-breaks-cg-dna-rna.cns
-	patch-types-cg-hbond-dna-rna.cns
+	- `patch-breaks-cg-dna-rna.cns`
+	- `patch-types-cg-hbond-dna-rna.cns`
 
 * Templates
-	template-dna-rna-aa-restraints.def
-	template-dna-rna-cg-restraints.def
+	- `template-dna-rna-aa-restraints.def`
+	- `template-dna-rna-cg-restraints.def`
 
-Most of this was based on the previous implementation done by Jorge Roel for CG protein-protein docking and Marc for Protein-DNA.
+*Most of this was based on the previous implementation done by Jorge Roel for CG protein-protein docking and Marc for Protein-DNA.*
 
-***
+Step 1: Bead renaming and parameter/topology conversion
 
-Step 1: Bead ranming and parameter/topology conversion
-
-Step 2: Implement DNA in aa2cg script
+Step 2: Implement DNA/RNA in aa2cg script
 
 Step 3: Patch HADDOCK to use new files
 
@@ -28,7 +26,7 @@ Step 4: Benchmarking
 
 Step 5: Case studies
 
-## Step 1: Bead ranming and parameter/topology conversion
+## Step 1: Bead renaming and parameter/topology conversion
 
 First step is to convert MARTINI forcefield parameters and write a CNS topology file. The parameters were extracted from the the `martini_v2.1P-dna.itp` file and the DNA/RNA extension papers (10.1021/acs.jctc.5b00286, 10.1016/j.bpj.2017.05.043).
 
