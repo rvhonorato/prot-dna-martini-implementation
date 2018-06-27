@@ -72,8 +72,8 @@ for f in [f for f in glob.glob('*') if not '.' in f]:
 	submissionf = '%s/run3/submission.log' % f
 	if not os.path.isfile(submissionf):
 		# not submitted yet
-		cmd = 'python /home/rodrigo/Nostromo/run_haddock22_file.py %s_e78 %s/run3/haddockparam.web' % (f, f)
-		# run(cmd, submissionf)
+		cmd = 'python /home/rodrigo/Nostromo/scripts/run_haddock22_file.py %s_e78 %s/run3/haddockparam.web' % (f, f)
+		run(cmd, submissionf)
 
 	else:
 		# submitted
@@ -87,6 +87,7 @@ for f in [f for f in glob.glob('*') if not '.' in f]:
 			try:
 				log = open('check.log').readlines()[0][:-1]
 				status = log.split()[-1]
+				print f, status
 			except:
 				print 'there is something wrong with %s, check it' % f
 
@@ -103,4 +104,6 @@ for f in [f for f in glob.glob('*') if not '.' in f]:
 				else:
 					print 'Something went wrong with downloading %s' % f
 					exit()
+		else:
+			print f, 'done'
 	# done

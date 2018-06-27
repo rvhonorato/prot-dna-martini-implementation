@@ -32,7 +32,7 @@ for TARGET in $DIRL
 	cd ..
 
 	# Analyze
-	REFERENCE=${p%/}$SUFFIX
+	REFERENCE=${TARGET%/}$SUFFIX
 	if [ ! -f run$RUNN/water.dat ]; then
 		echo "## Running CG analysis"
 		python ~/Nostromo/analysis/analyze-run.py $REFERENCE run$RUNN

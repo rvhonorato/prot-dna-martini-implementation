@@ -1,15 +1,17 @@
-
-import glob, os
-ls = [f for f in glob.glob('*') if not '.' in f]
+import os, sys, glob, subprocess, time
 
 
-for f in ls:
-	runf = '%s/run.sh' % f
-	if os.path.isfile(runf):
-		a = open(runf).readlines()[-1][-1]
-		try:
-			print int(a), f
-		except:
-			pass
-	else:
-		print f
+def run(cmd, outputf):
+	with open("./%s" % outputf, "w") as f:
+		process = subprocess.Popen(cmd.split(), shell=False, stdout=f)
+		process.wait()
+
+def run2(cmd, outputf):
+	with open("./%s" % outputf, "w") as f:
+		process = subprocess.Popen(cmd.split(), shell=False, stderr=f)
+		process.wait()
+
+cmd = 'tar zxf AAAAAG.tgz'
+run(cmd,'log')
+run2(cmd,'log')
+open('log').readlines()

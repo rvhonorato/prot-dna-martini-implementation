@@ -20,20 +20,20 @@ for TARGET in $DIRL
 	cd $TARGET
 	echo "########### >> $TARGET - run$RUNN <<"
 
-	# if [ ! -d run$RUNN ]; then
-	echo "## Setting up"
-	python /home/rodrigo/Nostromo/scripts/prepare_input.py $RUNN --rna
-	bash run.sh
-	# fi
+	if [ ! -d run$RUNN ]; then
+		echo "## Setting up"
+		python /home/rodrigo/Nostromo/scripts/prepare_input.py $RUNN --rna
+		bash run.sh
+	fi
 
-	# Run
+	## Run
 	cd run$RUNN
-	echo "## Executing"
+	#echo "## Executing"
 	$HADDOCKCMD >&/home/rodrigo/rna-benchmark/haddock.out
 	cd ..
 
-	# # Analyze
-	REFERENCE=${p%/}$SUFFIX
+	# Analyze
+	REFERENCE=${TARGET%/}$SUFFIX
 	if [ ! -f run$RUNN/water.dat ]; then
 		echo "## Running CG analysis"
 		python ~/Nostromo/analysis/analyze-run.py $REFERENCE run$RUNN

@@ -192,6 +192,7 @@ fix_chain_segid(reference)
 
 for chain in pdb_dic:
 	pdb = pdb_dic[chain]
+	print pdb
 	fix_chain_segid(pdb)
 
 #================================================================================================#
