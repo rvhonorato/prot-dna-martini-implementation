@@ -17,7 +17,6 @@ cp /home/rodrigo/cg-params/patch-breaks-cg-dna-rna.cns protocols/
 sed -i "s/{===>} dna_A=false;/{===>} dna_A=true;/g" run.cns
 
 # CG
-
 sed -i 's/{===>} w_desolv_0=1.0/{===>} w_desolv_0=0.0/g' run.cns
 sed -i 's/{===>} w_desolv_1=1.0/{===>} w_desolv_1=0.0/g' run.cns
 sed -i 's/{===>} w_desolv_2=1.0/{===>} w_desolv_2=0.0/g' run.cns

@@ -29,6 +29,7 @@ def launch(name, file):
   username = "rvhonorato"
   password = "Rvh2349&"
   # HADDOCK file-upload interface URL 
+  #url = 'http://alcazar.science.uu.nl/cgi/services/HADDOCK2.2/haddockserver-file.cgi'
   url = 'http://milou.science.uu.nl/cgi/services/HADDOCK2.2/haddockserver-file.cgi'
   # Params used in the file-upload interface :
   #

@@ -13,14 +13,8 @@ Updates
  - Changed the mapping routine to include DNA bead types (Rodrigo Honorato 2018)
  - Implemented feature to check if nucleic acid is a candidate for hbond (Rodrigo Honorato 2018)
 """
-import os
-import sys
-import random
-import math
-import operator #
-import itertools #
-import collections #
-import warnings
+import os, sys, random, math, operator, itertools, collections, warnings
+
 warnings.filterwarnings("ignore")
 
 try:

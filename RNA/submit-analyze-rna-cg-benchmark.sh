@@ -21,12 +21,12 @@ for TARGET in $DIRL
 	echo "########### >> $TARGET - run$RUNN <<"
 
 	if [ ! -d run$RUNN ]; then
-		echo "## Setting up"
+		# echo "## Setting up"
 		python /home/rodrigo/Nostromo/scripts/prepare_input.py $RUNN --rna
-		bash run.sh
+		bash run$RUNN.sh
 	fi
 
-	## Run
+	# Run
 	cd run$RUNN
 	#echo "## Executing"
 	$HADDOCKCMD >&/home/rodrigo/rna-benchmark/haddock.out

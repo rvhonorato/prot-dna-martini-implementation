@@ -13,17 +13,18 @@ parser.add_argument("--local",
 args = parser.parse_args()
 
 run = 'run%i' % args.runn
-#
+# tag_l = ['act-pass', 'act-pass-nodesol','CM', 'CM-nodesol']
 ls = glob.glob('*/')
 
 phases = ['it0', 'it1']
 
 for p in phases:
 	data_dic = {}
-
+	# for tag in tag_l:
 	for f in ls:
 
 		fname = f.split('/')[0]
+		# run = '%s-%s' % (fname,tag)
 
 		if args.local:
 			# 1A74_run1_it0_refine_1.out.gz
@@ -39,7 +40,8 @@ for p in phases:
 
 			data_dic[fname] = cpu_time
 
-	out = open('%s_%s_cpu_bench.dat' % (run,p),'w')
+	out = open('%s_%s_cpu_bench.dat' % (run, p),'w')
+	# out = open('/home/rodrigo/%s_%s_cpu_bench.dat' % (tag, p),'w')
 	out.write('\t'.join([h for h in data_dic.keys()]) + '\n')
 	tbw = ''
 	for f in data_dic:

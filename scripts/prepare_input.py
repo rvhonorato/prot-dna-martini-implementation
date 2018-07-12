@@ -411,9 +411,9 @@ open('new.html.%i' % args.runn,'w').write(tbw)
 os.system('cp new.html.%i new.html' % args.runn)
 
 if args.dna:
-	open('run.sh','w').write('python /home/software/haddock/haddock2.3/Haddock/RunHaddock.py\nbash /home/rodrigo/Nostromo/DNA/patch-dna-cg-run%i.sh %s' % (args.runn, dna_chain))
+	open('run%i.sh' % args.runn,'w').write('python /home/software/haddock/haddock2.3/Haddock/RunHaddock.py\nbash /home/rodrigo/Nostromo/DNA/patch-dna-cg-run%i.sh %s' % (args.runn, dna_chain))
 if args.rna:
-	open('run.sh','w').write('python /home/software/haddock/haddock2.3/Haddock/RunHaddock.py\nbash /home/rodrigo/Nostromo/RNA/patch-rna-cg-run%i.sh %s' % (args.runn, dna_chain))
+	open('run%i.sh' % args.runn,'w').write('python /home/software/haddock/haddock2.3/Haddock/RunHaddock.py\nbash /home/rodrigo/Nostromo/RNA/patch-rna-cg-run%i.sh %s' % (args.runn, dna_chain))
 
 
 

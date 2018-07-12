@@ -4,14 +4,15 @@ SUFFIX=_complex.pdb
 HADDOCKCMD="python /home/software/haddock/haddock2.3/Haddock/RunHaddock.py"
 BENCHMARK_PATH="/home/rodrigo/dna-benchmark"
 
+cd $BENCHMARK_PATH
+DIRL="$(ls -d */)"
+
+
 if [ $# -eq 0 ]
   then
     echo "No run number supplied"
     exit
 fi
-
-cd $BENCHMARK_PATH
-DIRL="$(ls -d */)"
 
 for TARGET in $DIRL
 	do
@@ -22,12 +23,12 @@ for TARGET in $DIRL
 	if [ ! -d run$RUNN ]; then
 		echo "## Setting up"
 		python /home/rodrigo/Nostromo/scripts/prepare_input.py $RUNN --dna
-		bash run.sh
+		bash run$RUNN.sh
 	fi
 
 	# Run
 	cd run$RUNN
-	echo "## Executing"
+	#echo "## Executing"
 	$HADDOCKCMD >&/home/rodrigo/dna-benchmark/haddock.out
 	cd ..
 

@@ -104,6 +104,6 @@ for f in [f for f in glob.glob('*') if not '.' in f]:
 				else:
 					print 'Something went wrong with downloading %s' % f
 					exit()
-		else:
-			print f, 'done'
+		# else:
+			# print f, 'done'
 	# done

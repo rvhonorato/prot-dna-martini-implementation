@@ -12,7 +12,7 @@ for TARGET in $DIRL
 	do
 
 	PDB=${TARGET%/}
-	echo $PDB
+	# echo $PDB
 
 	# copy template
 	cp $PARAM_TEMPLATE $COMPLEXES_PATH/$TARGET/haddockparam.web
@@ -33,15 +33,15 @@ for TARGET in $DIRL
 	grep "ATOM" $COMPLEXES_PATH/$TARGET/$PDB.pdb > $COMPLEXES_PATH/$TARGET/$PDB.pdb.tmp
 	mv $COMPLEXES_PATH/$TARGET/$PDB.pdb.tmp $COMPLEXES_PATH/$TARGET/$PDB.pdb
 	
- 	python /home/rodrigo/pdb-tools/pdb_splitchain.py $COMPLEXES_PATH/$TARGET/$PDB.pdb
+ 	# python /home/rodrigo/pdb-tools/pdb_splitchain.py $COMPLEXES_PATH/$TARGET/$PDB.pdb
 
- 	python /home/rodrigo/pdb-tools/pdb_reatom.py -1 $COMPLEXES_PATH/$TARGET/${PDB}_A.pdb > $COMPLEXES_PATH/$TARGET/${PDB}_A.pdb.tmp
-	python /home/rodrigo/pdb-tools/pdb_reatom.py -1 $COMPLEXES_PATH/$TARGET/${PDB}_B.pdb > $COMPLEXES_PATH/$TARGET/${PDB}_B.pdb.tmp
+ 	# python /home/rodrigo/pdb-tools/pdb_reatom.py -1 $COMPLEXES_PATH/$TARGET/${PDB}_A.pdb > $COMPLEXES_PATH/$TARGET/${PDB}_A.pdb.tmp
+	# python /home/rodrigo/pdb-tools/pdb_reatom.py -1 $COMPLEXES_PATH/$TARGET/${PDB}_B.pdb > $COMPLEXES_PATH/$TARGET/${PDB}_B.pdb.tmp
 	
- 	python /home/rodrigo/pdb-tools/pdb_reres.py $COMPLEXES_PATH/$TARGET/${PDB}_A.pdb.tmp -resid 1 > $COMPLEXES_PATH/$TARGET/${PDB}_A.pdb
-	python /home/rodrigo/pdb-tools/pdb_reres.py $COMPLEXES_PATH/$TARGET/${PDB}_B.pdb.tmp -resid 1 > $COMPLEXES_PATH/$TARGET/${PDB}_B.pdb
+ 	# python /home/rodrigo/pdb-tools/pdb_reres.py $COMPLEXES_PATH/$TARGET/${PDB}_A.pdb.tmp -resid 1 > $COMPLEXES_PATH/$TARGET/${PDB}_A.pdb
+	# python /home/rodrigo/pdb-tools/pdb_reres.py $COMPLEXES_PATH/$TARGET/${PDB}_B.pdb.tmp -resid 1 > $COMPLEXES_PATH/$TARGET/${PDB}_B.pdb
 
-	cat $COMPLEXES_PATH/$TARGET/${PDB}_A.pdb $COMPLEXES_PATH/$TARGET/${PDB}_B.pdb > $COMPLEXES_PATH/$TARGET/$PDB.pdb
+	# cat $COMPLEXES_PATH/$TARGET/${PDB}_A.pdb $COMPLEXES_PATH/$TARGET/${PDB}_B.pdb > $COMPLEXES_PATH/$TARGET/$PDB.pdb
 
 	# replace pdb
 	python /home/rodrigo/Nostromo/tfbs/change-pdb.py $COMPLEXES_PATH/$TARGET/haddockparam.web $COMPLEXES_PATH/$TARGET/$PDB.pdb

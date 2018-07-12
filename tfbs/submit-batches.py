@@ -33,6 +33,8 @@ ls = [f for f in glob.glob('*') if not '.' in f]
 ls.sort()
 
 submission_batches = list(chunks(ls, 100))
+print len(submission_batches)
+# submission_batches = list(chunks(ls, 5))
 
 for i, batch in enumerate(submission_batches):
 
@@ -78,7 +80,7 @@ for i, batch in enumerate(submission_batches):
 					runf = glob.glob('%s*.tgz' % comp)[0]
 				except:
 					print 'Something went wrong with downloading %s' % comp
-					exit()
+					# exit()
 				# uncompress it into the correct place if it has not been before
 				if os.path.isfile(runf) and not os.path.isdir('run1'):
 					cmd = 'tar zxf %s' % runf

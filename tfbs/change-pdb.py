@@ -13,4 +13,4 @@ for i, l in enumerate(paraml):
 paraml[idxA+1] = '      pdbdata = %s,\n' % repr(''.join(target)[:-1])
 paraml[idxB+1] = '      pdbdata = %s,\n' % repr(''.join(target)[:-1])
 
-open('haddockparam.web','w').write(''.join(paraml))
+open(sys.argv[1],'w').write(''.join(paraml))
