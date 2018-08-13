@@ -231,7 +231,7 @@ def determine_hbonds(structure):
 					# print len(dna_chain_l)
 					# exit()
 
-		if len(dna_chain_l) > 1:   ## list sizes could be different, this might be improvable
+		if len(dna_chain_l) > 1:   ## list sizes could be different, this might be improbable
 			for chainA, chainB in itertools.combinations(dna_chain_l, 2):
 				reslistA = [r for r in chainA.get_residues()]
 				reslistB = [r for r in chainB.get_residues()]
@@ -752,20 +752,18 @@ for model in aa_model:
 		
 		mapping_dic = map_cg(chain)
 		
-		ordered_mapping_dic = collections.OrderedDict(sorted(mapping_dic.items()))
-		
-		for residue in ordered_mapping_dic:
+		for residue in mapping_dic:
 			if residue.id[0] != ' ': # filter HETATMS
 			  continue
 			
 			structure_builder.init_residue(residue.resname, residue.id[0], residue.id[1], residue.id[2])
 
-			for i, bead in enumerate(ordered_mapping_dic[residue]):
+			for i, bead in enumerate(mapping_dic[residue]):
 
 				bead_name = bead
-				bead_coord = ordered_mapping_dic[residue][bead_name][0]
-				haddock_code = ordered_mapping_dic[residue][bead_name][1]
-				restrain = ordered_mapping_dic[residue][bead_name][2]
+				bead_coord = mapping_dic[residue][bead_name][0]
+				haddock_code = mapping_dic[residue][bead_name][1]
+				restrain = mapping_dic[residue][bead_name][2]
 
 				structure_builder.init_atom(
 						bead_name, 
@@ -784,6 +782,27 @@ cg_model = structure_builder.get_structure()
 # Write CG structure
 io.set_structure(cg_model)
 io.save('%s_cg.pdb' %(pdbf_path[:-4]), write_end=1)
+
+# make sure atom names are in the correct place
+# .BB. .BB1. .BB2. and not BB.. BB1.. BB2..
+out = open('temp.pdb','w')
+for l in open('%s_cg.pdb' %(pdbf_path[:-4])):
+	if 'ATOM' in l[:4]:
+		atom_name = l[12:16].split()[0]
+		if len(atom_name) == 3:
+			n_l = l[:12] + ' ' + atom_name + l[16:]
+		elif len(atom_name) == 2:
+			n_l = l[:12] + ' ' + atom_name + ' ' + l[16:]
+		elif len(atom_name) == 1:
+			n_l = l[:12] + ' ' + atom_name + '  ' + l[16:]
+		else:
+			n_l = l
+	else:
+		n_l = l
+	out.write(n_l)
+
+out.close()
+os.system('cp temp.pdb %s_cg.pdb' % (pdbf_path[:-4]))
 
 # Write Restraints
 tbl_file = open('%s_cg_to_aa.tbl' %pdbf_path[:-4], 'w')

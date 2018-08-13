@@ -74,7 +74,11 @@ for chainA in unpaired_interface_res_dic:
         out.write('\nassign ( %s ) \n(\n %s \n) 2.0 2.0 0.0\n' % (tbwA, '\n or '.join(tbwB)))
 out.close
 
-
+# print active res
+for chain in interface_res_dic:
+    reslist = interface_res_dic[chain].keys()
+    reslist.sort()
+    print chain, '+'.join(map(str, reslist))
 
 
 

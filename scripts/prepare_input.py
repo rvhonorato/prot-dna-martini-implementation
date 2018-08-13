@@ -197,6 +197,7 @@ for chain in pdb_dic:
 
 #================================================================================================#
 # 2. Renumber unbound structures according to reference and get numbering reference file
+#  Not needed if used alongside analyze-run.py
 #================================================================================================#
 print '2. Renumber unbound structures according to reference and get numbering reference file'
 clustalo_exe = '/home/rodrigo/clustal-omega'

@@ -32,6 +32,10 @@ def run2(cmd, outputf):
 ls = [f for f in glob.glob('*') if not '.' in f]
 ls.sort()
 
+completed_ls = [e.split('/')[0] for e in glob.glob('*/run1/run.cns')]
+
+ls = [l for l in ls if l not in completed_ls]
+
 submission_batches = list(chunks(ls, 100))
 print len(submission_batches)
 # submission_batches = list(chunks(ls, 5))
@@ -72,6 +76,9 @@ for i, batch in enumerate(submission_batches):
 				print comp, status
 			except:
 				print 'there is something wrong with %s, checking it did not produce any output' % comp
+				# its not in the server anymore... has it been downloaded?
+				os.chdir('..')
+				continue
 			#
 			if 'Finished' in log:
 				# it finished and check-haddockrun.csh has downloaded it

@@ -41,13 +41,13 @@ def fix_chain_segid(pdb_f):
 	if segid_check and not chain_check:
 		# add chain
 		chainf = pdb_f.replace('.pdb','_chain.pdb')
-		cmd = '%s/pdb_segid-to-chain %s' % (haddocktools_path, pdb_f)
+		cmd = '%s/tools/pdb_segid-to-chain %s' % (runf, pdb_f)
 		run(cmd, chainf)
 		os.rename(chainf, pdb_f)
 	elif chain_check and not segid_check:
 		# add segid
 		segidf = pdb_f.replace('.pdb','_segid.pdb')
-		cmd = '%s/pdb_chain-to-segid %s' % (haddocktools_path, pdb_f)
+		cmd = '%s/tools/pdb_chain-to-segid %s' % (runf, pdb_f)
 		run(cmd, segidf)
 		os.rename(segidf, pdb_f)
 
@@ -81,6 +81,24 @@ def retrieve_seqs(aln):
 		# print header, sequence
 	return seq_dic
 
+def retrieve_seqs2(fastaf):
+	
+	aln_data = open(fastaf).readlines()
+	header_idxs = [i for i, e in enumerate(aln_data) if '>' in e] 
+	seql = [i for i, e in enumerate(aln_data) if  not '>' in e] 
+	seq_idx_list = [range(r[0], r[1]+1) for r in get_range(seql)]
+
+	seq_dic = {}
+	for i, idx in enumerate(header_idxs):
+		header = aln_data[idx]
+		sequence = ''
+		for sidx in seq_idx_list[i]:
+			sequence += aln_data[sidx]
+		
+		chain = header.split()[0].split('_')[-1]
+		seq_dic[chain] = ''.join(sequence.split())
+	return seq_dic
+
 def run(cmd, outputf):
 	with open(outputf, "w") as f:
 	    process = subprocess.Popen(cmd.split(), shell=False, stdout=f)
@@ -91,9 +109,77 @@ def find_key(dic, val):
 	return [k for k, v in dic.iteritems() if v == val][0]
 
 
+def get_contact_list(contactf):
+	contact_list = []
+	for l in open(contactf):
+		resnumA,chainA,atomA,resnumB,chainB,atomB,distance = l.split()
+		contact_list.append( ((int(resnumA),chainA,atomA), (int(resnumB),chainB,atomB)) )
+		contact_list.append( ((int(resnumB),chainB,atomB), (int(resnumA),chainA,atomA)) )
+	return contact_list
+
+# def rename_nuc(pdb):
+# 	d = {'A': '  A','C': '  C','T': '  T','G': '  G','U': '  U'}
+# 	out = open('temp.pdb','w')
+# 	for l in open(pdb):
+# 		if 'ATOM' in l[:4]:
+# 			try:
+# 				res = l[17:20].split()[0]
+# 				new_res = d[res]
+# 				nl =  l[:17] + d[res] + l[20:]
+# 			except:
+# 				nl = l
+# 			out.write('%s' % nl)
+# 	out.close()
+# 	print pdb
+# 	exit()
+# 	return 'temp.pdb'
+
+
+
+def cluster_stats(score_f, irmsd_f,cluster_f):
+	score_dic = dict([(i+1,float(l.split()[-2])) for i, l in enumerate(open(score_f))])
+	model_dic = dict([(i+1,l.split()[0].split(':')[-1][:-1]) for i, l in enumerate(open(score_f))])
+	irmsd_dic = dict([(l.split()[0], float(l.split()[1])) for l in open(irmsd_f).readlines()[1:]])
+
+	c_dic = {}
+	cluster_model_dic = {}
+	for c in open(cluster_f):
+		cluster_idx = int(c.split()[1])
+		center = c.split()[3]
+		top4 = map(int, c.split()[4:8])
+		#
+		mean_cluster_score = sum([score_dic[e] for e in top4]) / 4.0
+		c_dic[cluster_idx] = mean_cluster_score
+		cluster_model_dic[cluster_idx] = map(int, c.split()[3:])
+
+	# sort clusters	
+	sorted_c_dic = sorted(c_dic.items(), key=operator.itemgetter(1))
+
+	# get models
+	output = ''
+	for i, c in enumerate(sorted_c_dic):
+		modelid_list = cluster_model_dic[c[0]]
+		modelname_list = [model_dic[mid] for mid in modelid_list]
+		#
+		score_l = [score_dic[mid] for mid in modelid_list]
+		irmsd_l = [irmsd_dic[m] for m in modelname_list]
+		top4_irmsdl = [irmsd_dic[m] for m in modelname_list[1:5]] # index 0 is the cluster center according to FCC
+		mean_irmsd = sum(irmsd_l) / len(irmsd_l)
+		mean_score = sum(score_l) / len(score_l)
+		top4_irmsd = sum(top4_irmsdl) / len(top4_irmsdl)
+		#
+		output += 'Top_%i\tCluster_%i\ttop4_score: %.2f\tmean_score: %.5f\ttop4_irmsd: %.2f\tmean_irsmd: %.2f\n%s\n' % (i+1, c[0], c[1], mean_score, top4_irmsd, mean_irmsd, ','.join(modelname_list))
+		
+	return output
+
+
 global haddocktools_path
+global runf
 # haddocktools_path = '/Users/rvhonorato/tools'
-haddocktools_path = os.environ["HADDOCKTOOLS"]
+# haddocktools_path = os.environ["HADDOCKTOOLS"]
+clustalo_exe = '/home/rodrigo/clustal-omega'
+fnat_distance_threshold = 5.0
+
 #======#
 
 parser = argparse.ArgumentParser()
@@ -102,7 +188,7 @@ parser.add_argument("pdbf", type=str,
                     help="Reference PDB (xtal)")
 
 parser.add_argument("runf", type=str,
-                    help="run number (ex. run1)")
+                    help="run name (ex. run1)")
 
 parser.add_argument("--aa", help="do AA analysis",
                     action="store_true")
@@ -110,15 +196,13 @@ parser.add_argument("--aa", help="do AA analysis",
 args = parser.parse_args()
 
 pdbf = args.pdbf
-# pdbf = sys.argv[1]
 pdbf_cg = pdbf.replace('.pdb','_cg.pdb')
+pdb_name = pdbf.split('.pdb')[0]
+
+runf = args.runf
 
 path = os.getcwd()
 
-# runf = sys.argv[2]
-runf = args.runf
-
-pdb_name = pdbf.split('.pdb')[0]
 
 # check if it needs chain/segid fixing
 fix_chain_segid(pdbf)
@@ -138,6 +222,7 @@ water_l.sort()
 # it1_l = glob.glob('%s/%s/structures/it1/*pdb' % (path, runf))
 # water_l = glob.glob('%s/%s/structures/it1/water/*pdb' % (path, runf))
 
+# atoms to be used during i-rmsd calculation
 if args.aa:
 	stage_ref_dic = {
 		'it0':   [it0_l, pdbf, ("CA,C,N,O,P,C1,C9")],
@@ -151,11 +236,10 @@ else:
 		'water': [water_l, pdbf, ("CA,C,N,O,P,C1,C9")]
 }
 
-# create and populate residue lists
+# create and populate result dictionary
 result_dic = {}
 for stage in stage_ref_dic:
 	result_dic[stage] = {}
-	# pdb_l = 
 	pdb_l = stage_ref_dic[stage][0] 
 	for pdb in pdb_l:
 		result_dic[stage][pdb] = {'fnat': float('nan'), 'irms': float('nan'), 'lrms': float('nan'), 'total': float('nan'), 
@@ -166,12 +250,92 @@ for stage in stage_ref_dic:
 		'desolv' : float('nan'),
 		'binding' : float('nan')}
 
+#=========================================================================================#
+## Numbering
+#=========================================================================================#
 
+print '> Matching numbering via sequence alignment'
+
+# create numbering dic on the fly
+decoy = stage_ref_dic['water'][0][0]
+
+chain_list = list(set([l[21] for l in open(pdbf).readlines() if 'ATOM' in l [:4]]))
+target_chain_dic = dict([(c, []) for c in chain_list])
+
+decoy_name = decoy.split('/')[-1].split('.pdb')[0]
+os.system('cp %s .' % decoy)
+os.system('python /home/rodrigo/pdb-tools/pdb_splitseg.py %s.pdb' % decoy_name)
+
+# put in the dictionary
+pdb_dic = dict([(c.split('_')[-1].split('.pdb')[0], c) for c in glob.glob('%s_*.pdb' % decoy_name)])
+
+ref_seqf = 'reference.fasta'
+cmd = 'python /home/rodrigo/pdb-tools/pdb_toseq.py %s' % pdbf
+run(cmd, ref_seqf)
+ref_seq_dic = retrieve_seqs2(ref_seqf)
+
+len_dic = {}
 numbering_dic = {}
-for f in glob.glob('*numbering.ref'):
-	# open(f).readlines()
-	chain = f.split('-')[0]
-	numbering_dic[chain] = dict([map(int, a.split(',')) for a in open(f)])
+for chain in pdb_dic:
+
+	open('ref.fasta','w').write('>ref\n%s\n' % ref_seq_dic[chain])
+
+	pdb = pdb_dic[chain]
+	seqf = pdb.replace('.pdb','.fasta')
+	cmd = 'python /home/rodrigo/pdb-tools/pdb_toseq.py %s' % pdb
+	run(cmd, seqf)
+
+	# prepare alignment
+	aln_outf = '%s.aln' % chain
+	os.system('cat ref.fasta %s > seqs.fasta' % seqf)
+	cmd = '%s -i seqs.fasta --outfmt=clu --resno --wrap=9000 --force' % clustalo_exe
+	run(cmd, aln_outf)
+
+	aln_list = []
+	# identity 
+	for l in open(aln_outf):
+		if 'ref' in l:
+			aln_list.append(l.split()[1])
+		elif pdb.split('.')[0] in l:
+			aln_list.append(l.split()[1])
+
+	ref_seq_aln = aln_list[0]
+	ubound_seq_aln = aln_list[1]
+
+	ref_res_l = list(set([int(l[22:26]) for l in open(pdbf).readlines() if 'ATOM' in l[:4] and chain == l[21]]))
+	# chain_res_l = list(set([int(l[22:26]) for l in open(pdb).readlines() if 'ATOM' in l[:4] and chain == l[21]])) # chain
+	chain_res_l = list(set([int(l[22:26]) for l in open(pdb).readlines() if 'ATOM' in l[:4] and chain == l[72:76][0]])) # segid
+
+	ref_res_dic = dict([(i+1, e) for i, e in enumerate(ref_res_l)])
+	chain_res_dic = dict([(i+1, e) for i, e in enumerate(chain_res_l)])
+
+	counterA = 0
+	counterB = 0
+	offset = 0
+	numbering_list = []
+
+	for position, aln in enumerate(zip(ref_seq_aln, ubound_seq_aln)):
+		#
+		resA = aln[0]
+		resB = aln[1]
+		#
+		if resA != '-':
+			counterA +=1
+		if resB != '-':
+			counterB +=1
+		#
+		if not '-' in aln:
+			resnumA = ref_res_dic[counterA]
+			resnumB = chain_res_dic[counterB]
+			# print position, aln, counterA, counterB, resnumA, resnumB 
+			# exit()
+			if resA != resB:
+				print 'WARNING: Reference chain %s aa %s position %i does not match target chain %s aa %s' % (chain, resA, i, chain, resB)
+			else:
+				numbering_list.append((resnumA, resnumB))
+		
+	numbering_dic[chain] = dict(numbering_list)
+
 
 size_l = [(c, len(numbering_dic[c])) for c in numbering_dic ]
 size_l.sort()
@@ -181,13 +345,13 @@ receptor_chain = size_l[0][0]
 ## Interface RMSD
 #=========================================================================================#
 
-# print '> i-rmsd'
+print '> Calculating i-rmsd'
 # define contact for AA and for CG
 izone_dic = {}
 for ref in [pdbf, pdbf_cg]:
 	distance_threshold = 10.
 	ref_contactf = ref.split('.')[0] + '_%i.contacts' % distance_threshold
-	cmd = '%s/contact %s %i' % (haddocktools_path, ref, distance_threshold)
+	cmd = '%s/tools/contact %s %i' % (runf, ref, distance_threshold)
 	run(cmd, ref_contactf)
 
 	contact_list = []
@@ -273,7 +437,7 @@ for stage in stage_ref_dic:
 	atoms = stage_ref_dic[stage][2]
 	izone_l = izone_dic[ref]
 
-	# print '>> stage %s' % stage
+	print '>> %s' % stage
 
 	# prepare structural input
 	irms_dic = {}
@@ -290,16 +454,21 @@ for stage in stage_ref_dic:
 		run(cmd, 'fix')
 		#####################################
 
-		#####################################
-		# WARNING                           #
-		# This will rename nucleotides      #
-		cmd = 'bash /home/rodrigo/Nostromo/scripts/rename_nuc.sh %s' % conformation
-		run(cmd, 'rename')
-		#####################################
+		# #####################################
+		# # WARNING                           #
+		# # This will rename nucleotides      #
+		# cmd = 'bash /home/rodrigo/Nostromo/scripts/rename_nuc.sh %s' % conformation
+		# run(cmd, 'rename')
+		# #####################################
+
+		# _ = rename_nuc(conformation)
 		
 		# prepare cmd for PROFIT
 		cmd = 'refe %s\nmobi %s\nATOMS %s\nZONE CLEAR\n%s\nstatus\nFIT\nquit' % (ref, conformation, atoms, '\n'.join(izone_l))
-		open('idbg','w').write(cmd)
+		# cmd = 'refe %s\nmobi %s\nATOMS %s\nZONE CLEAR\n%s\nstatus\nFIT\nquit' % (ref, 'temp.pdb', atoms, '\n'.join(izone_l))
+
+		# save this for debug
+		open('irmsd.dbg','w').write(cmd)
 		# open('idbg_%i' % counter,'w').write(cmd)
 		# if counter == 2:
 		# 	exit()
@@ -339,7 +508,7 @@ for stage in stage_ref_dic:
 ## Ligand RMSD
 #=========================================================================================#
 
-# print '> l-rmsd'
+# print '> Calculating l-rmsd'
 
 # ligand_zone = {}
 # for chain in numbering_dic:
@@ -367,7 +536,7 @@ for stage in stage_ref_dic:
 
 # # ready?
 # for stage in stage_ref_dic:
-# 	# print '>>> stage %s' % stage
+# 	# print '>> %s' % stage
 
 # 	pdb_l = stage_ref_dic[stage][0] 
 # 	ref = stage_ref_dic[stage][1]
@@ -416,30 +585,21 @@ for stage in stage_ref_dic:
 ## Fnat
 #=========================================================================================#
 
-# print '> fnat'
+
+
+print '> Calculating fnat (%.2f A)' % fnat_distance_threshold
 
 # define contact for AA and for CG
-
-def get_contact_list(contactf):
-	contact_list = []
-	for l in open(contactf):
-		resnumA,chainA,atomA,resnumB,chainB,atomB,distance = l.split()
-		contact_list.append( ((int(resnumA),chainA,atomA), (int(resnumB),chainB,atomB)) )
-		contact_list.append( ((int(resnumB),chainB,atomB), (int(resnumA),chainA,atomA)) )
-	return contact_list
-
-distance_threshold = 5.0
-
 contact_dic = {}
 for ref in [pdbf, pdbf_cg]:
 	#
 	contact_outf = ref.replace('.pdb', '.contacts')
-	cmd = '%s/contact %s %i' % (haddocktools_path, ref, distance_threshold)
+	cmd = '%s/tools/contact %s %i' % (runf, ref, fnat_distance_threshold)
 	run(cmd, contact_outf)
-	#
+
 	bound_contact_list = get_contact_list(contact_outf)
-	# 
-	# fix numbering and ignore contacts seen only in reference
+
+	# check numbering and ignore contacts seen only in reference
 	fixed_contact_list = []
 	for contact in bound_contact_list:
 		# print contact
@@ -467,7 +627,8 @@ for ref in [pdbf, pdbf_cg]:
 			new_contact = ( (unbound_resA, chainA, atomA), (unbound_resB, chainB, atomB) )
 			fixed_contact_list.append(new_contact)
 		else:
-			print contact, 'discarded, not found on unbound'
+			pass
+			# print contact, 'discarded, not found on decoy'
 	#
 	contact_dic[ref] = fixed_contact_list
 
@@ -477,16 +638,15 @@ for stage in stage_ref_dic:
 	pdb_l = stage_ref_dic[stage][0] 
 	ref = stage_ref_dic[stage][1]
 
-	# print '>>> stage %s' % stage
+	print '>> stage %s' % stage
 
 	fnat_dic = {}
 	for conformation in pdb_l:
 		###
 		fix_chain_segid(conformation)
 
-		# distance_threshold = 5.0
 		contact_outf = conformation.replace('.pdb', '.contacts')
-		cmd = '%s/contact %s %i' % (haddocktools_path, conformation, distance_threshold)
+		cmd = '%s/tools/contact %s %i' % (runf, conformation, fnat_distance_threshold)
 		run(cmd, contact_outf)
 
 		conformation_contacts = get_contact_list(contact_outf)
@@ -513,7 +673,74 @@ for stage in stage_ref_dic:
 	#
 	# os.system('cp %s %s' % (outputf, outputf.replace('.dat', '-sorted.dat')))
 
-#==========#
+
+#=========================================================================================#
+# Clustering
+#=========================================================================================#
+
+print '> Analyzing clusters'
+
+path = os.getcwd()
+
+# water
+clusterf = '%s/%s/structures/it1/water/analysis/cluster.out.gz' % (path, runf)
+if os.path.isfile('%s/%s/structures/it1/water/analysis/cluster.out.gz' % (path, runf)):
+	water_clusterf = '%s/%s/structures/it1/water/analysis/cluster.out.gz' % (path, runf)
+elif os.path.isfile('%s/%s/structures/it1/water/analysis/cluster.out' % (path, runf)):
+	water_clusterf = '%s/%s/structures/it1/water/analysis/cluster.out' % (path, runf)
+else:
+	water_clusterf = False
+
+# it1
+clusterf = '%s/%s/structures/it1/analysis/cluster.out.gz' % (path, runf)
+if os.path.isfile('%s/%s/structures/it1/analysis/cluster.out.gz' % (path, runf)):
+	it1_clusterf = '%s/%s/structures/it1/analysis/cluster.out.gz' % (path, runf)
+elif os.path.isfile('%s/%s/structures/it1/analysis/cluster.out' % (path, runf)):
+	it1_clusterf = '%s/%s/structures/it1/analysis/cluster.out' % (path, runf)
+else:
+	it1_clusterf = False
+
+if water_clusterf:
+	if 'gz' in water_clusterf:
+		os.chdir('%s/%s/structures/it1/water/analysis/' % (path, runf))
+		os.system('gunzip cluster.out.gz')
+
+	os.chdir('%s/%s/structures/it1/water/' % (path, runf))
+	os.system('%s/%s/tools/ana_clusters.csh -best 4 analysis/cluster.out' % (path, runf))
+
+	score_f = '%s/%s/structures/it1/water/file.list' % (path, runf)
+	cluster_f = '%s/%s/structures/it1/water/analysis/cluster.out' % (path, runf)
+	irmsd_f = '%s/%s/structures/it1/water/i-RMSD.dat' % (path, runf)
+
+	water_cluster_statf = open('%s/%s/water_cluster.dat' % (path, runf),'w')
+	tbw = cluster_stats(score_f, irmsd_f,cluster_f)
+	water_cluster_statf.write(tbw)
+	water_cluster_statf.close()
+
+
+if it1_clusterf:
+	if 'gz' in it1_clusterf:
+		os.chdir('%s/%s/structures/it1/analysis/' % (path, runf))
+		os.system('gunzip cluster.out.gz')
+
+	os.chdir('%s/%s/structures/it1/' % (path,runf))
+	os.system('%s/%s/tools/ana_clusters.csh -best 4 analysis/cluster.out' % (path, runf))
+
+	score_f = '%s/%s/structures/it1/file.list' % (path, runf)
+	cluster_f = '%s/%s/structures/it1/analysis/cluster.out' % (path, runf)
+	irmsd_f = '%s/%s/structures/it1/i-RMSD.dat' % (path, runf)
+
+	it1_cluster_statf = open('%s/%s/it1_cluster.dat' % (path, runf),'w')
+	tbw = cluster_stats(score_f, irmsd_f,cluster_f)
+	it1_cluster_statf.write(tbw)
+	it1_cluster_statf.close()
+
+os.chdir(path)
+
+
+#=========================================================================================#
+# Output
+#=========================================================================================#
 
 haddock_score_dic = {}
 for stage in stage_ref_dic:
@@ -537,7 +764,6 @@ for stage in stage_ref_dic:
 	# get energies and etc
 	pdb_l = stage_ref_dic[stage][0]
 	for conformation in pdb_l:
-		# print pdb
 		data = open(conformation).readlines()
 		energies_l = map(float, data[7].split(':')[-1].split(','))
 		total, bonds, angles, improper, dihe, vdw, elec, air, cdih, coup, rdcs, vean, dani, xpcs, rg = energies_l
@@ -574,21 +800,19 @@ for stage in stage_ref_dic:
 
 
 for stage in result_dic:
-	out = open('%s/%s.dat' % (runf, stage),'w')
+	out = open('%s/%s/%s.dat' % (path, runf, stage),'w')
 	out.write('stage\tpdb_name\trank\tscore\tfnat\tlrms\tirms\tbinding\tdesolv\tbsa\ttotal\tbonds\tangles\timproper\tdihe\tvdw\telec\tair\tcdih\tcoup\trdcs\tvean\tdani\txpcs\trg\n')
-	# out = open('%s.capri' % stage, 'w')
-	# out.write('conformation\tfnat\tlrms\tirms\n')
-	# pdb_name = 
+
 	sorted_haddock_score_list = sorted(haddock_score_dic[stage].items(), key=operator.itemgetter(1))
 	for i, e in enumerate(sorted_haddock_score_list):
-		#
+		
 		conformation = e[0]
 		rank = i+1
-		#
+		
 		fnat = result_dic[stage][conformation]['fnat']
 		lrms = result_dic[stage][conformation]['lrms']
 		irms = result_dic[stage][conformation]['irms']
-		#
+
 		total = result_dic[stage][conformation]['total']
 		bonds = result_dic[stage][conformation]['bonds']
 		angles = result_dic[stage][conformation]['angles']
@@ -616,48 +840,10 @@ for stage in result_dic:
 			desolv,
 			bsa, 
 			total, bonds, angles, improper, dihe, vdw, elec, air, cdih, coup, rdcs, vean, dani, xpcs, rg))
-	#
+	
 	out.close()
 
-# input for melquiplot
-# At least two arguments are expected through STDIN. 
-# A CSV file (with at least two columns) with RMSD values in the first column and HADDOCK scores on the second. 
-# All the columns from the input file will be ploted. Second argument must be a single column 
-# file with the identifiers (e.g 1AYZ), which will be used as x_label.
-
-# for stage in result_dic:
-# 	sorted_haddock_score_list = sorted(haddock_score_dic[stage].items(), key=operator.itemgetter(1))
-# 	out = open('minput_%s.csv' % stage,'w')
-# 	for e in sorted_haddock_score_list:
-# 		conformation = e[0]
-# 		irms = result_dic[stage][conformation]['irms']
-# 		haddock_score = haddock_score_dic[stage][conformation]
-# 		# if not math.isnan(haddock_score):
-# 		out.write('%.4f,%.4f\n' % (irms, haddock_score))
-# 		# rank = i+1
-# 	out.close()
-
-#=========================================================================================#
-# Clustering
-#=========================================================================================#
-
-# water
-
-# os.chdir('%s/structures/it1/water/analysis' % runf)
-# if not os.path.isfile('cluster.out'):
-# 	os.system('gunzip cluster.out.gz')
-# os.chdir('../')
-# os.system('~/ana_clusters.csh -best 4 analysis/cluster.out')
-# # it1
-# os.chdir('../analysis')
-# if not os.path.isfile('cluster.out'):
-# 	os.system('gunzip cluster.out.gz')
-# os.chdir('../')
-# os.system('~/ana_clusters.csh -best 4 analysis/cluster.out')
-# os.chdir('../../../')
-# os.system('~/results-stats.csh %s' % runf)
-# cmd = '/home/rodrigo/results-stats.csh %s' % runf
-# run(cmd, '%s.stats' % runf)
+# done (:
 
 
 

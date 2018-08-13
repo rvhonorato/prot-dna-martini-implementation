@@ -39,9 +39,10 @@ def get_range(data):
 
 
 
+reference = sys.argv[1]
+pdb_dic = {'A':sys.argv[2], 'B':sys.argv[3]}
+print pdb_dic 
 
-pdb_dic = {'A':'A.pdb', 'B':'B.pdb'}
-reference = 'reference.pdb'
 
 clustalo_exe = '/home/rodrigo/clustal-omega'
 

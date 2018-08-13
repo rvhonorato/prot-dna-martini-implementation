@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="524.93335mm"
+   height="251.58096mm"
+   viewBox="0 0 1860.0001 891.42861"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="file_formats.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="644.56599"
+     inkscape:cy="346.15061"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     showguides="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1440"
+     inkscape:window-height="848"
+     inkscape:window-x="0"
+     inkscape:window-y="180"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4194"
+       originx="1051.4286"
+       originy="-199.99996" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(1051.4286,39.066364)">
+    <rect
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4216"
+       width="1860"
+       height="891.42859"
+       x="-1051.4286"
+       y="-39.066364" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-995.71429"
+       y="126.64791"
+       id="text4136"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4138"
+         x="-995.71429"
+         y="126.64791">;;; LEUCINE</tspan><tspan
+         sodipodi:role="line"
+         x="-995.71429"
+         y="176.64792"
+         id="tspan4140"></tspan><tspan
+         sodipodi:role="line"
+         x="-995.71429"
+         y="226.64792"
+         id="tspan4142">[ moleculetype ]</tspan><tspan
+         sodipodi:role="line"
+         x="-995.71429"
+         y="276.64792"
+         id="tspan4144">; molname       nrexcl</tspan><tspan
+         sodipodi:role="line"
+         x="-995.71429"
+         y="326.64792"
+         id="tspan4146">LEU                1</tspan><tspan
+         sodipodi:role="line"
+         x="-995.71429"
+         y="376.64792"
+         id="tspan4148"></tspan><tspan
+         sodipodi:role="line"
+         x="-995.71429"
+         y="426.64792"
+         id="tspan4150">[ atoms ]</tspan><tspan
+         sodipodi:role="line"
+         x="-995.71429"
+         y="476.64792"
+         id="tspan4152">;id type resnr residu atom cgnr   charge</tspan><tspan
+         sodipodi:role="line"
+         x="-995.71429"
+         y="526.64789"
+         id="tspan4154"> 1   P5   1     LEU     BB     1      0    </tspan><tspan
+         sodipodi:role="line"
+         x="-995.71429"
+         y="576.64789"
+         id="tspan4156"> 2   C1   1     LEU     SC1    2      0    </tspan><tspan
+         sodipodi:role="line"
+         x="-995.71429"
+         y="626.64789"
+         id="tspan4158"></tspan><tspan
+         sodipodi:role="line"
+         x="-995.71429"
+         y="676.64789"
+         id="tspan4160">[bonds]</tspan><tspan
+         sodipodi:role="line"
+         x="-995.71429"
+         y="726.64789"
+         id="tspan4162">;  i     j   funct   length  force.c.</tspan><tspan
+         sodipodi:role="line"
+         x="-995.71429"
+         y="776.64789"
+         id="tspan4164">   1     2    1       0.33     7500   </tspan><tspan
+         sodipodi:role="line"
+         x="-995.71429"
+         y="826.64789"
+         id="tspan4166"></tspan><tspan
+         sodipodi:role="line"
+         x="-995.71429"
+         y="876.64789"
+         id="tspan4168" /></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-112.26541"
+       y="127.34116"
+       id="text4170"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4172"
+         x="-112.26541"
+         y="127.34116">RESIdue LEU</tspan><tspan
+         sodipodi:role="line"
+         x="-112.26541"
+         y="177.34116"
+         id="tspan4174">  GROUp</tspan><tspan
+         sodipodi:role="line"
+         x="-112.26541"
+         y="227.34116"
+         id="tspan4176">    ATOM BB  type=F5    charge=0.000 END</tspan><tspan
+         sodipodi:role="line"
+         x="-112.26541"
+         y="277.34116"
+         id="tspan4178">    ATOM SC1 type=LC1   charge=0.000 END</tspan><tspan
+         sodipodi:role="line"
+         x="-112.26541"
+         y="327.34116"
+         id="tspan4180"></tspan><tspan
+         sodipodi:role="line"
+         x="-112.26541"
+         y="377.34116"
+         id="tspan4182">  BOND BB SC1</tspan><tspan
+         sodipodi:role="line"
+         x="-112.26541"
+         y="427.34116"
+         id="tspan4184">END</tspan><tspan
+         sodipodi:role="line"
+         x="-112.26541"
+         y="477.34116"
+         id="tspan4186"></tspan><tspan
+         sodipodi:role="line"
+         x="-112.26541"
+         y="527.34119"
+         id="tspan4188" /></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-1001.4286"
+       y="65.219353"
+       id="text4190"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4192"
+         x="-1001.4286"
+         y="65.219353">(A)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-112.65411"
+       y="59.302032"
+       id="text4190-6"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4192-7"
+         x="-112.65411"
+         y="59.302032">(B)</tspan></text>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m -160,-16.209224 0,799.999994"
+       id="path4214"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>

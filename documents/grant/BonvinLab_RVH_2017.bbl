@@ -1,0 +1,234 @@
+\providecommand{\abntreprintinfo}[1]{%
+ \citeonline{#1}}
+\setlength{\labelsep}{0pt}\begin{thebibliography}{}
+\providecommand{\abntrefinfo}[3]{}
+\providecommand{\abntbstabout}[1]{}
+\abntbstabout{v-1.9.6 }
+
+\bibitem[Berman 2000]{Berman2000}
+\abntrefinfo{Berman}{BERMAN}{2000}
+{BERMAN, H.~M. The protein data bank.
+\emph{Nucleic Acids Research}, Oxford University Press ({OUP}), v.~28, n.~1, p.
+  235--242, jan 2000.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1093\%2Fnar\%2F28.1.235}.}
+
+\bibitem[Brunger 2013]{Brunger2013}
+\abntrefinfo{Brunger}{BRUNGER}{2013}
+{BRUNGER, A.~T. {CNS} (crystallography and {NMR} system). In:
+  \emph{Encyclopedia of Biophysics}. Springer Nature, 2013. p. 326--327.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1007\%2F978-3-642-16712-6\_318}.}
+
+\bibitem[Dijk e Bonvin 2008]{vanDijk2008}
+\abntrefinfo{Dijk e Bonvin}{DIJK; BONVIN}{2008}
+{DIJK, M. van; BONVIN, A. M. J.~J. A protein-{DNA} docking benchmark.
+\emph{Nucleic Acids Research}, Oxford University Press ({OUP}), v.~36, n.~14,
+  p. e88--e88, jun 2008.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1093\%2Fnar\%2Fgkn386}.}
+
+\bibitem[Dominguez, Boelens e Bonvin 2003]{Dominguez2003}
+\abntrefinfo{Dominguez, Boelens e Bonvin}{DOMINGUEZ; BOELENS; BONVIN}{2003}
+{DOMINGUEZ, C.; BOELENS, R.; BONVIN, A. M. J.~J. {HADDOCK}:~ a protein-protein
+  docking approach based on biochemical or biophysical information.
+\emph{Journal of the American Chemical Society}, American Chemical Society
+  ({ACS}), v.~125, n.~7, p. 1731--1737, feb 2003.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1021\%2Fja026939x}.}
+
+\bibitem[Hoffmann et al. 2015]{Hoffmann2015}
+\abntrefinfo{Hoffmann et al.}{HOFFMANN et al.}{2015}
+{HOFFMANN, N.~A. et al. Molecular structures of unbound and transcribing {RNA}
+  polymerase {III}.
+\emph{Nature}, Springer Nature, v.~528, n.~7581, p. 231--236, nov 2015.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1038\%2Fnature16143}.}
+
+\bibitem[Ing{\'{o}}lfsson et al. 2013]{Inglfsson2013}
+\abntrefinfo{Ing{\'{o}}lfsson et al.}{ING{\'{O}}LFSSON et al.}{2013}
+{ING{\'{O}}LFSSON, H.~I. et al. The power of coarse graining in biomolecular
+  simulations.
+\emph{Wiley Interdisciplinary Reviews: Computational Molecular Science},
+  Wiley-Blackwell, v.~4, n.~3, p. 225--248, aug 2013.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1002\%2Fwcms.1169}.}
+
+\bibitem[Janin 2002]{Janin2002}
+\abntrefinfo{Janin}{JANIN}{2002}
+{JANIN, J. Welcome to {CAPRI}: A critical assessment of {PRedicted}
+  interactions.
+\emph{Proteins: Structure, Function, and Genetics}, Wiley-Blackwell, v.~47,
+  n.~3, p. 257--257, apr 2002.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1002\%2Fprot.10111}.}
+
+\bibitem[Johnson 2004]{johnson2004numerical}
+\abntrefinfo{Johnson}{JOHNSON}{2004}
+{JOHNSON, M. \emph{Numerical computer methods}. Amsterdam Boston: Elsevier
+  Academic Press, 2004.
+ISBN 9780080497211.}
+
+\bibitem[Jorgensen e Tirado-Rives 1988]{Jorgensen1988}
+\abntrefinfo{Jorgensen e Tirado-Rives}{JORGENSEN; TIRADO-RIVES}{1988}
+{JORGENSEN, W.~L.; TIRADO-RIVES, J. The {OPLS} [optimized potentials for liquid
+  simulations] potential functions for proteins, energy minimizations for
+  crystals of cyclic peptides and crambin.
+\emph{Journal of the American Chemical Society}, American Chemical Society
+  ({ACS}), v.~110, n.~6, p. 1657--1666, mar 1988.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1021\%2Fja00214a001}.}
+
+\bibitem[Kmiecik et al. 2016]{Kmiecik2016}
+\abntrefinfo{Kmiecik et al.}{KMIECIK et al.}{2016}
+{KMIECIK, S. et al. Coarse-grained protein models and their applications.
+\emph{Chemical Reviews}, American Chemical Society ({ACS}), v.~116, n.~14, p.
+  7898--7936, jul 2016.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1021\%2Facs.chemrev.6b00163}.}
+
+\bibitem[Kolinski et al. 1998]{Kolinski1998}
+\abntrefinfo{Kolinski et al.}{KOLINSKI et al.}{1998}
+{KOLINSKI, A. et al. An efficient monte carlo model of protein chains. modeling
+  the short-range correlations between side group centers of mass.
+\emph{The Journal of Physical Chemistry B}, American Chemical Society ({ACS}),
+  v.~102, n.~23, p. 4628--4637, jun 1998.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1021\%2Fjp973371j}.}
+
+\bibitem[Kurcinski et al. 2015]{Kurcinski2015}
+\abntrefinfo{Kurcinski et al.}{KURCINSKI et al.}{2015}
+{KURCINSKI, M. et al. {CABS}-dock web server for the flexible docking of
+  peptides to proteins without prior knowledge of the binding site.
+\emph{Nucleic Acids Research}, Oxford University Press ({OUP}), v.~43, n.~W1,
+  p. W419--W424, may 2015.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1093\%2Fnar\%2Fgkv456}.}
+
+\bibitem[Levitt 1976]{Levitt1976}
+\abntrefinfo{Levitt}{LEVITT}{1976}
+{LEVITT, M. A simplified representation of protein conformations for rapid
+  simulation of protein folding.
+\emph{Journal of Molecular Biology}, Elsevier {BV}, v.~104, n.~1, p. 59--107,
+  jun 1976.
+Dispon{\'\i}vel em:
+  \url{https://doi.org/10.1016\%2F0022-2836\%2876\%2990004-8}.}
+
+\bibitem[Levitt e Warshel 1975]{Levitt1975}
+\abntrefinfo{Levitt e Warshel}{LEVITT; WARSHEL}{1975}
+{LEVITT, M.; WARSHEL, A. Computer simulation of protein folding.
+\emph{Nature}, Springer Nature, v.~253, n.~5494, p. 694--698, feb 1975.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1038\%2F253694a0}.}
+
+\bibitem[Linge, O{\textquotesingle}Donoghue e Nilges 2001]{Linge2001}
+\abntrefinfo{Linge, O{\textquotesingle}Donoghue e Nilges}{LINGE;
+  O{\textquotesingle}DONOGHUE; NILGES}{2001}
+{LINGE, J.; O{\textquotesingle}DONOGHUE, S.; NILGES, M. Automated assignment of
+  ambiguous nuclear overhauser effects with {ARIA}. In:  \emph{Methods in
+  Enzymology}. Elsevier {BV}, 2001. p. 71--90.
+Dispon{\'\i}vel em:
+  \url{https://doi.org/10.1016\%2Fs0076-6879\%2801\%2939310-2}.}
+
+\bibitem[Liwo et al. 2014]{Liwo2014}
+\abntrefinfo{Liwo et al.}{LIWO et al.}{2014}
+{LIWO, A. et al. A unified coarse-grained model of biological macromolecules
+  based on mean-field multipole{\textendash}multipole interactions.
+\emph{Journal of Molecular Modeling}, Springer Nature, v.~20, n.~8, jul 2014.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1007\%2Fs00894-014-2306-5}.}
+
+\bibitem[Liwo et al. 1997]{Liwo1997}
+\abntrefinfo{Liwo et al.}{LIWO et al.}{1997}
+{LIWO, A. et al. A united-residue force field for off-lattice protein-structure
+  simulations. i. functional forms and parameters of long-range side-chain
+  interaction potentials from protein crystal data.
+\emph{Journal of Computational Chemistry}, Wiley-Blackwell, v.~18, n.~7, p.
+  849--873, may 1997.
+Dispon{\'\i}vel em:
+  \url{https://doi.org/10.1002\%2F\%28sici\%291096-987x\%28199705\%2918\%3A7\%3C849\%3A\%3Aaid-jcc1\%3E3.0.co\%3B2-r}.}
+
+\bibitem[Louhivuori et al. 2010]{Louhivuori2010}
+\abntrefinfo{Louhivuori et al.}{LOUHIVUORI et al.}{2010}
+{LOUHIVUORI, M. et al. Release of content through mechano-sensitive gates in
+  pressurized liposomes.
+\emph{Proceedings of the National Academy of Sciences}, Proceedings of the
+  National Academy of Sciences, v.~107, n.~46, p. 19856--19860, nov 2010.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1073\%2Fpnas.1001316107}.}
+
+\bibitem[Luscombe et al. 2000]{Luscombe2000}
+\abntrefinfo{Luscombe et al.}{LUSCOMBE et al.}{2000}
+{LUSCOMBE, N.~M. et al.
+\emph{Genome Biology}, Springer Nature, v.~1, n.~1, p. reviews001.1, 2000.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1186\%2Fgb-2000-1-1-reviews001}.}
+
+\bibitem[Mark e Nilsson 2001]{Mark2001}
+\abntrefinfo{Mark e Nilsson}{MARK; NILSSON}{2001}
+{MARK, P.; NILSSON, L. Structure and dynamics of the {TIP}3p, {SPC}, and
+  {SPC}/e water models at 298 k.
+\emph{The Journal of Physical Chemistry A}, American Chemical Society ({ACS}),
+  v.~105, n.~43, p. 9954--9960, nov 2001.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1021\%2Fjp003020w}.}
+
+\bibitem[Marrink et al. 2007]{Marrink2007}
+\abntrefinfo{Marrink et al.}{MARRINK et al.}{2007}
+{MARRINK, S.~J. et al. The {MARTINI} force field:~ coarse grained model for
+  biomolecular simulations.
+\emph{The Journal of Physical Chemistry B}, American Chemical Society ({ACS}),
+  v.~111, n.~27, p. 7812--7824, jul 2007.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1021\%2Fjp071097f}.}
+
+\bibitem[Marrink e Tieleman 2013]{Marrink2013}
+\abntrefinfo{Marrink e Tieleman}{MARRINK; TIELEMAN}{2013}
+{MARRINK, S.~J.; TIELEMAN, D.~P. Perspective on the martini model.
+\emph{Chemical Society Reviews}, Royal Society of Chemistry ({RSC}), v.~42,
+  n.~16, p.~6801, 2013.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1039\%2Fc3cs60093a}.}
+
+\bibitem[Performance Of Haddock In Casp Capri 2015]{HADDOCKCAPRI}
+\abntrefinfo{Performance\ldots}{PERFORMANCE\ldots}{2015}
+{PERFORMANCE Of Haddock In Casp Capri. 2015.
+  \url{http://www.bonvinlab.org/news/Top-Performance-of-HADDOCK-in-CASP-CAPRI/}.}
+
+\bibitem[Periole et al. 2007]{Periole2007}
+\abntrefinfo{Periole et al.}{PERIOLE et al.}{2007}
+{PERIOLE, X. et al. G protein-coupled receptors self-assemble in dynamics
+  simulations of model bilayers.
+\emph{Journal of the American Chemical Society}, American Chemical Society
+  ({ACS}), v.~129, n.~33, p. 10126--10132, aug 2007.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1021\%2Fja0706246}.}
+
+\bibitem[Privalov et al. 2007]{Privalov2007}
+\abntrefinfo{Privalov et al.}{PRIVALOV et al.}{2007}
+{PRIVALOV, P.~L. et al. What drives proteins into the major or minor grooves of
+  {DNA}?
+\emph{Journal of Molecular Biology}, Elsevier {BV}, v.~365, n.~1, p.~1--9, jan
+  2007.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1016\%2Fj.jmb.2006.09.059}.}
+
+\bibitem[Sambriski, Schwartz e Pablo 2009]{Sambriski2009}
+\abntrefinfo{Sambriski, Schwartz e Pablo}{SAMBRISKI; SCHWARTZ; PABLO}{2009}
+{SAMBRISKI, E.~J.; SCHWARTZ, D.~C.; PABLO, J.~J. de. Uncovering pathways in
+  {DNA} oligonucleotide hybridization via transition state analysis.
+\emph{Proceedings of the National Academy of Sciences}, Proceedings of the
+  National Academy of Sciences, v.~106, n.~43, p. 18125--18130, oct 2009.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1073\%2Fpnas.0904721106}.}
+
+\bibitem[Silva, Oliveira e Santos 2015]{Silva2015}
+\abntrefinfo{Silva, Oliveira e Santos}{SILVA; OLIVEIRA; SANTOS}{2015}
+{SILVA, I. T.~G. da; OLIVEIRA, P. S.~L. de; SANTOS, G.~M. Featuring the
+  nucleosome surface as a therapeutic target.
+\emph{Trends in Pharmacological Sciences}, Elsevier {BV}, v.~36, n.~5, p.
+  263--269, may 2015.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1016\%2Fj.tips.2015.02.010}.}
+
+\bibitem[Uusitalo et al. 2015]{Uusitalo2015}
+\abntrefinfo{Uusitalo et al.}{UUSITALO et al.}{2015}
+{UUSITALO, J.~J. et al. Martini coarse-grained force field: Extension to {DNA}.
+\emph{Journal of Chemical Theory and Computation}, American Chemical Society
+  ({ACS}), v.~11, n.~8, p. 3932--3945, aug 2015.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1021\%2Facs.jctc.5b00286}.}
+
+\bibitem[Vendruscolo e Dobson 2011]{Vendruscolo2011}
+\abntrefinfo{Vendruscolo e Dobson}{VENDRUSCOLO; DOBSON}{2011}
+{VENDRUSCOLO, M.; DOBSON, C.~M. Protein dynamics: Moore{\textquotesingle}s law
+  in molecular biology.
+\emph{Current Biology}, Elsevier {BV}, v.~21, n.~2, p. R68--R70, jan 2011.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1016\%2Fj.cub.2010.11.062}.}
+
+\bibitem[Wilson e Doniach 1989]{Wilson1989}
+\abntrefinfo{Wilson e Doniach}{WILSON; DONIACH}{1989}
+{WILSON, C.; DONIACH, S. A computer model to dynamically simulate protein
+  folding: Studies with crambin.
+\emph{Proteins: Structure, Function, and Genetics}, Wiley-Blackwell, v.~6,
+  n.~2, p. 193--209, 1989.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1002\%2Fprot.340060208}.}
+
+\end{thebibliography}

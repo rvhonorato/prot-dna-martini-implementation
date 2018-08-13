@@ -1,0 +1,9 @@
+\select@language {brazil}
+\select@language {english}
+\contentsline {figure}{\numberline {1}{\ignorespaces Different scales of common computational biology experiments \cite {Kmiecik2016}.}}{11}{figure.1.1}
+\contentsline {figure}{\numberline {2}{\ignorespaces Different coarse-grained representations of a protein; united side chain atoms are colored in orange. pseudobonds of fluctuating length are shown as springs and lattice models are shown on the underlying lattice slide \cite {Kmiecik2016}.}}{13}{figure.1.2}
+\contentsline {figure}{\numberline {3}{\ignorespaces Examples of Martini mapping selected molecules. (A) Standard water particle. (B) Polarizable water molecule with embedded charges. (C) DMPC lipid. (D) Polysaccharide fragment. (E) Peptide. (F) DNA fragment. (G) Polystyrene fragment. (H) Fullerene molecule. In all cases Martini CG beads are shown as cyan transparent beads overlaying the atomistic structure \cite {Marrink2013}.}}{14}{figure.1.3}
+\contentsline {figure}{\numberline {4}{\ignorespaces DNA backbone is modeled with one bead describing the phosphate and two beads describing the sugar. The pyrimidines are modeled with three beads and the purines with four beads. T-prefix marks the beads that use the new tiny bead type. For hydrogen bonding beads, the new special bead types are shown together with the bead type describing their interactions with all beads except the special hydrogen bonding beads (in parentheses) \cite {Uusitalo2015}.}}{16}{figure.1.4}
+\contentsline {figure}{\numberline {5}{\ignorespaces Overview of the proposed implementation.}}{25}{figure.5.5}
+\contentsline {figure}{\numberline {6}{\ignorespaces Example of MARTINI (A) and CNS (B) topology for the amino acid leucine.}}{26}{figure.5.6}
+\contentsline {figure}{\numberline {7}{\ignorespaces Diagram of the score optimization}}{28}{figure.5.7}
