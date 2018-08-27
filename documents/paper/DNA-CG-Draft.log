@@ -1,0 +1,747 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.8.13)  24 AUG 2018 17:10
+entering extended mode
+ restricted \write18 enabled.
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
+**DNA-CG-Draft.tex
+(./DNA-CG-Draft.tex
+LaTeX2e <2018-04-01> patch level 2
+Babel <3.18> and hyphenation patterns for 84 language(s) loaded.
+(./NAR.cls
+Document Class: NAR 2007/03/23 v1.4b Standard LaTeX document class
+(./fleqn.clo
+File: fleqn.clo 1998/08/17 v1.1c Standard LaTeX option (flush left equations)
+\mathindent=\dimen102
+) (./crop.sty
+Package: crop 2001/11/16 v1.6 cropmarks (mf)
+\CROP@width=\dimen103
+\CROP@height=\dimen104
+\CROP@index=\count80
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 99.
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
+))
+\CROP@offset=\count81
+Package crop Info: Local config file crop.cfg used on input line 346.
+
+(/usr/local/texlive/2018/texmf-dist/tex/xelatex/xetexconfig/crop.cfg))
+Package crop Info: using pdf(la)tex graphics driver on input line 76.
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2018/04/06 v1.3b Input encoding file
+\inpenc@prehook=\toks14
+\inpenc@posthook=\toks15
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2017/09/02 v2.17a AMS math features
+\@mathmargin=\skip41
+
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2018/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01 AMS text
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks16
+\ex@=\dimen105
+))
+(/usr/local/texlive/2018/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen106
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 2016/03/08 v2.02 operator names
+)
+\inf@bad=\count82
+LaTeX Info: Redefining \frac on input line 213.
+\uproot@=\count83
+\leftroot@=\count84
+LaTeX Info: Redefining \overline on input line 375.
+\classnum@=\count85
+\DOTSCASE@=\count86
+LaTeX Info: Redefining \ldots on input line 472.
+LaTeX Info: Redefining \dots on input line 475.
+LaTeX Info: Redefining \cdots on input line 596.
+\Mathstrutbox@=\box26
+\strutbox@=\box27
+\big@size=\dimen107
+LaTeX Font Info:    Redeclaring font encoding OML on input line 712.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 713.
+\macc@depth=\count87
+\c@MaxMatrixCols=\count88
+\dotsspace@=\muskip10
+\c@parentequation=\count89
+\dspbrk@lvl=\count90
+\tag@help=\toks17
+\row@=\count91
+\column@=\count92
+\maxfields@=\count93
+\andhelp@=\toks18
+\eqnshift@=\dimen108
+\alignsep@=\dimen109
+\tagshift@=\dimen110
+\tagwidth@=\dimen111
+\totwidth@=\dimen112
+\lineht@=\dimen113
+\@envbody=\toks19
+\multlinegap=\skip42
+\multlinetaggap=\skip43
+\mathdisplay@stack=\toks20
+LaTeX Info: Redefining \[ on input line 2817.
+LaTeX Info: Redefining \] on input line 2818.
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
+(/usr/local/texlive/2018/texmf-dist/tex/latex/base/latexsym.sty
+Package: latexsym 1998/08/17 v2.2e Standard LaTeX package (lasy symbols)
+\symlasy=\mathgroup6
+LaTeX Font Info:    Overwriting symbol font `lasy' in version `bold'
+(Font)                  U/lasy/m/n --> U/lasy/b/n on input line 52.
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count94
+\float@exts=\toks21
+\float@box=\box28
+\@float@everytoks=\toks22
+\@floatcapt=\box29
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics/epsfig.sty
+Package: epsfig 2017/06/25 v1.7b (e)psfig emulation (SPQR)
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks23
+)
+\Gin@req@height=\dimen114
+\Gin@req@width=\dimen115
+)
+\epsfxsize=\dimen116
+\epsfysize=\dimen117
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/wrapfig/wrapfig.sty
+\wrapoverhang=\dimen118
+\WF@size=\dimen119
+\c@WF@wrappedlines=\count95
+\WF@box=\box30
+\WF@everypar=\toks24
+Package: wrapfig 2003/01/31  v 3.6
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/sttools/stfloats.sty
+Package: stfloats 2017/03/27 v3.3 Improve float mechanism and baselineskip sett
+ings
+\@dblbotnum=\count96
+\c@dblbotnumber=\count97
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/tools/multicol.sty
+Package: multicol 2018/04/01 v1.8r multicolumn formatting (FMi)
+\c@tracingmulticols=\count98
+\mult@box=\box31
+\multicol@leftmargin=\dimen120
+\c@unbalance=\count99
+\c@collectmore=\count100
+\doublecol@number=\count101
+\multicoltolerance=\count102
+\multicolpretolerance=\count103
+\full@width=\dimen121
+\page@free=\dimen122
+\premulticols=\dimen123
+\postmulticols=\dimen124
+\multicolsep=\skip44
+\multicolbaselineskip=\skip45
+\partial@page=\box32
+\last@line=\box33
+\maxbalancingoverflow=\dimen125
+\mult@rightbox=\box34
+\mult@grightbox=\box35
+\mult@gfirstbox=\box36
+\mult@firstbox=\box37
+\@tempa=\box38
+\@tempa=\box39
+\@tempa=\box40
+\@tempa=\box41
+\@tempa=\box42
+\@tempa=\box43
+\@tempa=\box44
+\@tempa=\box45
+\@tempa=\box46
+\@tempa=\box47
+\@tempa=\box48
+\@tempa=\box49
+\@tempa=\box50
+\@tempa=\box51
+\@tempa=\box52
+\@tempa=\box53
+\@tempa=\box54
+\c@columnbadness=\count104
+\c@finalcolumnbadness=\count105
+\last@try=\dimen126
+\multicolovershoot=\dimen127
+\multicolundershoot=\dimen128
+\mult@nat@firstbox=\box55
+\colbreak@box=\box56
+\mc@col@check@num=\count106
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics/rotating.sty
+Package: rotating 2016/08/11 v2.16d rotated objects in LaTeX
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
+)
+\c@r@tfl@t=\count107
+\rotFPtop=\skip46
+\rotFPbot=\skip47
+\rot@float@box=\box57
+\rot@mess@toks=\toks25
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/multirow/multirow.sty
+Package: multirow 2016/11/25 v2.2 Span multiple rows of a table
+\multirow@colwidth=\skip48
+\multirow@cntb=\count108
+\multirow@dima=\skip49
+\bigstrutjot=\dimen129
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/tools/dcolumn.sty
+Package: dcolumn 2014/10/28 v1.06 decimal alignment package (DPC)
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/tools/array.sty
+Package: array 2018/04/07 v2.4g Tabular extension package (FMi)
+\col@sep=\dimen130
+\ar@mcellbox=\box58
+\extrarowheight=\dimen131
+\NC@list=\toks26
+\extratabsurround=\skip50
+\backup@length=\skip51
+\ar@cellbox=\box59
+))
+(/usr/local/texlive/2018/texmf-dist/tex/latex/boxedminipage/boxedminipage.sty)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/base/makeidx.sty
+Package: makeidx 2014/09/29 v1.0m Standard LaTeX package
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/soul/soul.sty
+Package: soul 2003/11/17 v2.4 letterspacing/underlining (mf)
+\SOUL@word=\toks27
+\SOUL@lasttoken=\toks28
+\SOUL@cmds=\toks29
+\SOUL@buffer=\toks30
+\SOUL@token=\toks31
+\SOUL@spaceskip=\skip52
+\SOUL@ttwidth=\dimen132
+\SOUL@uldp=\dimen133
+\SOUL@ulht=\dimen134
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip11
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/tools/xspace.sty
+Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
+) (./times.sty
+Package: times 2000/01/12 PSNFSS-v8.1 Times font as default roman (SPQR) 
+)
+\jnameskip=\skip53
+\titleskip=\dimen135
+\ruleskip=\dimen136
+\ruleht=\dimen137
+\droplines=\count109
+\dropsep=\dimen138
+\capvskip=\skip54
+\caphskip=\skip55
+\capwd=\dimen139
+\droplinewd=\dimen140
+\c@part=\count110
+\c@section=\count111
+\c@subsection=\count112
+\c@subsubsection=\count113
+\c@paragraph=\count114
+\c@subparagraph=\count115
+\labelwidthi=\dimen141
+\labelwidthii=\dimen142
+\labelwidthiii=\dimen143
+\labelwidthiv=\dimen144
+\topsepi=\skip56
+\topsepii=\skip57
+\topsepiii=\skip58
+\topsepiv=\skip59
+\itemsepi=\skip60
+\itemsepii=\skip61
+\itemsepiii=\skip62
+\itemsepiv=\skip63
+\labelsepi=\dimen145
+\labelsepii=\dimen146
+\labelsepiii=\dimen147
+\labelsepiv=\dimen148
+\parsepi=\dimen149
+\parsepii=\dimen150
+\parsepiii=\dimen151
+\parsepiv=\dimen152
+\rightmargini=\dimen153
+\rightmarginii=\dimen154
+\rightmarginiii=\dimen155
+\rightmarginiv=\dimen156
+\itemindenti=\dimen157
+\itemindentii=\dimen158
+\itemindentiii=\dimen159
+\itemindentiv=\dimen160
+\labelleftmargin=\dimen161
+\c@figure=\count116
+\c@table=\count117
+\abovecaptionskip=\skip64
+\belowcaptionskip=\skip65
+\figurewidth=\dimen162
+\figureheight=\dimen163
+\dwidth=\dimen164
+\dheight=\dimen165
+\ncolumns=\count118
+\nrows=\count119
+\tablewd=\dimen166
+\tablewidth=\dimen167
+\captionwd=\dimen168
+\tempbox=\box60
+\tableleftskip=\skip66
+\tablerightskip=\skip67
+\tablecapleftskip=\skip68
+\tablecaprightskip=\skip69
+\tablefootleftskip=\skip70
+\tablefootrightskip=\skip71
+\footnumskip=\dimen169
+\bibindent=\dimen170
+\maxbibwd=\dimen171
+
+(./NAR-natbib.sty
+Package: NAR-natbib 2000/07/24 7.0a (PWD)
+\bibhang=\skip72
+\bibsep=\skip73
+LaTeX Info: Redefining \cite on input line 509.
+\c@NAT@ctr=\count120
+)
+\hours=\count121
+\minutes=\count122
+\grid@sidemargin=\dimen172
+\grid@wd=\dimen173
+\grid@ht=\dimen174
+\grid@linewd=\dimen175
+\grid@topofline=\dimen176
+LaTeX Info: Redefining \textso on input line 1856.
+\currfontsize=\dimen177
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/amscls/amsthm.sty
+Package: amsthm 2017/10/31 v2.20.4
+\thm@style=\toks32
+\thm@bodyfont=\toks33
+\thm@headfont=\toks34
+\thm@notefont=\toks35
+\thm@headpunct=\toks36
+\thm@preskip=\skip74
+\thm@postskip=\skip75
+\thm@headsep=\skip76
+\dth@everypar=\toks37
+)
+\@indexfile=\write3
+\openout3 = `DNA-CG-Draft.idx'.
+
+
+Writing index file DNA-CG-Draft.idx
+) (/usr/local/texlive/2018/texmf-dist/tex/latex/lipsum/lipsum.sty
+Package: lipsum 2014/07/27 v1.3 150 paragraphs of Lorem Ipsum dummy text
+\c@lips@count=\count123
+)
+(./DNA-CG-Draft.aux)
+\openout1 = `DNA-CG-Draft.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 13.
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/psnfss/ot1ptm.fd
+File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
+)
+(/usr/local/texlive/2018/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count124
+\scratchdimen=\dimen178
+\scratchbox=\box61
+\nofMPsegments=\count125
+\nofMParguments=\count126
+\everyMPshowfont=\toks38
+\MPscratchCnt=\count127
+\MPscratchDim=\dimen179
+\MPnumerator=\count128
+\makeMPintoPDFobject=\count129
+\everyMPtoPDFconversion=\toks39
+) (/usr/local/texlive/2018/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/oberdiek/grfext.sty
+Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
+
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
+
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
+)))
+(/usr/local/texlive/2018/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
+
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
+
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
+
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)))
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+Package: pdftexcmds 2018/01/30 v0.27 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2017/03/15 v3.2 Provides the ifpdf switch
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+38.
+Package grfext Info: Graphics extension search list:
+(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 456.
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+
+LaTeX Font Warning: Font shape `OT1/cmss/b/n' undefined
+(Font)              using `OT1/cmss/m/n' instead on input line 36.
+
+
+LaTeX Font Warning: Font shape `OT1/cmss/m/n' in size <20> not available
+(Font)              size <20.74> substituted on input line 36.
+
+
+LaTeX Font Warning: Font shape `OT1/cmss/b/n' in size <20> not available
+(Font)              size <20.74> substituted on input line 36.
+
+
+Overfull \vbox (4.10277pt too high) detected at line 36
+ []
+
+LaTeX Font Info:    Try loading font information for U+msa on input line 36.
+(/usr/local/texlive/2018/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 36.
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+LaTeX Font Info:    Try loading font information for U+lasy on input line 36.
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/base/ulasy.fd
+File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
+)
+
+LaTeX Font Warning: Font shape `OT1/cmss/n/n' undefined
+(Font)              using `OT1/cmss/m/n' instead on input line 36.
+
+
+Overfull \hbox (267.0pt too wide) in paragraph at lines 36--36
+[][] 
+ []
+
+
+Underfull \hbox (badness 1097) in paragraph at lines 38--39
+\OT1/cmss/b/n/10 vehicula augue eu neque. Pellentesque habitant morbi
+ []
+
+
+Underfull \hbox (badness 2261) in paragraph at lines 46--47
+\OT1/ptm/m/n/10 and dynamics has been advancing steadily in the past
+ []
+
+
+Underfull \hbox (badness 1087) in paragraph at lines 46--47
+\OT1/ptm/m/n/10 representation level from all-atom to coarse-grained is a
+ []
+
+
+Underfull \hbox (badness 2932) in paragraph at lines 48--49
+\OT1/ptm/m/n/10 70's and were successfully able to simulate an entire
+ []
+
+
+Underfull \hbox (badness 1142) in paragraph at lines 48--49
+\OT1/ptm/m/n/10 folding process [10.1038/253694a0]. Further development
+ []
+
+
+Underfull \hbox (badness 2253) in paragraph at lines 50--51
+[]\OT1/ptm/m/n/10 Since proteins adopt a well-defined three-dimensional
+ []
+
+
+Underfull \hbox (badness 1354) in paragraph at lines 50--51
+\OT1/ptm/m/n/10 by the side chains, it is expected that a coarse-grained
+ []
+
+
+Underfull \hbox (badness 2894) in paragraph at lines 54--55
+\OT1/ptm/m/n/10 via statistical analysis. Here we apply the knowledge-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 54--55
+\OT1/ptm/m/n/10 based forcefield CG MARTINI [10.1021/jp071097f]
+ []
+
+
+Underfull \hbox (badness 3271) in paragraph at lines 54--55
+\OT1/ptm/m/n/10 which has been extended to account for nucleic-acids
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 54--55
+\OT1/ptm/m/n/10 [10.1021/acs.jctc.5b00286], in our data-driven docking
+ []
+
+
+Underfull \hbox (badness 2418) in paragraph at lines 54--55
+\OT1/ptm/m/n/10 program HADDOCK <ref>. Whilst there are some CG
+ []
+
+
+Underfull \hbox (badness 1939) in paragraph at lines 56--57
+\OT1/ptm/m/n/10 core particle substrate. PRC1 is assembled as a multi-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 56--57
+\OT1/ptm/m/n/10 structure remodeling both directly and through the
+ []
+
+
+Underfull \hbox (badness 4168) in paragraph at lines 56--57
+\OT1/ptm/m/n/10 establishment and removal of histone post-translational
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 68--69
+\OT1/ptm/m/n/10 The MARTINI CG DNA model was systematically
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 68--69
+\OT1/ptm/m/n/10 parametrized according to the MARTINI philosophy,
+ []
+
+
+Underfull \hbox (badness 4454) in paragraph at lines 70--71
+\OT1/ptm/m/n/10 combines top-down (experimental data) and bottom-up
+ []
+
+
+Underfull \hbox (badness 1577) in paragraph at lines 70--71
+\OT1/ptm/m/n/10 selected based on partition free energies from water to
+ []
+
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <10> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 72.
+LaTeX Font Info:    Calculating math sizes for size <7.5> on input line 72.
+
+LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <7.5> not available
+(Font)              size <7> substituted on input line 72.
+
+
+LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <3.75> not available
+(Font)              size <5> substituted on input line 72.
+
+
+LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <7.5> not available
+(Font)              size <7> substituted on input line 72.
+
+
+LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <3.75> not available
+(Font)              size <5> substituted on input line 72.
+
+
+LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <7.5> not available
+(Font)              size <7> substituted on input line 72.
+
+
+LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <3.75> not available
+(Font)              size <5> substituted on input line 72.
+
+
+LaTeX Font Warning: Font shape `U/lasy/m/n' in size <7.5> not available
+(Font)              size <7> substituted on input line 72.
+
+
+LaTeX Font Warning: Font shape `U/lasy/m/n' in size <3.75> not available
+(Font)              size <5> substituted on input line 72.
+
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 72.
+(/usr/local/texlive/2018/texmf-dist/tex/latex/psnfss/omsptm.fd
+File: omsptm.fd 
+)
+LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <7.5> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 72.
+
+
+LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <7.5> not available
+(Font)              size <7> substituted on input line 72.
+
+[1{/usr/local/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+
+
+]
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 72.
+
+Underfull \hbox (badness 4981) in paragraph at lines 72--73
+[]\OT1/ptm/m/n/10 The HADDOCK-MARTINI integration was done in
+ []
+
+
+Underfull \hbox (badness 3250) in paragraph at lines 75--76
+\OT1/ptm/m/n/10 protein-DNA benchmark v1.2 [10.1093/nar/gkn386] was
+ []
+
+
+Underfull \hbox (badness 2065) in paragraph at lines 75--76
+\OT1/ptm/m/n/10 test cases that cover all major protein-DNA complexes
+ []
+
+
+Underfull \hbox (badness 6808) in paragraph at lines 80--82
+[]\OT1/ptm/m/n/10 Docking simulations were performed using optimal
+ []
+
+
+Underfull \hbox (badness 7869) in paragraph at lines 80--82
+\OT1/ptm/m/n/10 parameters for Protein-DNA [10.1093/nar/gkq222], the
+ []
+
+
+LaTeX Warning: Reference `it0' on page 2 undefined on input line 93.
+
+
+Underfull \hbox (badness 1067) in paragraph at lines 95--96
+[]\OT1/ptm/m/n/10 Reducing degrees of freedom makes the docking task
+ []
+
+<figures/cpu-time.pdf, id=20, 505.89pt x 505.89pt>
+File: figures/cpu-time.pdf Graphic file (type pdf)
+<use figures/cpu-time.pdf>
+Package pdftex.def Info: figures/cpu-time.pdf  used on input line 99.
+(pdftex.def)             Requested size: 257.0pt x 257.00468pt.
+
+Overfull \hbox (10.0pt too wide) in paragraph at lines 99--100
+ [] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [2 <./figures/cpu-time.pdf>]
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 130.
+ [3] (./DNA-CG-Draft.aux
+
+Package natbib Warning: Citation(s) may have changed.
+(natbib)                Rerun to get citations correct.
+
+)
+
+LaTeX Font Warning: Size substitutions with differences
+(Font)              up to 1.25pt have occurred.
+
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 4273 strings out of 492649
+ 55413 string characters out of 6129622
+ 234995 words of memory out of 5000000
+ 8009 multiletter control sequences out of 15000+600000
+ 28430 words of font info for 76 fonts, out of 8000000 for 9000
+ 1150 hyphenation exceptions out of 8191
+ 41i,19n,34p,660b,335s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
+exlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/te
+xlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texl
+ive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texliv
+e/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2
+018/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/local/texlive/20
+18/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/local/texlive/201
+8/texmf-dist/fonts/type1/public/amsfonts/cm/cmss17.pfb></usr/local/texlive/2018
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/local/texlive/2018/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2018/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2018/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2018/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2018/texmf-di
+st/fonts/type1/public/amsfonts/latxfont/lcircle1.pfb></usr/local/texlive/2018/t
+exmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2018/texmf-dist/
+fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/typ
+e1/urw/times/utmr8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/tim
+es/utmri8a.pfb>
+Output written on DNA-CG-Draft.pdf (3 pages, 172251 bytes).
+PDF statistics:
+ 90 PDF objects out of 1000 (max. 8388607)
+ 65 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+

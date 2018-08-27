@@ -27,8 +27,7 @@ ls = [f for f in glob.glob('*') if not '.' in f]
 
 irmsd_dic = {'rank':[],'irmsd':[], 'name': [], 'phase': [], 'run': []}
 
-
-runL = ['run1', 'run2']#, 'run3','run4']
+runL = ['run3','run4']
 
 irmsd_dic_it0 = {}
 irmsd_dic_it1 = {}
@@ -56,5 +55,5 @@ for f in ls:
 		read_data(water_f, f, run)
 			
 df = pd.DataFrame.from_dict(irmsd_dic)
-df.to_csv('-benchmark.csv')
+df.to_csv('benchmark.csv')
 
