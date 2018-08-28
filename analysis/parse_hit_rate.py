@@ -16,7 +16,7 @@ run = 'run%i' % args.runn
 
 ls = [f for f in glob.glob('*') if not '.' in f]
 
-topL = [1, 5, 10, 50, 100, 400, 10000]
+topL = [1, 5, 10, 50, 100, 200, 400, 10000]
 
 print args.phase
 print 'top acceptable medium high'

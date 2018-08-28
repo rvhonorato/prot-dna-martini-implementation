@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.8.13)  24 AUG 2018 17:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.8.13)  27 AUG 2018 10:28
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -669,7 +669,41 @@ Underfull \hbox (badness 7869) in paragraph at lines 80--82
  []
 
 
+LaTeX Warning: Command \r invalid in math mode on input line 84.
+
+
+LaTeX Warning: Command \r invalid in math mode on input line 84.
+
+
+LaTeX Warning: Command \r invalid in math mode on input line 84.
+
+
+LaTeX Warning: Command \r invalid in math mode on input line 84.
+
+
+LaTeX Warning: Command \r invalid in math mode on input line 84.
+
+
+LaTeX Warning: Command \r invalid in math mode on input line 84.
+
+
+LaTeX Warning: Command \r invalid in math mode on input line 84.
+
+
+LaTeX Warning: Command \r invalid in math mode on input line 84.
+
+
+Underfull \hbox (badness 2020) in paragraph at lines 84--85
+\OT1/ptm/m/n/10 over the backbone CG beads (it0, it1) and AA atoms
+ []
+
+
 LaTeX Warning: Reference `it0' on page 2 undefined on input line 93.
+
+
+Underfull \hbox (badness 1112) in paragraph at lines 92--94
+\OT1/ptm/m/n/10 Quality of both CG and AA docking was evaluated by
+ []
 
 
 Underfull \hbox (badness 1067) in paragraph at lines 95--96
@@ -686,18 +720,10 @@ Overfull \hbox (10.0pt too wide) in paragraph at lines 99--100
  [] 
  []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [2 <./figures/cpu-time.pdf>]
+[2 <./figures/cpu-time.pdf>]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 130.
- [3] (./DNA-CG-Draft.aux
-
-Package natbib Warning: Citation(s) may have changed.
-(natbib)                Rerun to get citations correct.
-
-)
+ [3] (./DNA-CG-Draft.aux)
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.25pt have occurred.
@@ -708,18 +734,15 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 LaTeX Warning: There were undefined references.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
  ) 
 Here is how much of TeX's memory you used:
  4273 strings out of 492649
  55413 string characters out of 6129622
- 234995 words of memory out of 5000000
+ 235063 words of memory out of 5000000
  8009 multiletter control sequences out of 15000+600000
  28430 words of font info for 76 fonts, out of 8000000 for 9000
  1150 hyphenation exceptions out of 8191
- 41i,19n,34p,660b,335s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 41i,19n,34p,724b,335s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/te
 xlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texl
@@ -738,7 +761,7 @@ exmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2018/texmf-dist/
 fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/typ
 e1/urw/times/utmr8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/tim
 es/utmri8a.pfb>
-Output written on DNA-CG-Draft.pdf (3 pages, 172251 bytes).
+Output written on DNA-CG-Draft.pdf (3 pages, 174595 bytes).
 PDF statistics:
  90 PDF objects out of 1000 (max. 8388607)
  65 compressed objects within 1 object stream

@@ -6,7 +6,7 @@
 import gzip, operator, glob, os
 import pandas as pd
 
-ls = [p for p in glob.glob('*') if not '.' in p]
+ls = [p for p in glob.glob('*') if not '.' in p and p != 'plots']
 # runn = 4
 
 runL = [3,4]
