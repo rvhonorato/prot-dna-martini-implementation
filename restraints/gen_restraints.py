@@ -29,7 +29,7 @@ unpaired_interface_res_dic = dict([(c, []) for c in chain_list])
 for l in open(contactf):
     bound_resA, chainA, _, bound_resB, chainB, _, dist = l.split()
     #
-    if float(dist) <= 2.0:
+    if float(dist) >= 2.0:
         bound_resA = int(bound_resA)
         bound_resB = int(bound_resB)
         # look for unbound equivalents...
@@ -43,36 +43,73 @@ for l in open(contactf):
 
         # first set
         try:
-            interface_res_dic[chainA][unbound_resA].append(chainB)
+            interface_res_dic[chainA][unbound_resA].append(unbound_resB)
         except:
             interface_res_dic[chainA][unbound_resA] = []
-            interface_res_dic[chainA][unbound_resA].append(chainB)
+            interface_res_dic[chainA][unbound_resA].append(unbound_resB)
         # second set
         try:
-            interface_res_dic[chainB][unbound_resB].append(chainA)
+            interface_res_dic[chainB][unbound_resB].append(unbound_resA)
         except:
             interface_res_dic[chainB][unbound_resB] = []
-            interface_res_dic[chainB][unbound_resB].append(chainA)
-        # unpaired
+            interface_res_dic[chainB][unbound_resB].append(unbound_resA)
+        
+	#try:
+        #    interface_res_dic[chainA][unbound_resA].append(chainB)
+        #except:
+        #    interface_res_dic[chainA][unbound_resA] = []
+        #    interface_res_dic[chainA][unbound_resA].append(chainB)
+        #try:
+        #    interface_res_dic[chainB][unbound_resB].append(chainA)
+        #except:
+        #    interface_res_dic[chainB][unbound_resB] = []
+        #    interface_res_dic[chainB][unbound_resB].append(chainA)
+        
+	# unpaired
         unpaired_interface_res_dic[chainA].append(unbound_resA)
         unpaired_interface_res_dic[chainB].append(unbound_resB)
 
+# 1. Define restraints according to the interface pairing
+#  Ex. Chain A has contacts with B, C and F
+#    resid resA segidA ( assign ( active res B) ( active res F) )
 
-del interface_res_dic['A'][724]
-del interface_res_dic['A'][725]
-del interface_res_dic['A'][737]
+for chainA in interface_res_dic:
+	reslistA = list(set(interface_res_dic[chainA]))
+	reslistA.sort()
+	for resA in reslistA:
+		reslistB = list(set(interface_res_dic[chainA][resA]))
+		reslistB.sort()
+        	tbwA = 'resid %i and segid %s' % (resA, chainA)
+	        tbwB = []
+		for resB in reslistB:
+                        tbwB.append('( resid %i and segid %s )' % (resB, chainB))
+        	#out.write('\nassign ( %s ) \n(\n %s \n) 2.0 2.0 0.0\n' % (tbwA, '\n or '.join(tbwB)))
+		print '\nassign ( %s ) \n(\n %s \n) 2.0 2.0 0.0\n' % (tbwA, '\n or '.join(tbwB))
+
+	exit()
 
 
-del interface_res_dic['B'][724]
-del interface_res_dic['B'][725]
-del interface_res_dic['B'][737]
 
+out = open('ambig-paired.tbl','w')
+for chainA in interface_res_dic:
+    print interface_res_dic[chainA]
+    for resA in interface_res_dic[chainA].keys():
+        tbwA = 'resid %i and segid %s' % (resA, chainA)
+        tbwB = []
+        for resB in list(set(interface_res_dic[chainA][resA])):
+		for candidate_chain in list(set(interface_res_dic[chainB][resB])):
+                    if candidate_chain == chainA:
+                        tbwB.append('( resid %i and segid %s )' % (resB, chainB))
+                        # print resA, chainA, resB, chainB
+        out.write('\nassign ( %s ) \n(\n %s \n) 2.0 2.0 0.0\n' % (tbwA, '\n or '.join(tbwB)))
+out.close()
+exit()
 # 1. Define restraints according to the interface pairing
 #  Ex. Chain A has contacts with B, C and F
 #    resid resA segidA ( assign ( active res B) ( active res F) )
 out = open('ambig-paired.tbl','w')
 for chainA in interface_res_dic:
-    # print interface_res_dic[chainA]
+    print interface_res_dic[chainA]
     for resA in interface_res_dic[chainA].keys():
         tbwA = 'resid %i and segid %s' % (resA, chainA)
         tbwB = []
@@ -85,7 +122,7 @@ for chainA in interface_res_dic:
                         # print resA, chainA, resB, chainB
         out.write('\nassign ( %s ) \n(\n %s \n) 2.0 2.0 0.0\n' % (tbwA, '\n or '.join(tbwB)))
 out.close()
-
+exit()
 # 2. Define restraints without taking into account interface pairing
 #   resis resA segidA ( assign ( active resB )( active resC ) ... ( active resF ) )
 out = open('ambig-unpaired.tbl','w')

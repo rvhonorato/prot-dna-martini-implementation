@@ -5,7 +5,8 @@ from itertools import groupby
 
 global haddocktools_path
 # haddocktools_path = '/Users/rvhonorato/alc/tools'
-haddocktools_path = '/home/software/haddock/haddock2.3/tools'
+#haddocktools_path = '/home/software/haddock/haddock2.3/tools'
+haddocktools_path = os.environ['HADDOCKTOOLS']
 
 def run(cmd, outputf):
 	with open("./%s" % outputf, "w") as f:
@@ -41,6 +42,7 @@ def get_range(data):
 
 reference = sys.argv[1]
 pdb_dic = {'A':sys.argv[2], 'B':sys.argv[3]}
+
 print pdb_dic 
 
 
