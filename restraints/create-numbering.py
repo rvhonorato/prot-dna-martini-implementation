@@ -107,10 +107,10 @@ for chain in pdb_dic:
 		if not '-' in aln:
 			resnumA = ref_res_dic[counterA]
 			resnumB = chain_res_dic[counterB]
-			# print position, aln, counterA, counterB, resnumA, resnumB 
+			print position, aln, counterA, counterB, resnumA, resnumB 
 			# exit()
 			if resA != resB:
-				print 'WARNING: Reference chain %s aa %s position %i does not match target chain %s aa %s' % (chain, resA, i, chain, resB)
+				print 'WARNING: Reference %s %s does not match target %s %s' % (chain, resA, chain, resB)
 			else:
 				numbering_list.append((resnumA, resnumB))
 		
