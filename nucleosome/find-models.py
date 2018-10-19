@@ -1,28 +1,27 @@
 # based on the submission, find which model belong to which run
-
 import glob, os
 
+# create pdb list
 pdb_l = []
+for pdb in glob.glob('/home/rodrigo/nucleosome/capri/runs/*pdb.gz'):
+    pdb_l.append(pdb)
 
-run_path_l = ['/data/capri/Capri31/Target95/runs/T95-all-passive-fcc',
-    '/data/capri/Capri31/Target95/runs/T95-ambig-fullbases',
-    '/data/capri/Capri31/Target95/runs/T95-cm-Cys-Lys',
-    '/data/capri/Capri31/Target95/runs/T95-DNA-only-fcc',
-    '/data/capri/Capri31/Target95/runs/T95-server-fcc',
-    '/data/capri/Capri31/Target95/runs/T95-server-rmsd']
+pdb_dic = {}
+for pdb in glob.glob('/home/rodrigo/nucleosome/capri/*pdb'):
+    pdb_dic[pdb] = {}
+    for complex in pdb_l:
+        cmd = 'refe %s\nmobi %s\nATOMS CA\nALIGN\nFIT\nquit' % (pdb, complex)
+        output = os.popen('echo "%s" | profit' % cmd)  # if this fails, check the terminal atoms..
+        result = [l for l in output if 'RMS:' in l][0]
+        rms = float(result.split()[-1])
+        pdb_dic[pdb][complex] = rms
 
-# out = open('/home/rodrigo/pdb.list','w')
-for path in run_path_l:
-    for pdb in glob.glob('%s/structures/it1/water/*pdb*' % path):
-        name = path.split('/')[-1] + '-' + pdb.split('/')[-1]
-        os.system('cp %s /home/rodrigo/nucleossome/capri/runs/%s' % (pdb, name))
-        # pdb_l.append(pdb)
-        # out.write(pdb+'\n')
+out = open('found.csv','w')
+for pdb in pdb_dic:
+    min_rms = min(pdb_dic[pdb].values())
+    for name, rms in pdb_dic[pdb].items():
+        if rms == min_rms:
+            id = name.split('/')[-1].split('complex')[0]
+            out.write("%s,%.4f,%s,%s\n" % (pdb, rms, id, name))
 
-# out.close()
-
-
-# capri_models = glob.glob('/home/rodrigo/nucleossome/capri/target95*pdb')
-
-# print pdb_l[0], capri_models[0]
-
+out.close()

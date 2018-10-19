@@ -44,7 +44,7 @@ def get_range(data):
 reference = sys.argv[1]
 pdb_dic = {'A': sys.argv[2], 'B': sys.argv[3]}
 
-print pdb_dic
+print(pdb_dic)
 
 clustalo_exe = '/home/rodrigo/clustal-omega'
 
@@ -107,10 +107,10 @@ for chain in pdb_dic:
         if not '-' in aln:
             resnumA = ref_res_dic[counterA]
             resnumB = chain_res_dic[counterB]
-            print position, aln, counterA, counterB, resnumA, resnumB
+            print(position, aln, counterA, counterB, resnumA, resnumB)
             # exit()
             if resA != resB:
-                print 'WARNING: Reference %s %s does not match target %s %s' % (chain, resA, chain, resB)
+                print('WARNING: Reference %s %s does not match target %s %s' % (chain, resA, chain, resB))
             else:
                 numbering_list.append((resnumA, resnumB))
 

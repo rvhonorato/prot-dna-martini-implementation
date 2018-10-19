@@ -6,14 +6,16 @@ def run(cmd, outputf):
         process = subprocess.Popen(cmd.split(), shell=False, stdout=f)
         process.wait()
 
+wd = os.chdir('/home/rodrigo/nucleosome/capri')
+
 exe = 'python /home/rodrigo/pdb-tools/pdb_rplchain.py'
-wd = os.chdir('/home/rodrigo/lab/nucleosome/capri')
 
 A = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
 B = ['K', 'L', 'M']
 
 pdb_l = glob.glob('target95*pdb')
-print 'what'
+print("what")
+
 for pdb in pdb_l:
     for chain in A:
         cmd = '%s -%s -X %s' % (exe, chain, pdb)
@@ -32,4 +34,6 @@ for pdb in pdb_l:
     run(cmd, 'oo')
     os.system('mv oo %s' % pdb)
 
-    exit()
+    cmd = 'python /home/rodrigo/pdb-tools/pdb_chainxseg.py %s' % pdb
+    run(cmd, 'oo')
+    os.system('mv oo %s' % pdb)
