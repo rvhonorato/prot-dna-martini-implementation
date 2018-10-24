@@ -9,6 +9,9 @@ for TARGET in $DIRL
 
 	cp /home/rodrigo/nucleosome/capri/cg-runs-input/* .
 
+	python ~/Nostromo/scripts/martinize-restraints.py ambig.tbl
+    python ~/Nostromo/scripts/martinize-restraints.py unambig.tbl
+
     $HADDOCKCMD
 
     bash ~/Nostromo/nucleosome/patch-nuc.sh
