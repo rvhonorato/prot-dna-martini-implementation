@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 #
 RUNN=$1
 SUFFIX=_complex.pdb

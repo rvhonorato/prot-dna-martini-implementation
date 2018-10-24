@@ -20,7 +20,6 @@ for i, pdb in enumerate(submission_l):
         result = [l for l in output if 'RMS:' in l][0]
         rms = float(result.split()[-1])
         pdb_dic[pdb][complex] = rms
-        print pdb, complex, rms, total
 
 out = open('/home/rodrigo/nucleosome/capri/found.csv','w')
 for pdb in pdb_dic:
