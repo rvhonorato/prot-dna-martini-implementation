@@ -25,7 +25,6 @@ for TARGET in $DIRL
 #    sed 1d $myfile | sort >> outputfile
 #    rm $myfile
 #    mv outputfile run.cns.diff
-
 	cd ..
 
 done

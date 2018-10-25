@@ -29,8 +29,6 @@ sed -i 's/{===>} w_desolv_2=1.0/{===>} w_desolv_2=0.0/g' run.cns
 
 sed -i 's/{===>} epsilon=10.0;/{===>} epsilon=78.0;/g' run.cns
 
-sed -i 's/{===>} solvshell=true;/{===>} solvshell=false;/g' run.cns
-
 # match original AA parameters used in CAPRI
 sed -i 's/{===>} structures_0=1000;/{===>} structures_0=4000;/g' run.cns
 sed -i 's/{===>} structures_1=200;/{===>} structures_1=400;/g' run.cns

@@ -85,6 +85,4 @@ for line in open(f):
     else:
         pass
 
-    out.write(line)
-
 out.close()
