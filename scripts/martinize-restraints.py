@@ -1,6 +1,14 @@
 # martinize restraints
 import sys, re
 
+def identify_bead(atom):
+    found_bead = None
+    for bead in bead_atom_dic:
+        if atom in bead_atom_dic[bead]:
+            found_bead = bead
+            break
+    return found_bead
+
 bead_atom_dic = {
     "BB1": ["CA", "C", "N", "O", "P", "O1P", "O2P", "O5'", "OP1", "OP2"],
     "BB2": ["C5'", "O4'", "C4'"],
@@ -10,8 +18,21 @@ bead_atom_dic = {
     "SC3": ['OH', 'CZ3', 'CZ', 'CE3', 'CE1', 'ND1','C7', 'N6', 'O6', 'N1', 'O4', 'N4', 'C6', 'C5', 'C4'],
     "SC4": ["C8", "N7", "C5", "CZ2","CH2"]
 }
+# atoms that break the script
+blacklist_atoms = ['ZN']
+
 # add wildcard variants
 cns_wildcards = ['*','%','#','+']
+# "#" matches any string consisting of numerals,
+#  this means that C# is C1
+Question for the CNS experts: I'm working on a script to convert AA restraints to CG and just came across wildcards; ' \
+                               the manual says that #
+
+                               '' \
+                               '' \
+                               'for th
+
+# fix this! C<int> becomes BB and it should be SC
 
 for bead in bead_atom_dic:
     atom_list = bead_atom_dic[bead]
@@ -20,69 +41,62 @@ for bead in bead_atom_dic:
     for e in [a + '*' for a in atom_list]:
          new_atom_list.append(e)
 
-    for atom in atom_list:
-        try:
-            _ = int(atom[-1])
-            new_atom_list.append(atom + '#')
-        except:
-            pass
-
-        try:
-            _ = int(atom[-2])
-            new_atom_list.append(atom + '#')
-        except:
-            pass
+    for e in [a + '#' for a in atom_list]:
+        new_atom_list.append(e)
 
     bead_atom_dic[bead] = atom_list + new_atom_list
 
-# f = sys.argv[1]
-f = '/home/rodrigo/nucleosome/capri/cg-runs/T95-DNA-only-fcc/ambig.tbl'
-out = open('%s' % f.replace('.tbl','-cg.tbl'),'w')
+f = sys.argv[1]
+
+s = ''.join(open(f).readlines()) #.replace('\n','')
+
+for b in blacklist_atoms:
+    if b in s:
+        print('ERROR: This script cannot handle %s, remove them from %s and try again' % (b, f))
+        exit()
+
+# make sure there is room for beads..!
+done_list = []
+total = len(re.findall(r"name\s*(\w*[^\)])", s))
+atom_dic = {}
+for i in range(total):
+    atoms_match = re.finditer(r"name\s*(\w*[^\)|\s])", s)
+    for atom_mNum, atom_m in enumerate(atoms_match):
+        if atom_mNum not in done_list:
+            atom_start = atom_m.start(1)
+            atom_end = atom_m.end(1)
+            atom_name = atom_m.group(1)
+            new_atom = atom_name + ' ' * (4 - len(str(atom_name)))
+            s = s[:atom_start] + new_atom + s[atom_end:] # +1 is the space
+            done_list.append(atom_mNum)
+            # prepare dictionary for next step
+            atom_dic[atom_start] = atom_name, None
+            break
 
 
-for line in open(f):
+# relate atoms with beads
+deleted = []
+for coord in atom_dic:
+    atom = atom_dic[coord][0]
+    bead = identify_bead(atom)
+    atom_dic[coord] = atom, bead
+    if bead == None:
 
-    # line = 'assign ( resid 262  and segid B )'
+        if atom not in deleted:
+            deleted.append(atom)
 
-    if re.findall(r"\((name.*)\)\)", line):
+        # find where it starts
+        e =  re.finditer(r"(or\sname$|\(\s*name\s*\))",s[:coord-1])
+        start = [j.start() for j in e][0]
+        end = coord
 
-        matches = re.finditer(r"name\s(.|..|...|....)[\)|\s]", line)
-        atoms = [m.group(1) for m in matches]
-        # atoms = [a.split(w)[0] for a in atoms for w in  if w in a]
-
-        ref_dic = {}
-        for atom in atoms:
-            ref_dic[atom] = ''
-            for bead in bead_atom_dic:
-                if atom in bead_atom_dic[bead]:
-                    ref_dic[atom] = bead
-
-        for atom in ref_dic:
-
-            regex = r"(name %s)[\s|\)]" % atom
-            
-            for c in cns_wildcards:
-                if c in atom:
-                    regex = r"(name %s)[\s|\)]" % atom.replace(c, '\%s' % c)
-                    break
-
-            e = re.finditer(regex, line)
-            start, end = [(j.start(), j.end()) for j in e][0]
-
-            bead = ref_dic[atom]
-
-
-            if bead:
-                line = line[:start] + 'name ' + bead + ' ' + line[end:]
-            else:
-                line = line[:start] + '' + line[end:]
-
-        # look for syntax errors
-        line = line.replace('or or','or')
-        line = line.replace('or )', ')')
-        line = line.replace('or)', ')')
+        s = s[:start] + '_'*(end-start+len(atom)) + s[end+len(atom):]
 
     else:
-        pass
+        s = s[:coord] + bead + s[coord+3:]
 
-out.close()
+s = s.replace('_', '')
+
+# print('WARNING the following atoms do not have bead counterparts and were deleted: %s' % ' '.join(deleted))
+
+print(s)
