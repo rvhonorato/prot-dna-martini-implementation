@@ -2,10 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="82c45af0-fb02-4518-9942-7757b09e83e9" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/scripts/apply-patch.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/Nostromo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Nostromo.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nucleosome/patch-nuc.sh" beforeDir="false" afterPath="$PROJECT_DIR$/nucleosome/patch-nuc.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nucleosome/run-nuc.sh" beforeDir="false" afterPath="$PROJECT_DIR$/nucleosome/run-nuc.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/martinize-restraints.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/martinize-restraints.py" afterDir="false" />
+    </list>
+    <list id="fc44617b-5af8-4708-a40b-b063f3a1a643" name="nucleosome changes" comment="">
       <change beforePath="$PROJECT_DIR$/scripts/martinize-restraints.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/martinize-restraints.py" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/shelf/" />
@@ -16,63 +20,63 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/Nostromo$compare_runcns.coverage" NAME="compare-runcns Coverage Results" MODIFIED="1540395888269" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/Nostromo$martinize_restraints.coverage" NAME="martinize-restraints Coverage Results" MODIFIED="1541077596218" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/Nostromo$fix_chains.coverage" NAME="Default Coverage Results" MODIFIED="1539875039023" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/nucleosome" />
     <SUITE FILE_PATH="coverage/Nostromo$Python2_7.coverage" NAME="Python2.7 Coverage Results" MODIFIED="1539874329832" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/Nostromo$find_models.coverage" NAME="find-models Coverage Results" MODIFIED="1540224942276" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/nucleosome" />
-    <SUITE FILE_PATH="coverage/Nostromo$retrieve_inputs.coverage" NAME="retrieve-inputs Coverage Results" MODIFIED="1540382809108" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/nucleosome" />
-    <SUITE FILE_PATH="coverage/Nostromo$fix_chains.coverage" NAME="Default Coverage Results" MODIFIED="1539875039023" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/nucleosome" />
     <SUITE FILE_PATH="coverage/Nostromo$Unnamed.coverage" NAME="Unnamed Coverage Results" MODIFIED="1539874416631" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/Nostromo$retrieve_inputs.coverage" NAME="retrieve-inputs Coverage Results" MODIFIED="1540382809108" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/nucleosome" />
     <SUITE FILE_PATH="coverage/Nostromo$Default.coverage" NAME="Default Coverage Results" MODIFIED="1539967547608" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/nucleosome" />
-    <SUITE FILE_PATH="coverage/Nostromo$martinize_restraints.coverage" NAME="martinize-restraints Coverage Results" MODIFIED="1540578516130" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
-    <SUITE FILE_PATH="coverage/Nostromo$compare_runcns.coverage" NAME="compare-runcns Coverage Results" MODIFIED="1540395888269" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="-1353709161">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
           <entry key="project.closed" value="7" />
-          <entry key="project.open.time.0" value="2" />
+          <entry key="project.open.time.0" value="3" />
           <entry key="project.open.time.1" value="2" />
           <entry key="project.open.time.18" value="1" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="8" />
+          <entry key="project.opened" value="9" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="Profile stats" value="3" />
           <entry key="html" value="1" />
-          <entry key="py" value="18" />
-          <entry key="sh" value="8" />
+          <entry key="py" value="29" />
+          <entry key="sh" value="13" />
           <entry key="txt" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Bash" value="7" />
+          <entry key="Bash" value="12" />
           <entry key="HTML" value="1" />
           <entry key="PLAIN_TEXT" value="1" />
           <entry key="Profiler Session" value="3" />
-          <entry key="Python" value="17" />
+          <entry key="Python" value="28" />
           <entry key="Scratch" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Python Console" value="489" />
+          <entry key="Python Console" value="2529" />
           <entry key="html" value="88" />
-          <entry key="py" value="5413" />
-          <entry key="sh" value="989" />
+          <entry key="py" value="10646" />
+          <entry key="sh" value="991" />
           <entry key="txt" value="539" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Bash" value="818" />
+          <entry key="Bash" value="820" />
           <entry key="HTML" value="88" />
           <entry key="PLAIN_TEXT" value="200" />
-          <entry key="Python" value="5750" />
+          <entry key="Python" value="13023" />
           <entry key="Scratch" value="662" />
         </counts>
       </usages-collector>
@@ -127,41 +131,32 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/martinize-restraints.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="19" column="1" lean-forward="true" selection-start-line="19" selection-start-column="1" selection-end-line="19" selection-end-column="1" />
+            <state relative-caret-position="244">
+              <caret line="206" column="13" lean-forward="true" selection-start-line="206" selection-start-column="13" selection-end-line="206" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/analysis/analyze-run.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="133">
+              <caret line="199" column="32" lean-forward="true" selection-start-line="199" selection-start-column="32" selection-end-line="199" selection-end-column="32" />
               <folding>
-                <marker date="1540579047958" expanded="true" signature="2578:2580" ph="..." />
+                <element signature="e#62#120#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/aa2cg/aa2cg-prot_dna_rna.py">
+        <entry file="file://$PROJECT_DIR$/scripts/compare-runcns.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-308">
-              <caret line="586" column="51" lean-forward="true" selection-start-line="586" selection-start-column="51" selection-end-line="586" selection-end-column="51" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps/_pydev_execfile.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="17" selection-start-line="17" selection-end-line="17" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/apply-patch.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret line="6" selection-start-line="6" selection-end-line="6" />
+            <state relative-caret-position="-251">
+              <caret line="10" selection-start-line="10" selection-end-line="10" />
             </state>
           </provider>
         </entry>
@@ -169,8 +164,65 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/nucleosome/run-nuc.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret line="14" selection-start-line="14" selection-end-line="14" />
+            <state relative-caret-position="225">
+              <caret line="18" selection-start-line="18" selection-end-line="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/nucleosome/retrieve-inputs.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="23" column="16" selection-start-line="23" selection-start-column="16" selection-end-line="23" selection-end-column="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/nucleosome/patch-nuc.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="420">
+              <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DNA/patch-dna-cg-run1.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-885">
+              <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="48">
+              <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DNA/patch-dna-cg-run4.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="125">
+              <caret line="77" selection-start-line="77" selection-end-line="77" selection-end-column="67" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/prepare_input.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2670">
+              <caret line="292" column="36" selection-start-line="292" selection-start-column="36" selection-end-line="292" selection-end-column="36" />
+              <folding>
+                <element signature="e#318#378#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -190,6 +242,7 @@
       <find>profit</find>
       <find>dna_res</find>
       <find />
+      <find>solv</find>
     </findStrings>
     <replaceStrings>
       <replace>&quot;,&quot;</replace>
@@ -199,16 +252,16 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/restraints/create-numbering.py" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/nucleosome/patch-nuc.sh" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/nucleosome/retrieve-inputs.py" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/nucleosome/fix-chains.py" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/scripts/apply-patch.sh" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/scripts/prepare_input.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/nucleosome/find-models.py" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/scripts/martinize-restraints.py" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/nucleosome/run-nuc.sh" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/restraints/create-numbering.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/nucleosome/fix-chains.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/nucleosome/new.html" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/nucleosome/retrieve-inputs.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/scripts/prepare_input.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/nucleosome/run-nuc.sh" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/nucleosome/patch-nuc.sh" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/scripts/martinize-restraints.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/scripts/apply-patch.sh" root0="SKIP_INSPECTION" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -223,12 +276,12 @@
         <option value="$PROJECT_DIR$/nucleosome/retrieve-inputs.py" />
         <option value="$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh" />
         <option value="$PROJECT_DIR$/scripts/compare-runcns.py" />
-        <option value="$PROJECT_DIR$/nucleosome/patch-nuc.sh" />
         <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch.txt" />
         <option value="$PROJECT_DIR$/nucleosome/new.html" />
-        <option value="$PROJECT_DIR$/nucleosome/run-nuc.sh" />
         <option value="$PROJECT_DIR$/scripts/apply-patch.sh" />
         <option value="$PROJECT_DIR$/scripts/martinize-restraints.py" />
+        <option value="$PROJECT_DIR$/nucleosome/run-nuc.sh" />
+        <option value="$PROJECT_DIR$/nucleosome/patch-nuc.sh" />
       </list>
     </option>
   </component>
@@ -237,6 +290,36 @@
   <component name="JsGulpfileManager">
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="LineStatusTrackerManager">
+    <file path="$PROJECT_DIR$/scripts/martinize-restraints.py">
+      <ranges>
+        <range start1="1" end1="2" start2="1" end2="2" changelist="82c45af0-fb02-4518-9942-7757b09e83e9" />
+        <range start1="4" end1="5" start2="4" end2="6" changelist="82c45af0-fb02-4518-9942-7757b09e83e9" />
+        <range start1="7" end1="9" start2="8" end2="10" changelist="82c45af0-fb02-4518-9942-7757b09e83e9" />
+        <range start1="12" end1="13" start2="13" end2="15" changelist="82c45af0-fb02-4518-9942-7757b09e83e9" />
+        <range start1="22" end1="22" start2="24" end2="30" changelist="82c45af0-fb02-4518-9942-7757b09e83e9" />
+        <range start1="27" end1="29" start2="35" end2="50" changelist="fc44617b-5af8-4708-a40b-b063f3a1a643" />
+        <range start1="30" end1="33" start2="51" end2="55" changelist="fc44617b-5af8-4708-a40b-b063f3a1a643" />
+        <range start1="35" end1="36" start2="57" end2="57" changelist="82c45af0-fb02-4518-9942-7757b09e83e9" />
+        <range start1="39" end1="39" start2="60" end2="72" changelist="82c45af0-fb02-4518-9942-7757b09e83e9" />
+        <range start1="40" end1="42" start2="73" end2="76" changelist="82c45af0-fb02-4518-9942-7757b09e83e9" />
+        <range start1="43" end1="45" start2="77" end2="78" changelist="82c45af0-fb02-4518-9942-7757b09e83e9" />
+        <range start1="46" end1="49" start2="79" end2="82" changelist="82c45af0-fb02-4518-9942-7757b09e83e9" />
+        <range start1="51" end1="51" start2="84" end2="88" changelist="82c45af0-fb02-4518-9942-7757b09e83e9" />
+        <range start1="52" end1="56" start2="89" end2="90" changelist="82c45af0-fb02-4518-9942-7757b09e83e9" />
+        <range start1="57" end1="74" start2="91" end2="92" changelist="82c45af0-fb02-4518-9942-7757b09e83e9" />
+        <range start1="75" end1="75" start2="93" end2="95" changelist="82c45af0-fb02-4518-9942-7757b09e83e9" />
+        <range start1="76" end1="83" start2="96" end2="109" changelist="82c45af0-fb02-4518-9942-7757b09e83e9" />
+        <range start1="84" end1="86" start2="110" end2="111" changelist="82c45af0-fb02-4518-9942-7757b09e83e9" />
+        <range start1="87" end1="91" start2="112" end2="120" changelist="82c45af0-fb02-4518-9942-7757b09e83e9" />
+        <range start1="92" end1="93" start2="121" end2="139" changelist="82c45af0-fb02-4518-9942-7757b09e83e9" />
+        <range start1="94" end1="96" start2="140" end2="208" changelist="82c45af0-fb02-4518-9942-7757b09e83e9" />
+        <range start1="97" end1="98" start2="209" end2="217" changelist="82c45af0-fb02-4518-9942-7757b09e83e9" />
+        <range start1="99" end1="100" start2="218" end2="224" changelist="82c45af0-fb02-4518-9942-7757b09e83e9" />
+        <range start1="101" end1="102" start2="225" end2="231" changelist="82c45af0-fb02-4518-9942-7757b09e83e9" />
+      </ranges>
+    </file>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="width" value="960" />
@@ -250,6 +333,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Course" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -261,6 +345,11 @@
               <item name="Nostromo" type="b2602c69:ProjectViewProjectNode" />
               <item name="Nostromo" type="462c0819:PsiDirectoryNode" />
               <item name="aa2cg" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Nostromo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Nostromo" type="462c0819:PsiDirectoryNode" />
+              <item name="analysis" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Nostromo" type="b2602c69:ProjectViewProjectNode" />
@@ -282,7 +371,6 @@
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="Course" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -292,7 +380,7 @@
     <property name="last_opened_file_path" value="$USER_HOME$/csb_webserver" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -306,73 +394,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.martinize-restraints">
-    <configuration name="Default" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Nostromo" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/nucleosome" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/nucleosome/fix-chains.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="compare-runcns" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Nostromo" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/scripts" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/compare-runcns.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="find-models" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Nostromo" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/nucleosome" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/nucleosome/find-models.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager">
     <configuration name="martinize-restraints" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Nostromo" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -395,42 +417,9 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="retrieve-inputs" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Nostromo" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/nucleosome" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/nucleosome/retrieve-inputs.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <list>
-      <item itemvalue="Python.Default" />
-      <item itemvalue="Python.find-models" />
-      <item itemvalue="Python.retrieve-inputs" />
-      <item itemvalue="Python.compare-runcns" />
-      <item itemvalue="Python.martinize-restraints" />
-    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.martinize-restraints" />
-        <item itemvalue="Python.compare-runcns" />
-        <item itemvalue="Python.retrieve-inputs" />
-        <item itemvalue="Python.find-models" />
-        <item itemvalue="Python.Default" />
       </list>
     </recent_temporary>
   </component>
@@ -463,30 +452,30 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="23" width="1550" height="848" extended-state="6" />
+    <frame x="0" y="0" width="1920" height="1037" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49834436" visible="true" weight="0.1590604" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49834436" visible="true" weight="0.16061899" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.50165564" side_tool="true" weight="0.16755603" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Cvs" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Python Console" order="4" sideWeight="0.4994664" weight="0.3272727" />
-      <window_info anchor="bottom" id="Terminal" order="5" sideWeight="0.50165564" visible="true" weight="0.23076923" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" weight="0.3272727" />
-      <window_info anchor="bottom" id="File Transfer" order="9" weight="0.2937063" />
-      <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.50053364" side_tool="true" weight="0.39844617" />
-      <window_info anchor="bottom" id="Run" order="12" weight="0.4472808" />
+      <window_info anchor="bottom" id="Debug" order="4" sideWeight="0.4994664" weight="0.4972253" />
+      <window_info anchor="bottom" id="Python Console" order="5" sideWeight="0.4994664" weight="0.3263041" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="6" visible="true" weight="0.809101" />
+      <window_info anchor="bottom" id="TODO" order="7" />
+      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="9" weight="0.22086571" />
+      <window_info anchor="bottom" id="File Transfer" order="10" weight="0.29300776" />
+      <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" weight="0.809101" />
+      <window_info anchor="bottom" id="Run" order="13" weight="0.4472808" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="SciView" order="3" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" id="Debug" order="5" sideWeight="0.4994664" weight="0.48456377" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -588,49 +577,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/nucleosome/run-nuc-cg.sh" />
     <entry file="file://$PROJECT_DIR$/nucleosome/run_cg_nuc.sh" />
-    <entry file="file://$PROJECT_DIR$/DNA/patch-dna-cg-run1.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-60">
-          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/analysis/analyze-run.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="457" column="47" selection-start-line="457" selection-start-column="47" selection-end-line="457" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.txt" />
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="1067" selection-start-line="1067" selection-end-line="1067" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/compare-runcns.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nucleosome/retrieve-inputs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="16" selection-start-line="23" selection-start-column="16" selection-end-line="23" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/nucleosome/new.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="63">
@@ -638,36 +585,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/prepare_input.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="292" column="36" selection-start-line="292" selection-start-column="36" selection-end-line="292" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nucleosome/patch-nuc.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="146">
-          <caret line="25" column="64" lean-forward="true" selection-start-line="25" selection-start-column="64" selection-end-line="25" selection-end-column="64" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/nucleosome/found.csv">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/apply-patch.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="6" selection-start-line="6" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nucleosome/run-nuc.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="14" selection-start-line="14" selection-end-line="14" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps/_pydev_execfile.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -676,20 +595,121 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/apply-patch.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/restraints/gen_restraints.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="79" column="61" selection-start-line="79" selection-start-column="61" selection-end-line="79" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="141">
+          <caret line="1067" selection-start-line="1067" selection-end-line="1067" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/analysis/parse-results.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1">
+          <folding>
+            <element signature="e#48#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/aa2cg/aa2cg-prot_dna_rna.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-308">
-          <caret line="586" column="51" lean-forward="true" selection-start-line="586" selection-start-column="51" selection-end-line="586" selection-end-column="51" />
+        <state relative-caret-position="375">
+          <caret line="25" column="2" selection-start-line="25" selection-start-column="2" selection-end-line="25" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/prepare_input.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2670">
+          <caret line="292" column="36" selection-start-line="292" selection-start-column="36" selection-end-line="292" selection-end-column="36" />
+          <folding>
+            <element signature="e#318#378#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/analysis/analyze-run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="199" column="32" lean-forward="true" selection-start-line="199" selection-start-column="32" selection-end-line="199" selection-end-column="32" />
+          <folding>
+            <element signature="e#62#120#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/martinize-restraints.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="19" column="1" lean-forward="true" selection-start-line="19" selection-start-column="1" selection-end-line="19" selection-end-column="1" />
-          <folding>
-            <marker date="1540579047958" expanded="true" signature="2578:2580" ph="..." />
-          </folding>
+        <state relative-caret-position="244">
+          <caret line="206" column="13" lean-forward="true" selection-start-line="206" selection-start-column="13" selection-end-line="206" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/compare-runcns.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-251">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DNA/patch-dna-cg-run4.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="125">
+          <caret line="77" selection-start-line="77" selection-end-line="77" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DNA/submit-retrieve-dna-aa-benchmark-run3.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-540" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nucleosome/retrieve-inputs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="23" column="16" selection-start-line="23" selection-start-column="16" selection-end-line="23" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nucleosome/run-nuc.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="18" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nucleosome/patch-nuc.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DNA/patch-dna-cg-run1.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-885">
+          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="48">
+          <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
         </state>
       </provider>
     </entry>

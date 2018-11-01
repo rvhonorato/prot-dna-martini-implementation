@@ -8,14 +8,14 @@ for TARGET in $DIRL
 	cd $TARGET
 	echo $TARGET
 
-	cp /home/rodrigo/nucleosome/capri/cg-runs-input/* .
+#	cp /home/rodrigo/nucleosome/capri/cg-runs-input/* .
 
-	python ~/Nostromo/scripts/martinize-restraints.py ambig.tbl
-    python ~/Nostromo/scripts/martinize-restraints.py unambig.tbl
-
+#	python ~/Nostromo/scripts/martinize-restraints.py ambig.tbl
+#    python ~/Nostromo/scripts/martinize-restraints.py unambig.tbl
+#
 #    $HADDOCKCMD
 #
-#    bash ~/Nostromo/nucleosome/patch-nuc.sh
+    bash ~/Nostromo/nucleosome/patch-nuc.sh
 #
 #    myfile=$(mktemp)
 #    # run

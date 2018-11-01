@@ -1,16 +1,18 @@
 # martinize restraints
-import sys, re
+import sys, re, argparse
 
 def identify_bead(atom):
-    found_bead = None
+    # found_bead = None
+    found_bead = []
     for bead in bead_atom_dic:
         if atom in bead_atom_dic[bead]:
-            found_bead = bead
-            break
+            found_bead.append(bead)
+            # break
     return found_bead
 
 bead_atom_dic = {
-    "BB1": ["CA", "C", "N", "O", "P", "O1P", "O2P", "O5'", "OP1", "OP2"],
+    "BB": ["CA", "C", "N", "O"],
+    "BB1": ["P", "O1P", "O2P", "O5'", "OP1", "OP2"],
     "BB2": ["C5'", "O4'", "C4'"],
     "BB3": ["C3'", "C2'", "C1'"],
     "SC1": ['ND2', 'NE1', 'OG', 'CB', 'OD2', 'CG', 'CE', 'CD', 'CG1', 'NE2', 'CD1', 'CD2', 'OD1', 'OE2', 'ND1', 'OG1', 'CG2', 'SG', 'OE1', 'SD', "N9", "C4", "N1", "C6"],
@@ -20,6 +22,12 @@ bead_atom_dic = {
 }
 # atoms that break the script
 blacklist_atoms = ['ZN']
+
+#
+# for b in blacklist_atoms:
+#     if b in s:
+#         print('ERROR: This script cannot handle %s, remove them from %s and try again' % (b, f))
+#         exit()
 
 # add wildcard variants
 cns_wildcards = ['*','%','#','+']
@@ -33,70 +41,176 @@ Question for the CNS experts: I'm working on a script to convert AA restraints t
                                'for th
 
 # fix this! C<int> becomes BB and it should be SC
-
 for bead in bead_atom_dic:
     atom_list = bead_atom_dic[bead]
     new_atom_list = []
+    for e in atom_list:
+        # print(e)
+        for i, s in enumerate(e):
+            check = None
+            try:
+                check = int(list(e)[i + 1])
+            except:
+                pass
+            #
+            if check:
+                new_atom = ''.join(list(e)[:i + 1]) + '#'
+                new_atom_list.append(new_atom)
 
-    for e in [a + '*' for a in atom_list]:
-         new_atom_list.append(e)
+            if i + 1 < len(e):
+                new_atom = ''.join(list(e)[:i + 1]) + '*'
+                new_atom_list.append(new_atom)
 
-    for e in [a + '#' for a in atom_list]:
-        new_atom_list.append(e)
+    bead_atom_dic[bead] = list(set(atom_list + new_atom_list))
 
-    bead_atom_dic[bead] = atom_list + new_atom_list
-
-f = sys.argv[1]
+# f = sys.argv[1]
+f = args.rest_file
+# f = '/home/rodrigo/tmp/unambig.tbl'
 
 s = ''.join(open(f).readlines()) #.replace('\n','')
+s = s.replace('\n','')
 
-for b in blacklist_atoms:
-    if b in s:
-        print('ERROR: This script cannot handle %s, remove them from %s and try again' % (b, f))
-        exit()
+import regex
+str_match = regex.match(r"(assign\s\(.*?\d*\.\d*\s*\d*\.\d*\s*\d*\.\d*)++", s)
 
-# make sure there is room for beads..!
-done_list = []
-total = len(re.findall(r"name\s*(\w*[^\)])", s))
-atom_dic = {}
-for i in range(total):
-    atoms_match = re.finditer(r"name\s*(\w*[^\)|\s])", s)
-    for atom_mNum, atom_m in enumerate(atoms_match):
-        if atom_mNum not in done_list:
-            atom_start = atom_m.start(1)
-            atom_end = atom_m.end(1)
-            atom_name = atom_m.group(1)
-            new_atom = atom_name + ' ' * (4 - len(str(atom_name)))
-            s = s[:atom_start] + new_atom + s[atom_end:] # +1 is the space
-            done_list.append(atom_mNum)
-            # prepare dictionary for next step
-            atom_dic[atom_start] = atom_name, None
-            break
+if args.unambig:
 
+    for assign_str in str_match.captures(1):
 
-# relate atoms with beads
-deleted = []
-for coord in atom_dic:
-    atom = atom_dic[coord][0]
-    bead = identify_bead(atom)
-    atom_dic[coord] = atom, bead
-    if bead == None:
+        num_regex = r"(\d*\.\d*\s\d*\.\d*\s*\d*\.\d*)"
+        nums_l = map(float, re.findall(num_regex, assign_str)[0].split())
 
-        if atom not in deleted:
-            deleted.append(atom)
+    # if unambig:
+    # if args.unambig:
+        regex = r"\([^)]*\)"
+        rest_dic = {}
+        for i, e in enumerate(re.findall(regex, assign_str)):
+            resid = int(re.findall(r"resid\s*(\d*)", e)[0])
+            segid = re.findall(r"segid\s*(\w*)", e)[0]
+            atom_list = re.findall(r"name\s*(\w*)", e) # keep it as a list
+            try:
+                syntax = re.findall(r"and (not)", e)[0]
+            except IndexError:
+                syntax = None
+            rest_dic[i] = resid, segid, syntax, atom_list, []
 
-        # find where it starts
-        e =  re.finditer(r"(or\sname$|\(\s*name\s*\))",s[:coord-1])
-        start = [j.start() for j in e][0]
-        end = coord
+        # print rest_dic
 
-        s = s[:start] + '_'*(end-start+len(atom)) + s[end+len(atom):]
+        # martinize!
+        for idx in rest_dic:
+            atom_list = rest_dic[idx][3]
+            bead_list = []
+            for atom in atom_list:
+                for bead in identify_bead(atom):
+                    bead_list.append(bead)
+            _ = [rest_dic[idx][4].append(b) for b in set(bead_list)]
 
-    else:
-        s = s[:coord] + bead + s[coord+3:]
+        # write
+        rest_str = 'assign '
+        for idx in rest_dic:
+            rest_str += '( '
+            resid = rest_dic[idx][0]
+            segid = rest_dic[idx][1]
+            bead_l = rest_dic[idx][4]
+            rest_str += ' resid %s and segid %s ' % (resid, segid)
+            if bead_l:
+                if syntax:
+                    rest_str += '%s '
+                else:
+                    rest_str += 'and '
+                rest_str += '( %s )' % ('name ' + ' or name '.join(bead_l))
+            rest_str += ') '
+            # tbw.append(rest_str)
+        rest_str += ' '.join(['%.3f'%e for e in nums_l])
+        print rest_str
 
-s = s.replace('_', '')
+if args.ambig:
+    for assign_str in str_match.captures(1):
+        num_regex = r"(\d*\.\d*\s\d*\.\d*\s*\d*\.\d*)"
+        nums_l = map(float, re.findall(num_regex, assign_str)[0].split())
 
-# print('WARNING the following atoms do not have bead counterparts and were deleted: %s' % ' '.join(deleted))
+        regex = r"resid\s*(\d*)\s*and\s*segid\s*(\w*)\s*(and|and not)?(?(3)\s(\([^)]*\))|)\)"
+        matches = re.finditer(regex, assign_str)
 
-print(s)
+        # for n, match in enumerate(matches):
+        rest_dic = {}
+        for num, m in enumerate(matches):
+            if num == 0: # match0 is the active residue
+                act_resid = int(m.group(1))
+                act_segid = m.group(2)
+                try:
+                    act_syntax = m.group(3)
+                    act_atom_list = m.group(4)
+                    act_atom_list = re.findall(r"name\s*(\w*)", ''.join(act_atom_list))
+                except IndexError:
+                    act_syntax = None
+                    act_atom_list = None
+                #
+                rest_dic[num] = act_resid, act_segid, act_syntax, act_atom_list, [], {}
+            else:
+                resid = int(m.group(1))
+                segid = m.group(2)
+                try:
+                    syntax = m.group(3)
+                    atom_list = m.group(4)
+                    atom_list = re.findall(r"name\s*(\w*)", ''.join(atom_list))
+                except:
+                    syntax = None
+                    atom_list = None
+                #
+                rest_dic[0][-1][num] = resid, segid, syntax, atom_list, []
+
+        # martinize!
+
+        for idx in rest_dic:
+            atom_list = rest_dic[idx][3]
+            bead_list = []
+            for atom in atom_list:
+                for bead in identify_bead(atom):
+                    bead_list.append(bead)
+            _ = [rest_dic[idx][4].append(b) for b in set(bead_list)]
+            rdic = rest_dic[idx][-1]
+            for rkey in rdic:
+                ratom_list = rdic[rkey][3]
+                rbead_list = []
+                if ratom_list:
+                    for ratom in ratom_list:
+                        for rbead in identify_bead(ratom):
+                            rbead_list.append(rbead)
+                    _ = [rdic[rkey][4].append(rb) for rb in set(rbead_list)]
+
+        # re-write...!
+        # print 'assign (resid %i and segid %s) (' % (rest_dic[0][0], rest_dic[0][1])
+        ass_resid = rest_dic[0][0]
+        ass_segid = rest_dic[0][1]
+        ass_syntax = rest_dic[0][2]
+        ass_bead_list = rest_dic[0][4]
+
+        ass_str = 'assign (resid %i and segid %s ' % (ass_resid, ass_segid)
+        if ass_syntax:
+            ass_str += '%s ( %s ) ) (' % (ass_syntax, ('name ' + ' or name '.join(ass_bead_list)))
+            # exit()
+        else:
+            ass_str += ') ( '
+
+        tbw = []
+        for idx in rest_dic[0][-1]:
+            rest_str = '( '
+            resid = rest_dic[0][-1][idx][0]
+            segid = rest_dic[0][-1][idx][1]
+            syntax = rest_dic[0][-1][idx][2]
+            atom_l = rest_dic[0][-1][idx][3]
+            bead_l = rest_dic[0][-1][idx][4]
+
+            rest_str += 'resid %s and segid %s ' % (resid, segid)
+            if syntax:
+                bead_l.sort()
+                rest_str += ' %s ( %s )' % (syntax , ('name ' + ' or name or '.join(bead_l)))
+            rest_str += ' )'
+            tbw.append(rest_str)
+
+        print ass_str
+        print '\n or '.join(tbw)
+        print ')' + ' '.join(['%.3f'%e for e in nums_l])
+        print '\n'
+
