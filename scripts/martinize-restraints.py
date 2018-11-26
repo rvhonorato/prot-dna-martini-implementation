@@ -33,12 +33,26 @@ blacklist_atoms = ['ZN']
 cns_wildcards = ['*','%','#','+']
 # "#" matches any string consisting of numerals,
 #  this means that C# is C1
-Question for the CNS experts: I'm working on a script to convert AA restraints to CG and just came across wildcards; ' \
-                               the manual says that #
 
-                               '' \
-                               '' \
-                               'for th
+
+import argparse
+
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument("rest_file", type=str,
+                    help="AIR file")
+
+parser.add_argument("--ambig", help="Ambiguous",
+                    action="store_true")
+
+parser.add_argument("--unambig", help="Unambiguous",
+                    action="store_true")
+
+args = parser.parse_args()
+
+if not args.ambig and not args.unambig:
+    print parser.print_help()
 
 # fix this! C<int> becomes BB and it should be SC
 for bead in bead_atom_dic:
@@ -189,6 +203,7 @@ if args.ambig:
         ass_str = 'assign (resid %i and segid %s ' % (ass_resid, ass_segid)
         if ass_syntax:
             ass_str += '%s ( %s ) ) (' % (ass_syntax, ('name ' + ' or name '.join(ass_bead_list)))
+            # print(ass_str)
             # exit()
         else:
             ass_str += ') ( '
@@ -205,7 +220,8 @@ if args.ambig:
             rest_str += 'resid %s and segid %s ' % (resid, segid)
             if syntax:
                 bead_l.sort()
-                rest_str += ' %s ( %s )' % (syntax , ('name ' + ' or name or '.join(bead_l)))
+                rest_str += ' %s ( %s )' % (syntax , ('name ' + ' or name '.join(bead_l)))
+                # print(rest_str)
             rest_str += ' )'
             tbw.append(rest_str)
 
