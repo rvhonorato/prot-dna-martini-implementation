@@ -188,7 +188,7 @@ def validate_pdbl(pdbl):
 # global haddocktools_path
 global runf
 # haddocktools_path = '/Users/rvhonorato/tools'
-# haddocktools_path = os.environ["HADDOCKTOOLS"]
+haddocktools_path = os.environ["HADDOCKTOOLS"]
 clustalo_exe = '/home/rodrigo/clustal-omega'
 fnat_distance_threshold = 5.0
 
@@ -553,9 +553,9 @@ for stage in stage_ref_dic:
 #=========================================================================================#
 ## Ligand RMSD
 #=========================================================================================#
-
+#
 # print '> Calculating l-rmsd'
-
+#
 # ligand_zone = {}
 # for chain in numbering_dic:
 # 	ligand_zone[chain] = []
@@ -563,7 +563,7 @@ for stage in stage_ref_dic:
 # 		unbound_res = numbering_dic[chain][bound_res]
 # 		#
 # 		ligand_zone[chain].append('ZONE %s%s-%s%i:%s%i-%s%i' % (chain, bound_res, chain, bound_res, chain, unbound_res, chain, unbound_res))
-
+#
 # # generate command
 # lrms_cmd = ''
 # lrms_cmd += '\n'.join(ligand_zone[receptor_chain])
@@ -579,41 +579,41 @@ for stage in stage_ref_dic:
 # 		lrms_cmd += '\n'
 # lrms_cmd += 'ZONE CLEAR'
 # lrms_cmd += '\n'
-
+#
 # # ready?
 # for stage in stage_ref_dic:
 # 	# print '>> %s' % stage
-
-# 	pdb_l = stage_ref_dic[stage][0] 
+#
+# 	pdb_l = stage_ref_dic[stage][0]
 # 	ref = stage_ref_dic[stage][1]
 # 	atoms = stage_ref_dic[stage][2]
-
+#
 # 	lrms_dic = {}
 # 	for conformation in pdb_l:
-
+#
 # 		# segid_output = 'segid.temp'
 # 		fix_chain_segid(conformation)
-
+#
 # 		# os.system('%s/pdb_segid-to-chain %s > %s' % (haddocktools_path, conformation, segid_output))
 # 		# os.system('cp segid.temp %s' % conformation)
 # 		cmd = 'refe %s\nmobi %s\nATOMS %s\n%s\nquit' % (ref, conformation, atoms, lrms_cmd)
-
+#
 # 		output = os.popen('echo "%s" | profit' % cmd)
-
+#
 # 		# parse result
 # 		result = [l for l in output if 'RMS' in l][-1]
 # 		lrms = float(result.split()[-1])
-
+#
 # 		lrms_dic[conformation] = lrms
 # 		result_dic[stage][conformation]['lrms'] = lrms
 # 		#
 # 		# os.system('rm %s' % segid_output)
-
+#
 # 	if stage == 'water':
 # 		outputf = '%s/structures/it1/%s/l-RMSD.dat' % (runf, stage)
 # 	else:
 # 		outputf = '%s/structures/%s/l-RMSD.dat' % (runf, stage)
-
+#
 # 	#
 # 	lrms_out = open(outputf,'w')
 # 	lrms_out.write('#struc l-RMSD\n')
@@ -626,12 +626,10 @@ for stage in stage_ref_dic:
 # 	lrms_out.close()
 # 	#
 # 	os.system('cp %s %s' % (outputf, outputf.replace('.dat', '-sorted.dat')))
-
-#=========================================================================================#
-## Fnat
-#=========================================================================================#
-
-
+#
+# #=========================================================================================#
+# ## Fnat
+# #=========================================================================================#
 
 print '> Calculating fnat (%.2f A)' % fnat_distance_threshold
 
@@ -729,7 +727,6 @@ print '> Analyzing clusters'
 path = os.getcwd()
 
 # water
-clusterf = '%s/structures/it1/water/analysis/cluster.out.gz' % runf
 if os.path.isfile('%s/structures/it1/water/analysis/cluster.out.gz' % runf):
     water_clusterf = '%s/structures/it1/water/analysis/cluster.out.gz' % (runf)
 elif os.path.isfile('%s/structures/it1/water/analysis/cluster.out' % runf):
@@ -738,7 +735,6 @@ else:
     water_clusterf = False
 
 # it1
-clusterf = '%s/structures/it1/analysis/cluster.out.gz' % runf
 if os.path.isfile('%s/structures/it1/analysis/cluster.out.gz' % runf):
     it1_clusterf = '%s/structures/it1/analysis/cluster.out.gz' % runf
 elif os.path.isfile('%s/structures/it1/analysis/cluster.out' % runf):
@@ -752,13 +748,15 @@ if water_clusterf:
         os.system('gunzip cluster.out.gz')
 
     os.chdir('%s/structures/it1/water/' % runf)
-    os.system('%s/tools/ana_clusters.csh -best 4 analysis/cluster.out' % runf)
+    # os.system('%s/tools/ana_clusters.csh -best 4 analysis/cluster.out' % runf)
+    os.system('%s/ana_clusters.csh -best 4 analysis/cluster.out' % haddocktools_path)
+    os.chdir(path)
 
     score_f = '%s/structures/it1/water/file.list' % runf
     cluster_f = '%s/structures/it1/water/analysis/cluster.out' % runf
     irmsd_f = '%s/structures/it1/water/i-RMSD.dat' % runf
 
-    water_cluster_statf = open('%s/%s/water_cluster.dat' % runf,'w')
+    water_cluster_statf = open('%s/water_cluster.dat' % runf,'w')
     tbw = cluster_stats(score_f, irmsd_f,cluster_f)
     water_cluster_statf.write(tbw)
     water_cluster_statf.close()
@@ -770,7 +768,9 @@ if it1_clusterf:
         os.system('gunzip cluster.out.gz')
 
     os.chdir('%s/structures/it1/' % runf)
-    os.system('%s/tools/ana_clusters.csh -best 4 analysis/cluster.out' % runf)
+    # os.system('%s/tools/ana_clusters.csh -best 4 analysis/cluster.out' % runf)
+    os.system('%s/ana_clusters.csh -best 4 analysis/cluster.out' % haddocktools_path)
+    os.chdir(path)
 
     score_f = '%s/structures/it1/file.list' % runf
     cluster_f = '%s/structures/it1/analysis/cluster.out' % runf
@@ -811,7 +811,11 @@ for stage in stage_ref_dic:
     pdb_l = stage_ref_dic[stage][0]
     for conformation in pdb_l:
         data = open(conformation).readlines()
-        energies_l = map(float, data[7].split(':')[-1].split(','))
+        # TODO: Find a more reliable way to parse this
+        try:
+            energies_l = map(float, data[7].split(':')[-1].split(','))
+        except:
+            energies_l = map(float, data[6].split(':')[-1].split(','))
         total, bonds, angles, improper, dihe, vdw, elec, air, cdih, coup, rdcs, vean, dani, xpcs, rg = energies_l
 
         try:
@@ -821,9 +825,13 @@ for stage in stage_ref_dic:
             binding = float(data[30].split(':')[-1])
         except:
             # server run
-            bsa = float(data[28].split(':')[-1])
-            binding = float(data[26].split(':')[-1])
-            desolv = float(data[23].split(':')[-1])
+            # bsa = float(data[28].split(':')[-1])
+            # binding = float(data[26].split(':')[-1])
+            # desolv = float(data[23].split(':')[-1])
+
+            bsa = float(data[28-1].split(':')[-1])
+            binding = float(data[26-1].split(':')[-1])
+            desolv = float(data[23-1].split(':')[-1])
 
         result_dic[stage][conformation]['total'] = total
         result_dic[stage][conformation]['bonds'] = bonds

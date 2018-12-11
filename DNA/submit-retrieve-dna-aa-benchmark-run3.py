@@ -1,4 +1,7 @@
-import glob, os, subprocess
+import glob
+import os
+import subprocess
+
 
 def run(cmd, outputf):
 	with open("./%s" % outputf, "w") as f:
