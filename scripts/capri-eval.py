@@ -1,15 +1,17 @@
 # create the izone based on structural alignment
+from _operator import itemgetter
 import argparse
 import shutil
 import subprocess
 import glob
 import os
+import random
 from itertools import groupby
-from operator import itemgetter
+# import operator
 
 
 def split_chain(pdbf):
-    # """ inpsired """ by https://github.com/JoaoRodrigues/pdb-tools ;)
+    # """ inpsired """ by https://github.com/JoaoRodrigues/pdb-tools (:
 
     prev_chain, chain_ids, chain_atoms = None, [], {}
     cur_chain = None
@@ -43,23 +45,28 @@ def load_seq(prot):
     aa_dic = {'ALA': 'A', 'ARG': 'R', 'ASN': 'N', 'ASP': 'D', 'CYS': 'C', 'GLU': 'E',
               'GLN': 'Q', 'GLY': 'G', 'HIS': 'H', 'ILE': 'I', 'LEU': 'L', 'LYS': 'K',
               'MET': 'M', 'PHE': 'F', 'PRO': 'P', 'SER': 'S', 'THR': 'T', 'TRP': 'W',
-              'TYR': 'Y', 'VAL': 'V'}
+              'TYR': 'Y', 'VAL': 'V', 'DC': 'C',
+              'DA': 'A', 'DG': 'G', 'DT': 'T',
+              'ADE': 'A', 'THY':'T', 'GUA': 'G', 'CYT': 'C'}
     seq_dic = {}
     for l in open(prot):
         if 'ATOM' in l[:4]:
             chain = l[21]
             resnum = int(l[22:26])
-            resname = l[17:20]
+            resname = l[17:20].split()[0]
             try:
                 _ = seq_dic[chain]
             except KeyError:
                 seq_dic[chain] = {}
-
-            seq_dic[chain][resnum] = aa_dic[resname]
+            try:
+                name = aa_dic[resname]
+            except KeyError:
+                name = 'X'
+            seq_dic[chain][resnum] = name
     return seq_dic
 
 
-def align(prota, protb):
+def align(prota, protb, lovoalignexe):
     pad = split_chain(prota)
     pbd = split_chain(protb)
 
@@ -75,7 +82,9 @@ def align(prota, protb):
     numbering_dic = {}
     for chain in pad.keys():
         numbering_dic[chain] = {}
-        cmd = 'lovoalign -p1 {} -p2 {} -c1 {} -c2 {}'.format(pad[chain], pbd[chain], chain, chain)
+        # cmd = '{} -p1 {} -p2 {} -c1 {} -c2 {}'.format(lovoalignexe, pad[chain], pbd[chain], chain, chain)
+        cmd = '{} -p1 {} -p2 {} -c1 {} -c2 {} -seqnum'.format(lovoalignexe, pad[chain], pbd[chain], chain, chain)
+
         out = subprocess.getoutput(cmd).split('\n')
 
         aln_start = [out.index(e) for e in out if 'SEQUENCE ALIGNMENT' in e][0] + 2
@@ -83,6 +92,9 @@ def align(prota, protb):
         aln_l = out[aln_start:aln_end]
 
         aln = [aln_l[i:i + 3][:2] for i in range(0, len(aln_l), 3)]
+
+        idx_a = 0
+        idx_b = 0
 
         for e in aln:
             a, b = e
@@ -95,9 +107,6 @@ def align(prota, protb):
 
             reslist_a = list(pa_seqdic[chain].keys())
             reslist_b = list(pb_seqdic[chain].keys())
-
-            idx_a = 0
-            idx_b = 0
 
             res_a = None
             res_b = None
@@ -116,6 +125,22 @@ def align(prota, protb):
 
     return numbering_dic
 
+def output_renumbered(prot, numbering_dic):
+    #
+    renumb_pdb_l = []
+    for l in open(prot):
+        if 'ATOM' in l[:4]:
+            chain = l[21]
+            resnum = int(l[22:26])
+            new_res = numbering_dic[chain][resnum]
+            n_l = l[:22] + '{:>4}'.format(new_res) + ' ' + l[26:]
+            renumb_pdb_l.append(n_l)
+
+    outputf = prot.replace('.pdb', '-renum.pdb')
+    out = open(outputf, 'w')
+    out.write(''.join(renumb_pdb_l))
+    out.close()
+    print(prot)
 
 def run_contacts(pdbf, cutoff):
     cmd = 'contact {} {}'.format(pdbf, cutoff)
@@ -160,7 +185,16 @@ def identify_inteface(pdbf, cutoff):
             if resnum_b not in interface_dic[chain_b][chain_a]:
                 interface_dic[chain_b][chain_a].append(resnum_b)
 
-    return interface_dic
+    # sort residue lists
+    ninterface_dic = {}
+    for a in interface_dic:
+        ninterface_dic[a] = {}
+        for b in interface_dic[a]:
+            reslist = interface_dic[a][b]
+            reslist.sort()
+            ninterface_dic[a][b] = reslist
+
+    return ninterface_dic
 
 
 def get_range(data):
@@ -208,16 +242,21 @@ def run_profit(cmd):
     return subprocess.getoutput('echo "{}" | profit'.format(cmd)).split('\n')
 
 
-def calc_irmsd(prot_a, prot_b, atoms, izone_l):
-    irmsd = None
+def calc_irmsd(prot_a, prot_b, atoms, numbering_dic):
 
+    contact_dic_a = identify_inteface(prot_a, 10.0)
+    izone_l = retrieve_izone(contact_dic_a, numbering_dic)
+
+    # cmd = 'refe {}\nmobi {}\n{}\natoms {}\nfit\nzone clear'.format(prot_a, prot_b, '\n'.join(izone_l), atoms)
     cmd = 'refe %s\nmobi %s\nATOMS %s\nZONE CLEAR\n%s\nstatus\nFIT\nquit' % (prot_a, prot_b, atoms, '\n'.join(izone_l))
     open('irmsd.dbg', 'w').write(cmd)
+    open('izone','w').write('\n'.join(izone_l))
 
     out = run_profit(cmd)
 
+    irmsd = None
     try:
-        irmsd = float(out[-1].split()[-1])
+        irmsd = float(out[-2].split()[-1])
     except KeyError:
         print('Something went wrong when running PROFIT, check irmsd.dbg')
         exit()
@@ -229,21 +268,32 @@ def calc_fnat(pa, pb, numbering_dic, cutoff=5.0):
     con_a = run_contacts(pa, cutoff)
     con_b = run_contacts(pb, cutoff)
 
-    # match reference to target
     a_con_l = []
+    b_con_l = []
     for e in con_a:
-        resnum_x, chain_x, atom_x, resnum_y, chain_y, atom_y, _ = e.split()
+        resnum_x, chain_x, _, resnum_y, chain_y, _, _ = e.split()
         try:
             resnum_x = str(numbering_dic[chain_x][int(resnum_x)])
             resnum_y = str(numbering_dic[chain_y][int(resnum_y)])
         except KeyError:
             # one of the residues present in this contact was not matched to the target
             continue
-        a_con_l.append((resnum_x, chain_x, atom_x, resnum_y, chain_y, atom_y))
 
-    b_con_l = [tuple(b.split()[:-1]) for b in con_b]
+        a_con_l.append((resnum_x, resnum_y))
+    a_con_l = set(a_con_l)
 
-    fnat = float(len(set(a_con_l) & set(b_con_l))) / float(len(a_con_l))
+    for e in con_b:
+        resnum_x, _, _, resnum_y, _, _, _ = e.split()
+
+        b_con_l.append((resnum_x, resnum_y))
+    b_con_l = set(b_con_l)
+
+
+    try:
+        fnat = len(a_con_l & b_con_l) / len(a_con_l)
+    except ZeroDivisionError:
+        # No contacts were matched
+        fnat = .0
 
     return fnat
 
@@ -252,38 +302,68 @@ def calc_lrmsd(prot_a, prot_b, numbering_dic, atoms):
     lrmsd = None
 
     # receptor = first chain
+    # retrieve_lzone(numbering_dic)
     chain_l = list(numbering_dic.keys())
     chain_l.sort()
     receptor_chain = chain_l[0]
     ligand_zone = {}
     for chain in numbering_dic:
         ligand_zone[chain] = []
-        for ref_res in numbering_dic[chain]:
-            target_res = numbering_dic[chain][ref_res]
-            lzone = 'ZONE %s%s-%s%i:%s%i-%s%i' % (chain, ref_res, chain, ref_res, chain, target_res, chain, target_res)
-            ligand_zone[chain].append(lzone)
+        for bound_range in get_range(numbering_dic[chain]):
+            unbound_res_l = []
+            for bound_res in range(bound_range[0], bound_range[1] + 1):
+                unbound_res_l.append(numbering_dic[chain][bound_res])
 
-    cmd = ''
+            for unbound_range in get_range(unbound_res_l):
+                bound_res_l = []
+                for unbound_res in range(unbound_range[0], unbound_range[1] + 1):
+                    bound_res_l.append(list(numbering_dic[chain].keys())[list(numbering_dic[chain].values()).index(unbound_res)])
+
+                range_a = get_range(bound_res_l)[0]  # bound
+                range_b = unbound_range
+
+                lzone_str = 'ZONE %s%i-%s%i:%s%i-%s%i' % (
+                    chain, range_a[0], chain, range_a[1], chain, range_b[0], chain, range_b[1])
+                ligand_zone[chain].append(lzone_str)
+                # lzone_l.append(lzone_str)
+
+
+        # for ref_res in numbering_dic[chain]:
+        #     target_res = numbering_dic[chain][ref_res]
+        #     lzone = 'ZONE %s%s-%s%i:%s%i-%s%i' % (chain, ref_res, chain, ref_res, chain, target_res, chain, target_res)
+        #     ligand_zone[chain].append(lzone)
+
+    lzone_str_out = '\n'.join(ligand_zone[receptor_chain])
+    lzone_str_out += '\n'
+
+    cmd = 'refe {}'.format(prot_a)
+    cmd += '\n'
+    cmd += 'mobi {}'.format(prot_b)
+    cmd += '\n'
     cmd += '\n'.join(ligand_zone[receptor_chain])
     cmd += '\n'
-    cmd += 'FIT'
+    cmd += 'atoms {}'.format(atoms)
+    cmd += '\n'
+    cmd += 'fit'
     cmd += '\n'
     for ligand in ligand_zone:
         if ligand != receptor_chain:
             l_tbw = ''
             for zone in ligand_zone[ligand]:
                 l_tbw += ' R%s\n' % zone
+                lzone_str_out += ' R%s\n' % zone
             cmd += l_tbw[1:]
             cmd += '\n'
     cmd += 'ZONE CLEAR'
     cmd += '\n'
+    cmd += 'quit'
 
-    lrms_cmd = 'refe %s\nmobi %s\nATOMS %s\n%s\nquit' % (prot_a, prot_b, atoms, cmd)
     open('lrmsd.dbg', 'w').write(cmd)
+    open('lzone','w').write(lzone_str_out)
 
-    out = run_profit(lrms_cmd)
+    out = run_profit(cmd)
     try:
-        lrmsd = float(out[-1].split()[-1])
+        lrmsd = float([e for e in out if 'RMS' in e][-1].split()[-1])
     except KeyError:
         print('Something went wrong when running PROFIT, check irmsd.dbg')
         exit()
@@ -293,13 +373,90 @@ def calc_lrmsd(prot_a, prot_b, numbering_dic, atoms):
 
 def clean(prot_a, prot_b):
     pdb_l = [glob.glob('{}_*'.format(e.split('.pdb')[0])) for e in [prot_a, prot_b]]
-    pdb_l = [x for xs in pdb_l for x in xs]
-    for p in pdb_l:
+    pdb_l = [x for xs in pdb_l for x in xs] + glob.glob('*flatnum*')
+    for p in set(pdb_l):
         os.system('rm {}'.format(p))
 
 
+def scramble_prot(prot):
+    # scramble protein numbering for debug purposes
+    seq = load_seq(prot)
+    chain_resdic = dict([(c, list(seq[c].keys())) for c in seq])
+    new_resdic = {}
+    for chain in chain_resdic:
+        new_resdic[chain] = {}
+        reslist = chain_resdic[chain]
+        shuffled_reslist = reslist.copy()
+        random.shuffle(shuffled_reslist)
+        new_resdic[chain] = dict(zip(reslist, shuffled_reslist))
+
+    scrambled_prot = []
+    for l in open(prot):
+        if 'ATOM' in l[:4]:
+            chain = l[21]
+            resnum = int(l[22:26])
+            new_resnum = new_resdic[chain][resnum]
+            n_l = l[:22] + '{0:>4}'.format(new_resnum) + l[26:]
+            scrambled_prot.append(n_l)
+
+    outname = '{}_scramb.pdb'.format(prot.split('.pdb')[0])
+    out = open(outname, 'w')
+    out.write(''.join(scrambled_prot))
+    out.close()
+
+    return outname
+
+def flatten_numbers(prot):
+    # look for residue insertions
+    # 10, <10A, 10B, 10C>, 12
+
+    # create a numbering dictionary taking into account insertions
+    resdic = {}
+    chain_l = []
+    incr = None
+    for l in open(prot):
+        if 'ATOM' in l[:4] and 'CA' in l[12:16]:
+
+            chain = l[21]
+
+            if not chain in chain_l:
+                incr = 0
+                chain_l.append(chain)
+
+            try:
+                _ = resdic[chain]
+            except KeyError:
+                resdic[chain] = {}
+
+            ori_resnum = int(l[22:26])
+            icode = l[26]
+
+            if not icode.isspace():
+                incr += 1
+
+            resnum = ori_resnum + incr
+            resdic[chain][(ori_resnum, icode)] = resnum
+
+    flatf_l = []
+    for l in open(prot):
+        if 'ATOM' in l[:4]:
+            chain = l[21]
+            resnum = int(l[22:26])
+            icode = l[26]
+            new_res = resdic[chain][(resnum, icode)]
+            n_l = l[:22] + '{:>4}'.format(new_res) + ' ' + l[27:]
+            flatf_l.append(n_l)
+
+    outputf = prot.split('.pdb')[0] + '_flatnum.pdb'
+    out = open(outputf,'w')
+    out.write(''.join(flatf_l))
+    out.close()
+
+    return outputf
+
 def main():
     error_check = False
+    lovoalign_exe = '/home/rodrigo/software/lovoalign'
     for exe in ['profit', 'contact', 'lovoalign']:
         if not shutil.which(exe):
             print('ERROR: {} not found in $PATH'.format(exe))
@@ -311,7 +468,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("prot_a", help="Reference protein")
     parser.add_argument("prot_b", help="Target protein")
+
     parser.add_argument("--cg", help="Use CG beads", action="store_true", default=False)
+    parser.add_argument("--flat", help="Flatten numbering, use this if your protein has insertions ex: 10, 10A, 10B, 11")
 
     args = parser.parse_args()
     if args.cg:
@@ -322,17 +481,23 @@ def main():
     pa = args.prot_a
     pb = args.prot_b
 
-    num_dic = align(pa, pb)
+    # if args.flat:
+    pa = flatten_numbers(pa)
+    pb = flatten_numbers(pb)
 
-    contact_dic_a = identify_inteface(pa, 5.0)
+    # DEBUG ONLY!
+    # pb = scramble_prot(pb)
 
-    izone_list = retrieve_izone(contact_dic_a, num_dic)
+    num_dic = align(pa, pb, lovoalign_exe)
 
-    irmsd = calc_irmsd(pa, pb, atoms, izone_list)
+    # renumber the reference based on the target
+    # output_renumbered(pa, num_dic)
+
+    irmsd = calc_irmsd(pa, pb, atoms, num_dic)
     fnat = calc_fnat(pa, pb, num_dic)
     lrmsd = calc_lrmsd(pa, pb, num_dic, atoms)
 
-    print('irmsd: {:.2f} lrmsd: {:.2f} fnat: {:.2f}'.format(irmsd, lrmsd, fnat))
+    print('irmsd: {:.4f} lrmsd: {:.4f} fnat: {:.4f}'.format(irmsd, lrmsd, fnat))
 
     clean(pa, pb)
 
