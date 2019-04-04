@@ -2,7 +2,7 @@
 import glob
 import os
 
-folder_list = [f for f in glob.glob('/data/rodrigo/CG-ProteinDNA-Benchmark/*') if not '.' in f]
+folder_list = [f for f in glob.glob('/home/rodrigo/dna-benchmark/*') if not '.' in f]
 
 for folder in folder_list:
     html_f = f'{folder}/new.html'

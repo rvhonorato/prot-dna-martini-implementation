@@ -2,25 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="82c45af0-fb02-4518-9942-7757b09e83e9" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/DNA/html2param.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DNA/patch-dna-cg-run1.old.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/collab/zeynep/README.MD" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/collab/zeynep/score-dimers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scoring/match-chain.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scoring/scoring.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Nostromo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Nostromo.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/remote-mappings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/remote-mappings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/webServers.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webServers.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DNA/html2param.py" beforeDir="false" afterPath="$PROJECT_DIR$/DNA/html2param.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DNA/patch-dna-cg-run1.sh" beforeDir="false" afterPath="$PROJECT_DIR$/DNA/patch-dna-cg-run1.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh" beforeDir="false" afterPath="$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scoring/extract-top10.py" beforeDir="false" afterPath="$PROJECT_DIR$/scoring/extract-top10.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scoring/prepare_scorers_submission.py" beforeDir="false" afterPath="$PROJECT_DIR$/scoring/prepare_scorers_submission.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/capri-eval.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/capri-eval.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/prepare_input.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/prepare_input.py" afterDir="false" />
     </list>
     <list id="fc44617b-5af8-4708-a40b-b063f3a1a643" name="nucleosome changes" comment="" />
     <ignored path="$PROJECT_DIR$/.idea/shelf/" />
@@ -48,43 +32,38 @@
     <favorites_list name="Nostromo" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5">
-      <split-first>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/DNA/patch-dna-cg-run1.sh">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="510">
-                  <caret line="204" column="1" lean-forward="true" selection-start-line="204" selection-start-column="1" selection-end-line="204" selection-end-column="1" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="60">
-                  <caret line="4" column="18" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="true" current-in-tab="true">
-            <entry file="remoteDeploymentFS://&lt;0e19c7ab-6eb0-4ee0-99ce-1f1d5787b923&gt;/dna-benchmark/1O3T/run1/protocols/refine.inp">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="207">
-                  <caret line="1697" column="29" selection-start-line="1697" selection-start-column="25" selection-end-line="1697" selection-end-column="29" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DNA/html2param.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="4" column="65" selection-start-line="4" selection-start-column="65" selection-end-line="4" selection-end-column="65" />
+              <folding>
+                <element signature="e#32#43#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DNA/patch-dna-cg-run1.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="448">
+              <caret line="68" column="64" lean-forward="true" selection-start-line="68" selection-start-column="64" selection-end-line="68" selection-end-column="64" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="326">
+              <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -97,23 +76,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>profit</find>
-      <find>dna_res</find>
-      <find />
-      <find>solv</find>
-      <find>fix_terms</find>
-      <find>seg</find>
-      <find>clustal</find>
-      <find>segid</find>
-      <find>clustal_e</find>
-      <find>get_range</find>
-      <find>haddocktools_path</find>
-      <find>pdb_chain</find>
-      <find>retr</find>
-      <find>{* ran</find>
+      <find>dih</find>
+      <find>epsilon</find>
+      <find>ion.param</find>
+      <find>dihed</find>
+      <find>ion</find>
+      <find>RUN:toppar/</find>
+      <find>.param</find>
+      <find>param</find>
+      <find>parameter</find>
+      <find>temperature</find>
+      <find>temp</find>
+      <find>Initial</find>
+      <find>patch</find>
+      <find>hbon</find>
       <find>dna-rna</find>
-      <find>dna</find>
-      <find>dna-</find>
+      <find>rot</find>
+      <find>rotloop2</find>
+      <find>180</find>
+      <find>$rotiter</find>
+      <find>nlcount</find>
+      <find>$bath</find>
+      <find>rotiter</find>
+      <find>flex_seg</find>
+      <find>verbose</find>
+      <find>cdie</find>
+      <find>$Data.dielec</find>
+      <find>dna_break</find>
+      <find>di</find>
+      <find>r</find>
+      <find>desol</find>
     </findStrings>
     <replaceStrings>
       <replace>&quot;,&quot;</replace>
@@ -155,7 +147,6 @@
         <option value="$PROJECT_DIR$/capri/ana-hmodel.py" />
         <option value="$PROJECT_DIR$/scripts/martinize-restraints.py" />
         <option value="$PROJECT_DIR$/nucleosome/analysis.ipynb" />
-        <option value="$PROJECT_DIR$/analysis/analyze-run.py" />
         <option value="$USER_HOME$/work/scoring/py/fastcontact/fastcontact.c" />
         <option value="$USER_HOME$/work/scoring/py/calc_fcc_matrix.py" />
         <option value="$PROJECT_DIR$/scoring/scoring.py" />
@@ -166,10 +157,12 @@
         <option value="$PROJECT_DIR$/scoring/extract-top10.py" />
         <option value="$PROJECT_DIR$/scoring/prepare_scorers_submission.py" />
         <option value="$PROJECT_DIR$/scoring/match-chain.py" />
-        <option value="$PROJECT_DIR$/DNA/html2param.py" />
-        <option value="$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh" />
         <option value="$PROJECT_DIR$/scripts/prepare_input.py" />
+        <option value="$PROJECT_DIR$/analysis/analyze-run.py" />
+        <option value="&lt;0e19c7ab-6eb0-4ee0-99ce-1f1d5787b923&gt;/dna-benchmark/1O3T/run1/debug_it1.inp" />
+        <option value="$PROJECT_DIR$/DNA/html2param.py" />
         <option value="$PROJECT_DIR$/DNA/patch-dna-cg-run1.sh" />
+        <option value="$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh" />
       </list>
     </option>
   </component>
@@ -196,12 +189,22 @@
             <path>
               <item name="Nostromo" type="b2602c69:ProjectViewProjectNode" />
               <item name="Nostromo" type="462c0819:PsiDirectoryNode" />
+              <item name="analysis" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Nostromo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Nostromo" type="462c0819:PsiDirectoryNode" />
               <item name="DNA" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Nostromo" type="b2602c69:ProjectViewProjectNode" />
               <item name="Nostromo" type="462c0819:PsiDirectoryNode" />
-              <item name="scoring" type="462c0819:PsiDirectoryNode" />
+              <item name="nucleosome" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Nostromo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Nostromo" type="462c0819:PsiDirectoryNode" />
+              <item name="scripts" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -214,7 +217,7 @@
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.highlight.symlinks" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
@@ -250,7 +253,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.prepare_input">
+  <component name="RunManager" selected="Python.html2param">
     <configuration name="html2param" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Nostromo" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -386,8 +389,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.prepare_input" />
         <item itemvalue="Python.html2param" />
+        <item itemvalue="Python.prepare_input" />
         <item itemvalue="Python.match-chain" />
         <item itemvalue="Python.score-dimers" />
         <item itemvalue="Python.scoring" />
@@ -416,7 +419,7 @@
       <workItem from="1554297223184" duration="1409000" />
       <workItem from="1554314614431" duration="3705000" />
       <workItem from="1554370520561" duration="5258000" />
-      <workItem from="1554377142544" duration="1406000" />
+      <workItem from="1554377142544" duration="13350000" />
     </task>
     <task id="LOCAL-00001" summary="22102018">
       <created>1540226120237</created>
@@ -443,7 +446,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="73566000" />
+    <option name="totallyTimeSpent" value="85510000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -456,6 +459,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="2560" height="1340" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49834436" visible="true" weight="0.0949166" />
       <window_info id="Favorites" order="1" sideWeight="0.50165564" side_tool="true" weight="0.16755603" />
@@ -469,17 +473,17 @@
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32998884" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.22037652" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.49682286" visible="true" weight="0.42708334" />
+      <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.49682286" weight="0.41426283" />
       <window_info anchor="bottom" id="File Transfer" order="10" sideWeight="0.49960285" weight="0.23637821" />
       <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.5031771" side_tool="true" weight="0.57852566" />
-      <window_info anchor="bottom" id="Run" order="13" sideWeight="0.4992057" weight="0.44551283" />
+      <window_info active="true" anchor="bottom" id="Run" order="13" sideWeight="0.4992057" visible="true" weight="0.44551283" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="SciView" order="3" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" id="Remote Host" order="5" visible="true" weight="0.17156473" />
+      <window_info anchor="right" id="Remote Host" order="5" weight="0.22637014" />
       <window_info anchor="right" id="R Graphics" order="6" />
       <window_info anchor="right" id="R Packages" order="7" />
     </layout>
@@ -542,11 +546,6 @@
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/DNA/html2param.py</url>
-          <line>21</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/scripts/prepare_input.py</url>
           <line>88</line>
           <option name="timeStamp" value="6" />
@@ -556,7 +555,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Nostromo$prepare_input.coverage" NAME="prepare_input Coverage Results" MODIFIED="1554374473698" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="/home/rodrigo/dna-benchmark/1O3T" />
-    <SUITE FILE_PATH="coverage/Nostromo$html2param.coverage" NAME="html2param Coverage Results" MODIFIED="1554316271895" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="/home/rodrigo/" />
+    <SUITE FILE_PATH="coverage/Nostromo$html2param.coverage" NAME="html2param Coverage Results" MODIFIED="1554392130420" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="/home/rodrigo/" />
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="setValue">
@@ -580,7 +579,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/nucleosome/analysis.ipynb" />
     <entry file="file://$PROJECT_DIR$/scripts/martinize-restraints.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="89">
@@ -613,13 +611,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
           <caret line="9" selection-start-line="9" selection-end-line="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nucleosome/patch-nuc.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="88" selection-start-line="7" selection-start-column="88" selection-end-line="7" selection-end-column="88" />
         </state>
       </provider>
     </entry>
@@ -803,13 +794,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/analysis/analyze-run.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2835">
-          <caret line="191" selection-start-line="191" selection-end-line="191" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scoring/prepare_scorers_submission.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
@@ -885,16 +869,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DNA/html2param.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" selection-start-line="6" selection-end-line="6" />
-          <folding>
-            <element signature="e#32#43#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../haddock/protocols/refine.inp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="490">
@@ -902,17 +876,48 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/analysis/analyze-run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="448">
+          <caret line="256" column="8" selection-start-line="256" selection-start-column="8" selection-end-line="256" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nucleosome/patch-nuc.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="57" lean-forward="true" selection-start-line="19" selection-start-column="57" selection-end-line="19" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nucleosome/run-nuc.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="23" column="17" lean-forward="true" selection-start-line="23" selection-start-column="17" selection-end-line="23" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DNA/html2param.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="65" selection-start-line="4" selection-start-column="65" selection-end-line="4" selection-end-column="65" />
+          <folding>
+            <element signature="e#32#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/DNA/patch-dna-cg-run1.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="204" column="1" lean-forward="true" selection-start-line="204" selection-start-column="1" selection-end-line="204" selection-end-column="1" />
+        <state relative-caret-position="448">
+          <caret line="68" column="64" lean-forward="true" selection-start-line="68" selection-start-column="64" selection-end-line="68" selection-end-column="64" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="18" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
+        <state relative-caret-position="326">
+          <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
         </state>
       </provider>
     </entry>

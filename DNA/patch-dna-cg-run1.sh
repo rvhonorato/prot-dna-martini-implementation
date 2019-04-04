@@ -1,20 +1,11 @@
 #!/bin/bash
 #============================================================================================#
-#
-# run1: CG default values
-# run2: AA default values
-# run3: AA epsilon = 78, w_desol = 0.0
-# run4: CG epsilon = 78, w_desol = 0.0
-#
-#============================================================================================#
 
 #----------------------------------------------------------------------------------------------------------------#
 # INPUT
 #----------------------------------------------------------------------------------------------------------------#
 
-
-DNA_CHAIN=$1
-
+DNA_ID=$1
 
 # Add CG topology, parameters, link and patches
 PARAM_FOLDER=/home/rodrigo/cg-params/
@@ -29,9 +20,7 @@ CG_DNA_BREAKS=$PARAM_FOLDER/patch-breaks-cg-dna-rna.cns
 
 
 #----------------------------------------------------------------------------------------------------------------#
-#
-# SET UP CG RUN 
-#
+# SET UP CG RUN
 #----------------------------------------------------------------------------------------------------------------#
 echo "> Setting CG run"
 
@@ -39,9 +28,7 @@ echo "RUN1"
 cd run1
 
 #----------------------------------------------------------------------------------------------------------------#
-#
 # Copy new files
-#
 #----------------------------------------------------------------------------------------------------------------#
 
 echo "> Copying DNA CG files"
@@ -55,38 +42,39 @@ cp $CG_HBONDS protocols/
 cp $CG_DNA_BREAKS protocols/
 
 #----------------------------------------------------------------------------------------------------------------#
-#
-# Edit run.cns 
-#
+# Edit run.cns
 #----------------------------------------------------------------------------------------------------------------#
 
 echo "> Editting run.cns"
 
 ## this also changed to dna_molN
-sed -i "s/{===>} dna_mol$DNA_CHAIN=false;/{===>} dna_mol$DNA_CHAIN=true;/g" run.cns
-
+sed -i "s/{===>} dna_mol$DNA_ID=false;/{===>} dna_mol$DNA_ID=true;/g" run.cns
 
 # set AA parameters
-## this changed to prot_top_molN
-
-sed -i "s/{===>} prot_top_mol$DNA_CHAIN=\"protein-allhdg5-4.top\";/{===>} prot_top_mol$DNA_CHAIN=\"dna-rna-allatom-hj-opls-1.3.top\";/g" run.cns
-sed -i "s/{===>} prot_link_mol$DNA_CHAIN=\"protein-allhdg5-4-noter.link\";/{===>} prot_link_mol$DNA_CHAIN=\"dna-rna-1.3.link\";/g" run.cns
-sed -i "s/{===>} prot_par_mol$DNA_CHAIN=\"protein-allhdg5-4.param\";/{===>} prot_par_mol$DNA_CHAIN=\"dna-rna-allatom-hj-opls-1.3.param\";/g" run.cns
+sed -i "s/{===>} prot_top_mol$DNA_ID=\"protein-allhdg5-4.top\";/{===>} prot_top_mol$DNA_ID=\"dna-rna-allatom-hj-opls-1.3.top\";/g" run.cns
+sed -i "s/{===>} prot_link_mol$DNA_ID=\"protein-allhdg5-4-noter.link\";/{===>} prot_link_mol$DNA_ID=\"dna-rna-1.3.link\";/g" run.cns
+sed -i "s/{===>} prot_par_mol$DNA_ID=\"protein-allhdg5-4.param\";/{===>} prot_par_mol$DNA_ID=\"dna-rna-allatom-hj-opls-1.3.param\";/g" run.cns
 
 # set CG parameters
-sed -i "s/{===>} prot_cg_top_mol$DNA_CHAIN=\"protein-CG-Martini-2-2.top\";/{===>} prot_cg_top_mol$DNA_CHAIN=\"dna-rna-CG-MARTINI-2-1p.top\";/g" run.cns
-sed -i "s/{===>} prot_cg_link_mol$DNA_CHAIN=\"protein-CG-Martini-2-2.link\";/{===>} prot_cg_link_mol$DNA_CHAIN=\"dna-rna-CG-MARTINI-2-1p.link\";/g" run.cns
-sed -i "s/{===>} prot_cg_par_mol$DNA_CHAIN=\"protein-CG-Martini-2-2.param\";/{===>} prot_cg_par_mol$DNA_CHAIN=\"dna-rna-CG-MARTINI-2-1p.param\";/g" run.cns
+sed -i "s/{===>} prot_cg_top_mol$DNA_ID=\"protein-CG-Martini-2-2.top\";/{===>} prot_cg_top_mol$DNA_ID=\"dna-rna-CG-MARTINI-2-1p.top\";/g" run.cns
+sed -i "s/{===>} prot_cg_link_mol$DNA_ID=\"protein-CG-Martini-2-2.link\";/{===>} prot_cg_link_mol$DNA_ID=\"dna-rna-CG-MARTINI-2-1p.link\";/g" run.cns
+sed -i "s/{===>} prot_cg_par_mol$DNA_ID=\"protein-CG-Martini-2-2.param\";/{===>} prot_cg_par_mol$DNA_ID=\"dna-rna-CG-MARTINI-2-1p.param\";/g" run.cns
 
+sed -i 's/{===>} w_desolv_0=1.0/{===>} w_desolv_0=0.0/g' run.cns
+sed -i 's/{===>} w_desolv_1=1.0/{===>} w_desolv_1=0.0/g' run.cns
+sed -i 's/{===>} w_desolv_2=1.0/{===>} w_desolv_2=0.0/g' run.cns
 
+sed -i 's/{===>} epsilon_0=10.0/{===>} epsilon_0=78.0/g' run.cns
+sed -i 's/{===>} epsilon_1=1.0/{===>} epsilon_1=78.0/g' run.cns
+sed -i 's/{===>} epsilon_1=10.0/{===>} epsilon_1=78.0/g' run.cns
+
+sed -i 's/{===>} dielec_0=rdie/{===>} dielec_0=cdie/g' run.cns
+sed -i 's/{===>} dielec_1=rdie/{===>} dielec_1=rdie/g' run.cns
 #----------------------------------------------------------------------------------------------------------------#
-#
 # Edit input generator
-#
 #----------------------------------------------------------------------------------------------------------------#
 
 echo "> Editing input generator"
-# cp protocols/generate_B-cg.inp protocols/generate_B-cg.inp-bak
 
 sed -i '/patch-bb-cg.cns/a \ inline @RUN:protocols/patch-types-cg-hbond-dna-rna.cns' protocols/generate-cg.inp
 sed -i '/inline @RUN:protocols\/dna_break.cns/a \ \ \ inline @RUN:protocols\/patch-breaks-cg-dna-rna.cns' protocols/generate-cg.inp
@@ -100,13 +88,10 @@ sed -i 's/dna-rna-1.3.link/dna-rna-CG-MARTINI-2-1p.link/g' protocols/generate-cg
 sed -i 's/dna-rna-allatom-hj-opls-1.3.param/dna-rna-CG-MARTINI-2-1p.param/g' protocols/generate-cg.inp
 
 # keep the input generator from trying to setup dihedral restraints in CG
-## 
 sed -i 's/dna-rna_restraints.def/dna-rna-cg_restraints.def/g' protocols/generate-cg.inp
 
 #----------------------------------------------------------------------------------------------------------------#
-#
 # Write DNA-AA restraints
-#
 #----------------------------------------------------------------------------------------------------------------#
 
 echo "> Writing DNA-CG/AA restraints"
@@ -147,9 +132,7 @@ if [ -f ../dna_restraints.def ]; then
 	sed -i 's/{===>} basepair_planar=false;/{===>} basepair_planar=true;/g' data/sequence/dna-rna_restraints.def
 
 	#----------------------------------------------------------------------------------------------------------------#
-	#
 	# Write DNA-CG restraints
-	#
 	#----------------------------------------------------------------------------------------------------------------#
 
 	# add restraints to line 18 of template-dna-rna-aa-restraints.def
@@ -162,9 +145,7 @@ else
 fi
 
 #----------------------------------------------------------------------------------------------------------------#
-#
 # Edit refine input
-#
 #----------------------------------------------------------------------------------------------------------------#
 
 echo "> Editing refine input"

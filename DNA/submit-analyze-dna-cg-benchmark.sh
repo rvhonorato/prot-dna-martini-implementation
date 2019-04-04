@@ -22,24 +22,24 @@ for TARGET in $DIRL
 	cd $TARGET
 	echo "########### >> $TARGET - run$RUNN <<"
 
-	if [ ! -d run$RUNN ]; then
-		echo "## Setting up"
-		python /home/rodrigo/Nostromo/scripts/prepare_input.py $RUNN --dna
-		bash run$RUNN.sh
-	fi
+#	if [ ! -d run$RUNN ]; then
+#		echo "## Setting up"
+    python /home/rodrigo/Nostromo/scripts/prepare_input.py $RUNN --dna
+    bash run$RUNN.sh
+#	fi
 
 	# Run
 	cd run$RUNN
 	#echo "## Executing"
-	$HADDOCKCMD >&/home/rodrigo/dna-benchmark/haddock.out
+	$HADDOCKCMD > haddock.out
 	cd ..
 
-	# Analyze
-	REFERENCE=${TARGET%/}$SUFFIX
-	if [ ! -f run$RUNN/water.dat ]; then
-		echo "## Running CG analysis"
-		python ~/Nostromo/analysis/analyze-run.py $REFERENCE run$RUNN
-	fi
+#	# Analyze
+#	REFERENCE=${TARGET%/}$SUFFIX
+#	if [ ! -f run$RUNN/water.dat ]; then
+#		echo "## Running CG analysis"
+#		python ~/Nostromo/analysis/analyze-run.py $REFERENCE run$RUNN
+#	fi
 
 	cd $BENCHMARK_PATH
 	
