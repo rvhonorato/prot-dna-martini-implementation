@@ -2,7 +2,8 @@
 #
 RUNN=$1
 SUFFIX=_complex.pdb
-HADDOCKCMD="python /home/software/haddock/haddock2.3/Haddock/RunHaddock.py"
+#HADDOCKCMD="python /home/software/haddock/haddock2.3/Haddock/RunHaddock.py"
+HADDOCKCMD="/home/enmr/software/miniconda2/bin/python2.7 /home/abonvin/haddock_git/haddock2.4/Haddock/RunHaddock.py"
 BENCHMARK_PATH="/home/rodrigo/dna-benchmark"
 
 cd $BENCHMARK_PATH

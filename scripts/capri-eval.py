@@ -125,6 +125,7 @@ def align(prota, protb, lovoalignexe):
 
     return numbering_dic
 
+
 def output_renumbered(prot, numbering_dic):
     #
     renumb_pdb_l = []
@@ -141,6 +142,7 @@ def output_renumbered(prot, numbering_dic):
     out.write(''.join(renumb_pdb_l))
     out.close()
     print(prot)
+
 
 def run_contacts(pdbf, cutoff):
     cmd = 'contact {} {}'.format(pdbf, cutoff)

@@ -2,17 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="82c45af0-fb02-4518-9942-7757b09e83e9" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/R_User_Library.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/remote-mappings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capri/ana-hmodel.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/nucleosome/analysis.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DNA/html2param.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DNA/patch-dna-cg-run1.old.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/collab/zeynep/README.MD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/collab/zeynep/score-dimers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scoring/match-chain.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scoring/scoring.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/Nostromo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Nostromo.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/remote-mappings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/remote-mappings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/webServers.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webServers.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/analysis/analyze-run.py" beforeDir="false" afterPath="$PROJECT_DIR$/analysis/analyze-run.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/martinize-restraints.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/martinize-restraints.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DNA/patch-dna-cg-run1.sh" beforeDir="false" afterPath="$PROJECT_DIR$/DNA/patch-dna-cg-run1.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh" beforeDir="false" afterPath="$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scoring/extract-top10.py" beforeDir="false" afterPath="$PROJECT_DIR$/scoring/extract-top10.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scoring/prepare_scorers_submission.py" beforeDir="false" afterPath="$PROJECT_DIR$/scoring/prepare_scorers_submission.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/capri-eval.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/capri-eval.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/prepare_input.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/prepare_input.py" afterDir="false" />
     </list>
     <list id="fc44617b-5af8-4708-a40b-b063f3a1a643" name="nucleosome changes" comment="" />
     <ignored path="$PROJECT_DIR$/.idea/shelf/" />
@@ -23,41 +31,67 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/Nostromo$find_models.coverage" NAME="find-models Coverage Results" MODIFIED="1540224942276" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/nucleosome" />
-    <SUITE FILE_PATH="coverage/Nostromo$compare_runcns.coverage" NAME="compare-runcns Coverage Results" MODIFIED="1540395888269" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
-    <SUITE FILE_PATH="coverage/Nostromo$martinize_restraints.coverage" NAME="martinize-restraints Coverage Results" MODIFIED="1542213969767" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
     <SUITE FILE_PATH="coverage/Nostromo$Python2_7.coverage" NAME="Python2.7 Coverage Results" MODIFIED="1539874329832" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/Nostromo$fix_chains.coverage" NAME="Default Coverage Results" MODIFIED="1539875039023" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/nucleosome" />
+    <SUITE FILE_PATH="coverage/Nostromo$score_dimers.coverage" NAME="score-dimers Coverage Results" MODIFIED="1553093634103" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="/home/rodrigo/work/zeynep" />
+    <SUITE FILE_PATH="coverage/Nostromo$find_models.coverage" NAME="find-models Coverage Results" MODIFIED="1540224942276" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/nucleosome" />
+    <SUITE FILE_PATH="coverage/Nostromo$Unnamed.coverage" NAME="Unnamed Coverage Results" MODIFIED="1539874416631" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/Nostromo$scoring.coverage" NAME="scoring Coverage Results" MODIFIED="1553092457722" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="/home/rodrigo/work/zeynep" />
+    <SUITE FILE_PATH="coverage/Nostromo$compare_runcns.coverage" NAME="compare-runcns Coverage Results" MODIFIED="1540395888269" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/Nostromo$Default.coverage" NAME="Default Coverage Results" MODIFIED="1539967547608" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/nucleosome" />
+    <SUITE FILE_PATH="coverage/Nostromo$martinize_restraints.coverage" NAME="martinize-restraints Coverage Results" MODIFIED="1542213969767" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/Nostromo$match_chain.coverage" NAME="match-chain Coverage Results" MODIFIED="1553704461326" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="/home/rodrigo/scoring/match-chains" />
     <SUITE FILE_PATH="coverage/Nostromo$retrieve_inputs.coverage" NAME="retrieve-inputs Coverage Results" MODIFIED="1540382809108" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/nucleosome" />
     <SUITE FILE_PATH="coverage/Nostromo$analyze_run.coverage" NAME="analyze-run Coverage Results" MODIFIED="1543242829972" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/nucleosome/capri/aa-runs/T95-all-passive-fcc" />
-    <SUITE FILE_PATH="coverage/Nostromo$Unnamed.coverage" NAME="Unnamed Coverage Results" MODIFIED="1539874416631" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/Nostromo$Default.coverage" NAME="Default Coverage Results" MODIFIED="1539967547608" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/nucleosome" />
-    <SUITE FILE_PATH="coverage/Nostromo$fix_chains.coverage" NAME="Default Coverage Results" MODIFIED="1539875039023" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/nucleosome" />
   </component>
   <component name="FavoritesManager">
     <favorites_list name="Nostromo" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/analysis/analyze-run.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="478" column="17" lean-forward="true" selection-start-line="478" selection-start-column="17" selection-end-line="478" selection-end-column="17" />
-              <folding>
-                <element signature="e#62#120#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.5">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/DNA/patch-dna-cg-run1.sh">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="510">
+                  <caret line="204" column="1" lean-forward="true" selection-start-line="204" selection-start-column="1" selection-end-line="204" selection-end-column="1" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="60">
+                  <caret line="4" column="18" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="true" current-in-tab="true">
+            <entry file="remoteDeploymentFS://&lt;0e19c7ab-6eb0-4ee0-99ce-1f1d5787b923&gt;/dna-benchmark/1O3T/run1/protocols/refine.inp">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="207">
+                  <caret line="1697" column="29" selection-start-line="1697" selection-start-column="25" selection-end-line="1697" selection-end-column="29" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
-        <option value="Python Script" />
         <option value="Jupyter Notebook" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -67,9 +101,19 @@
       <find>dna_res</find>
       <find />
       <find>solv</find>
+      <find>fix_terms</find>
+      <find>seg</find>
+      <find>clustal</find>
+      <find>segid</find>
+      <find>clustal_e</find>
       <find>get_range</find>
       <find>haddocktools_path</find>
-      <find>fix_terms</find>
+      <find>pdb_chain</find>
+      <find>retr</find>
+      <find>{* ran</find>
+      <find>dna-rna</find>
+      <find>dna</find>
+      <find>dna-</find>
     </findStrings>
     <replaceStrings>
       <replace>&quot;,&quot;</replace>
@@ -79,17 +123,17 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/scripts/apply-patch.sh" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/nucleosome/patch-nuc.sh" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/nucleosome/run-nuc.sh" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/analysis/analyze-run.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/restraints/create-numbering.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/scripts/prepare_input.py" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/analysis/analyze-run.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/scripts/martinize-restraints.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/scripts/apply-patch.sh" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/nucleosome/find-models.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/nucleosome/fix-chains.py" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/nucleosome/retrieve-inputs.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/nucleosome/new.html" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/nucleosome/run-nuc.sh" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/nucleosome/patch-nuc.sh" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/scripts/martinize-restraints.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/nucleosome/retrieve-inputs.py" root0="SKIP_INSPECTION" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -102,7 +146,6 @@
         <option value="$PROJECT_DIR$/nucleosome/run-nuc-cg.sh" />
         <option value="$PROJECT_DIR$/nucleosome/run_cg_nuc.sh" />
         <option value="$PROJECT_DIR$/nucleosome/retrieve-inputs.py" />
-        <option value="$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh" />
         <option value="$PROJECT_DIR$/scripts/compare-runcns.py" />
         <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch.txt" />
         <option value="$PROJECT_DIR$/nucleosome/new.html" />
@@ -113,14 +156,27 @@
         <option value="$PROJECT_DIR$/scripts/martinize-restraints.py" />
         <option value="$PROJECT_DIR$/nucleosome/analysis.ipynb" />
         <option value="$PROJECT_DIR$/analysis/analyze-run.py" />
+        <option value="$USER_HOME$/work/scoring/py/fastcontact/fastcontact.c" />
+        <option value="$USER_HOME$/work/scoring/py/calc_fcc_matrix.py" />
+        <option value="$PROJECT_DIR$/scoring/scoring.py" />
+        <option value="$PROJECT_DIR$/collab/zeynep/score-dimers.py" />
+        <option value="$USER_HOME$/work/scoring/example-scoring/README" />
+        <option value="$PROJECT_DIR$/collab/zeynep/README.MD" />
+        <option value="$PROJECT_DIR$/scripts/capri-eval.py" />
+        <option value="$PROJECT_DIR$/scoring/extract-top10.py" />
+        <option value="$PROJECT_DIR$/scoring/prepare_scorers_submission.py" />
+        <option value="$PROJECT_DIR$/scoring/match-chain.py" />
+        <option value="$PROJECT_DIR$/DNA/html2param.py" />
+        <option value="$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh" />
+        <option value="$PROJECT_DIR$/scripts/prepare_input.py" />
+        <option value="$PROJECT_DIR$/DNA/patch-dna-cg-run1.sh" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="489" />
-    <option name="y" value="164" />
-    <option name="width" value="940" />
-    <option name="height" value="777" />
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
+    <option name="width" value="2560" />
+    <option name="height" value="1340" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -137,16 +193,27 @@
               <item name="Nostromo" type="b2602c69:ProjectViewProjectNode" />
               <item name="Nostromo" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="Nostromo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Nostromo" type="462c0819:PsiDirectoryNode" />
+              <item name="DNA" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Nostromo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Nostromo" type="462c0819:PsiDirectoryNode" />
+              <item name="scoring" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Course" />
       <pane id="Scope" />
+      <pane id="Course" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.highlight.symlinks" value="true" />
@@ -154,10 +221,22 @@
     <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../mad-assembly" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/DNA" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="restartRequiresConfirmation" value="false" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/DNA" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/collab" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -171,29 +250,22 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
-    <configuration name="analyze-run" type="PythonConfigurationType" factoryName="Python" temporary="true">
+  <component name="RunManager" selected="Python.prepare_input">
+    <configuration name="html2param" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Nostromo" />
-      <option name="INTERPRETER_OPTIONS" value="-s" />
+      <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$USER_HOME$/nucleosome/capri/aa-runs/T95-all-passive-fcc" />
+      <option name="WORKING_DIRECTORY" value="/home/rodrigo/" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <EXTENSION ID="net.ashald.envfile">
-        <option name="IS_ENABLED" value="false" />
-        <option name="IS_SUBST" value="false" />
-        <ENTRIES>
-          <ENTRY IS_ENABLED="true" PARSER="runconfig" />
-        </ENTRIES>
-      </EXTENSION>
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/analysis/analyze-run.py" />
-      <option name="PARAMETERS" value="&quot;$USER_HOME$/nucleosome/capri/cg-runs/4R8P_ref.pdb&quot; &quot;run2&quot;  &quot;--aa&quot;" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/DNA/html2param.py" />
+      <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -201,9 +273,124 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="match-chain" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Nostromo" />
+      <option name="INTERPRETER_OPTIONS" value="-s" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="/home/rodrigo/scoring/match-chains" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scoring/match-chain.py" />
+      <option name="PARAMETERS" value="&quot;target160-haddock-top-model.pdb&quot; &quot;target160-scoring_0175.pdb&quot;" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="prepare_input" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Nostromo" />
+      <option name="INTERPRETER_OPTIONS" value="-s" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="/home/rodrigo/dna-benchmark/1O3T" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/prepare_input.py" />
+      <option name="PARAMETERS" value="&quot;1&quot; &quot;--dna&quot;" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="score-dimers" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Nostromo" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="/home/rodrigo/work/zeynep" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/collab/zeynep/score-dimers.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="scoring" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Nostromo" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="FASTCONTACTDIR" value="$USER_HOME$/software/fastcontact" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="/home/rodrigo/work/zeynep" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scoring/scoring.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Unittests">
+      <module name="ana_scripts" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.html2param" />
+      <item itemvalue="Python.match-chain" />
+      <item itemvalue="Python.score-dimers" />
+      <item itemvalue="Python.scoring" />
+      <item itemvalue="Python.prepare_input" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.analyze-run" />
+        <item itemvalue="Python.prepare_input" />
+        <item itemvalue="Python.html2param" />
+        <item itemvalue="Python.match-chain" />
+        <item itemvalue="Python.score-dimers" />
+        <item itemvalue="Python.scoring" />
       </list>
     </recent_temporary>
   </component>
@@ -220,6 +407,16 @@
       <workItem from="1542906387258" duration="1674000" />
       <workItem from="1543230060450" duration="7412000" />
       <workItem from="1543240655157" duration="8330000" />
+      <workItem from="1552906761050" duration="879000" />
+      <workItem from="1552915964509" duration="35447000" />
+      <workItem from="1553506903433" duration="4979000" />
+      <workItem from="1553608520703" duration="129000" />
+      <workItem from="1553681379651" duration="145000" />
+      <workItem from="1553703388887" duration="2793000" />
+      <workItem from="1554297223184" duration="1409000" />
+      <workItem from="1554314614431" duration="3705000" />
+      <workItem from="1554370520561" duration="5258000" />
+      <workItem from="1554377142544" duration="1406000" />
     </task>
     <task id="LOCAL-00001" summary="22102018">
       <created>1540226120237</created>
@@ -246,7 +443,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17416000" />
+    <option name="totallyTimeSpent" value="73566000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -258,32 +455,31 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1920" height="1037" extended-state="6" />
-    <editor active="true" />
+    <frame x="0" y="23" width="2560" height="1340" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49834436" visible="true" weight="0.14087513" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Favorites" order="2" sideWeight="0.50165564" side_tool="true" weight="0.16755603" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49834436" visible="true" weight="0.0949166" />
+      <window_info id="Favorites" order="1" sideWeight="0.50165564" side_tool="true" weight="0.16755603" />
+      <window_info id="Structure" order="2" weight="0.13065925" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Cvs" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Debug" order="4" sideWeight="0.4994664" weight="0.42873052" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="5" visible="true" weight="0.37973273" />
-      <window_info anchor="bottom" id="Python Console" order="6" sideWeight="0.4994664" weight="0.32516703" />
-      <window_info anchor="bottom" id="TODO" order="7" weight="0.32998884" />
-      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="9" weight="0.22037652" />
-      <window_info anchor="bottom" id="File Transfer" order="10" weight="0.53786194" />
+      <window_info anchor="bottom" id="Debug" order="4" sideWeight="0.4988086" weight="0.38541666" />
+      <window_info anchor="bottom" id="Python Console" order="5" sideWeight="0.4992057" weight="0.32371795" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32998884" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" weight="0.22037652" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.49682286" visible="true" weight="0.42708334" />
+      <window_info anchor="bottom" id="File Transfer" order="10" sideWeight="0.49960285" weight="0.23637821" />
       <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" weight="0.809101" />
-      <window_info anchor="bottom" id="Run" order="13" weight="0.4465479" />
+      <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.5031771" side_tool="true" weight="0.57852566" />
+      <window_info anchor="bottom" id="Run" order="13" sideWeight="0.4992057" weight="0.44551283" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="SciView" order="3" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" id="Remote Host" order="5" weight="0.32977587" />
+      <window_info anchor="right" id="Remote Host" order="5" visible="true" weight="0.17156473" />
       <window_info anchor="right" id="R Graphics" order="6" />
       <window_info anchor="right" id="R Packages" order="7" />
     </layout>
@@ -337,6 +533,31 @@
     <MESSAGE value="martinize restraints &quot;done&quot;" />
     <option name="LAST_COMMIT_MESSAGE" value="martinize restraints &quot;done&quot;" />
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/scoring/match-chain.py</url>
+          <line>61</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/DNA/html2param.py</url>
+          <line>21</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/scripts/prepare_input.py</url>
+          <line>88</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Nostromo$prepare_input.coverage" NAME="prepare_input Coverage Results" MODIFIED="1554374473698" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="/home/rodrigo/dna-benchmark/1O3T" />
+    <SUITE FILE_PATH="coverage/Nostromo$html2param.coverage" NAME="html2param Coverage Results" MODIFIED="1554316271895" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="/home/rodrigo/" />
+  </component>
   <component name="debuggerHistoryManager">
     <expressions id="setValue">
       <expression>
@@ -359,133 +580,7 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
-    <entry file="file:///usr/lib/python3.7/tokenize.py" />
-    <entry file="file://$USER_HOME$/anaconda2/envs/Nostromo/lib/python2.7/subprocess.py" />
-    <entry file="file://$PROJECT_DIR$/nucleosome/test-job.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="9" selection-start-column="9" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nucleosome/run-nuc-cg.sh" />
-    <entry file="file://$PROJECT_DIR$/nucleosome/run_cg_nuc.sh" />
-    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.txt" />
-    <entry file="file://$PROJECT_DIR$/nucleosome/new.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="63">
-          <caret line="11" column="32" lean-forward="true" selection-start-line="11" selection-start-column="32" selection-end-line="11" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nucleosome/found.csv">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps/_pydev_execfile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" selection-start-line="17" selection-end-line="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/apply-patch.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" selection-start-line="6" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/restraints/gen_restraints.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="79" column="61" selection-start-line="79" selection-start-column="61" selection-end-line="79" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/analysis/parse-results.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/aa2cg/aa2cg-prot_dna_rna.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" column="2" selection-start-line="25" selection-start-column="2" selection-end-line="25" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DNA/submit-retrieve-dna-aa-benchmark-run3.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-540" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/compare-runcns.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="20">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nucleosome/run-nuc.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" selection-start-line="18" selection-end-line="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DNA/patch-dna-cg-run1.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="17" selection-start-line="17" selection-end-line="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="34" selection-start-line="34" selection-end-line="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DNA/patch-dna-cg-run4.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="77" selection-start-line="77" selection-end-line="77" selection-end-column="67" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/capri/ana-hmodel.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/restraints/create-numbering.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="16" column="26" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/prepare_input.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="292" column="36" selection-start-line="292" selection-start-column="36" selection-end-line="292" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="1663" selection-start-line="1663" selection-end-line="1663" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nucleosome/analysis.ipynb">
-      <provider selected="true" editor-type-id="ipnb-editor">
-        <state>
-          <selected id="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/nucleosome/analysis.ipynb" />
     <entry file="file://$PROJECT_DIR$/scripts/martinize-restraints.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="89">
@@ -535,13 +630,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2018.3/system/remote_sources/1545890614/1811304240/modeller/python_library/subprocess.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="1046" selection-start-line="1046" selection-end-line="1046" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2018.3/system/remote_sources/1545890614/1811304240/modeller/python_library/subprocess.py" />
     <entry file="file://$PROJECT_DIR$/scripts/fix_term.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
@@ -549,13 +638,281 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/work/scoring/example-scoring/ana_scripts/run_fastcontact-cont.csh">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/work/scoring/py/fastcontact/fastcontact.c" />
+    <entry file="file://$USER_HOME$/software/fastcontact/fastcontact.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3052" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/miniconda3/lib/python3.7/site-packages/pdbtools/pdb_selseg.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="359">
+          <caret line="124" lean-forward="true" selection-start-line="124" selection-end-line="124" />
+          <folding>
+            <element signature="e#1269#1278#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/software/dcomplex_single_file/dcomplex.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-7145">
+          <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/work/scoring/example-scoring/ana_scripts/run_fastcontact.csh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" selection-start-line="2" selection-end-line="32" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/work/scoring/example-scoring/ana_scripts/run_probe.csh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="448">
+          <caret line="32" column="18" lean-forward="true" selection-start-line="32" selection-start-column="18" selection-end-line="32" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/work/scoring/example-scoring/ana_scripts/run_dfire.csh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" column="6" lean-forward="true" selection-start-line="13" selection-start-column="6" selection-end-line="13" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/work/scoring/example-scoring/ana_scripts/make-files-init.csh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="62" lean-forward="true" selection-start-line="16" selection-start-column="2" selection-end-line="21" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/work/scoring/example-scoring/ana_scripts/make-files-end.csh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="30" lean-forward="true" selection-start-line="16" selection-start-column="30" selection-end-line="16" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_bundle/pydev_monkey.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="229">
+          <caret line="423" selection-start-line="423" selection-end-line="423" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/work/scoring/example-scoring/ana_scripts/run_anal.csh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="25" column="117" lean-forward="true" selection-start-line="25" selection-start-column="99" selection-end-line="25" selection-end-column="117" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/work/scoring/example-scoring/ana_scripts/cluster-scores.csh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-482" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/work/scoring/example-scoring/ana_scripts/make-files-cont.csh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="33" selection-start-line="8" selection-start-column="33" selection-end-line="8" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/work/scoring/py/make_contacts.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="245">
+          <caret line="28" column="44" lean-forward="true" selection-start-line="28" selection-start-column="44" selection-end-line="28" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/work/scoring/py/calc_fcc_matrix.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="72" column="20" lean-forward="true" selection-start-line="72" selection-start-column="20" selection-end-line="72" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/work/scoring/example-scoring/ana_scripts/ana_structures.csh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1861">
+          <caret line="229" column="82" lean-forward="true" selection-start-line="229" selection-start-column="82" selection-end-line="229" selection-end-column="82" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/work/scoring/py/cluster_fcc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-234">
+          <caret line="195" column="31" lean-forward="true" selection-start-line="195" selection-start-column="31" selection-end-line="195" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/work/scoring/example-scoring/ana_scripts/ana_clusters.csh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="100" column="57" selection-start-line="100" selection-start-column="57" selection-end-line="100" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/collab/zeynep/README.MD">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="165">
+            <caret line="11" column="14" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="14" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/collab/zeynep/score-dimers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="24" column="22" selection-start-line="24" selection-start-column="22" selection-end-line="24" selection-end-column="22" />
+          <folding>
+            <element signature="e#29#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/temp/scoring-trimer.inp" />
+    <entry file="file://$USER_HOME$/work/scoring/example-scoring/README">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="657">
+          <caret line="99" column="19" selection-start-line="99" selection-start-column="19" selection-end-line="100" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/temp/scoring-dimer.inp" />
+    <entry file="file://$USER_HOME$/Library/Caches/PyCharm2018.3/remote_sources/1674973333/371262748/tokenize.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="229">
+          <caret line="446" selection-start-line="446" selection-end-line="446" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/work/scoring/example-scoring/ana_scripts/ana_rescored.csh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="26" column="1" selection-start-line="26" selection-start-column="1" selection-end-line="26" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/analysis/analyze-run.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="478" column="17" lean-forward="true" selection-start-line="478" selection-start-column="17" selection-end-line="478" selection-end-column="17" />
+        <state relative-caret-position="2835">
+          <caret line="191" selection-start-line="191" selection-end-line="191" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scoring/prepare_scorers_submission.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="29" column="12" selection-start-line="29" selection-start-column="12" selection-end-line="29" selection-end-column="12" />
           <folding>
-            <element signature="e#62#120#0" expanded="true" />
+            <element signature="e#47#56#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DNA/patch-dna-cg-run1.old.sh">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/capri-eval.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="724">
+          <caret line="57" column="22" selection-start-line="57" selection-start-column="22" selection-end-line="57" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scoring/extract-top10.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="25" selection-start-line="6" selection-start-column="25" selection-end-line="6" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scoring/match-chain.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="637">
+          <caret line="61" column="17" selection-start-line="61" selection-start-column="17" selection-end-line="61" selection-end-column="17" />
+          <folding>
+            <element signature="e#68#78#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17010">
+          <caret line="1134" selection-start-line="1134" selection-end-line="1134" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps/_pydev_execfile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/prepare_input.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="535">
+          <caret line="421" column="14" selection-start-line="421" selection-start-column="14" selection-end-line="421" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Caches/PyCharm2019.1/remote_sources/1674973333/371262748/tokenize.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="446" selection-start-line="446" selection-end-line="446" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scoring/scoring.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="760">
+          <caret line="258" selection-start-line="258" selection-end-line="258" />
+          <folding>
+            <element signature="e#41#50#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DNA/html2param.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+          <folding>
+            <element signature="e#32#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../haddock/protocols/refine.inp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="490">
+          <caret line="1688" lean-forward="true" selection-start-line="1688" selection-end-line="1688" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DNA/patch-dna-cg-run1.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="204" column="1" lean-forward="true" selection-start-line="204" selection-start-column="1" selection-end-line="204" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="18" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
         </state>
       </provider>
     </entry>

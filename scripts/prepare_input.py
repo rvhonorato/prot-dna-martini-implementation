@@ -19,7 +19,8 @@ from itertools import groupby
 
 global haddocktools_path
 # haddocktools_path = '/Users/rvhonorato/alc/tools'
-haddocktools_path = '/home/software/haddock/haddock2.3/tools'
+# haddocktools_path = '/home/software/haddock/haddock2.3/tools'
+haddocktools_path = '/home/abonvin/haddock2.4/tools/'
 
 #================================================================================================#
 
@@ -61,6 +62,7 @@ def fix_chain_segid(pdb_f):
 		# add chain
 		chainf = pdb_f.replace('.pdb','_chain.pdb')
 		cmd = '%s/pdb_segid-to-chain %s' % (haddocktools_path, pdb_f)
+		# cmd = 'pdb_segxchain %s' % (pdb_f)
 		run(cmd, chainf)
 		os.rename(chainf, pdb_f)
 
@@ -68,6 +70,7 @@ def fix_chain_segid(pdb_f):
 		# add segid
 		segidf = pdb_f.replace('.pdb','_segid.pdb')
 		cmd = '%s/pdb_chain-to-segid %s' % (haddocktools_path, pdb_f)
+		# cmd = 'pdb_chainxseg %s' % (pdb_f)
 		run(cmd, segidf)
 		os.rename(segidf, pdb_f)
 
@@ -97,8 +100,9 @@ def retrieve_seqs(fastaf):
 def get_range(data):
 	### shamelessly copied from https://stackoverflow.com/a/2154437
 	ranges = []
-	for k, g in groupby(enumerate(data), lambda (i,x):i-x):
-		group = map(itemgetter(1), g)
+	# for k, g in groupby(enumerate(data), lambda (i,x):i-x):
+	for k, g in groupby(enumerate(data), lambda x: x[0] - x[1]):
+		group = list(map(itemgetter(1), g))
 		ranges.append((group[0], group[-1]))
 	return ranges
 
@@ -176,245 +180,251 @@ else:
 #================================================================================================#
 # 1. fix chain/segid
 #================================================================================================#
-print '1. fix chain/segid'
-
-# add chain
-for chain in pdb_dic:
-	cmd = 'python /home/rodrigo/pdb-tools/pdb_chain.py -%s %s' % (chain, pdb_dic[chain])
-	run(cmd, 'temp.pdb')
-	os.system('cp temp.pdb %s' % pdb_dic[chain])
-
-	cmd = 'python /home/rodrigo/pdb-tools/pdb_chainxseg.py %s' % pdb_dic[chain]
-	run(cmd, 'temp.pdb')
-	os.system('mv temp.pdb %s' % pdb_dic[chain])
-
-fix_chain_segid(reference)
-
-for chain in pdb_dic:
-	pdb = pdb_dic[chain]
-	print pdb
-	fix_chain_segid(pdb)
+# print('1. fix chain/segid')
+#
+# # add chain
+# for chain in pdb_dic:
+# 	# cmd = 'python /home/rodrigo/pdb-tools/pdb_chain.py -%s %s' % (chain, pdb_dic[chain])
+# 	cmd = 'pdb_chain -%s %s' % (chain, pdb_dic[chain])
+# 	run(cmd, 'temp.pdb')
+# 	os.system('cp temp.pdb %s' % pdb_dic[chain])
+#
+# 	# cmd = 'python /home/rodrigo/pdb-tools/pdb_chainxseg.py %s' % pdb_dic[chain]
+# 	cmd = 'pdb_chainxseg %s' % pdb_dic[chain]
+# 	run(cmd, 'temp.pdb')
+# 	os.system('mv temp.pdb %s' % pdb_dic[chain])
+#
+# fix_chain_segid(reference)
+#
+# for chain in pdb_dic:
+# 	pdb = pdb_dic[chain]
+# 	print(pdb)
+# 	fix_chain_segid(pdb)
 
 #================================================================================================#
 # 2. Renumber unbound structures according to reference and get numbering reference file
 #  Not needed if used alongside analyze-run.py
 #================================================================================================#
-print '2. Renumber unbound structures according to reference and get numbering reference file'
-clustalo_exe = '/home/rodrigo/clustal-omega'
-
-ref_seqf = 'reference.fasta'
-cmd = 'python /home/rodrigo/pdb-tools/pdb_toseq.py %s' % reference
-run(cmd, ref_seqf)
-ref_seq_dic = retrieve_seqs(ref_seqf)
-
-ref_valid_atoms = valid_atoms(reference)
-
-len_dic = {}
-for chain in pdb_dic:
-
-	open('ref.fasta','w').write('>ref\n%s\n' % ref_seq_dic[chain])
-
-	pdb = pdb_dic[chain]
-	seqf = pdb.replace('.pdb','.fasta')
-	cmd = 'python /home/rodrigo/pdb-tools/pdb_toseq.py %s' % pdb
-	run(cmd, seqf)
-
-	# prepare alignment
-	aln_outf = '%s.aln' % chain
-	os.system('cat ref.fasta %s > seqs.fasta' % seqf)
-	cmd = '%s -i seqs.fasta --outfmt=clu --resno --wrap=9000 --force' % clustalo_exe
-	run(cmd, aln_outf)
-
-	aln_list = []
-	# identity 
-	for l in open(aln_outf):
-		if 'ref' in l:
-			aln_list.append(l.split()[1])
-		elif pdb.split('.')[0] in l:
-			aln_list.append(l.split()[1])
-
-	chain_valid_atoms = valid_atoms(pdb)
-
-	ref_seq_aln = aln_list[0]
-	ubound_seq_aln = aln_list[1]
-
-	# ref_res_l = list(set([int(l.split()[5]) for l in open(reference).readlines() if 'ATOM' in l[:4] and chain == l.split()[4]]))
-	ref_res_l = list(set([int(l[22:26]) for l in open(reference).readlines() if 'ATOM' in l[:4] and chain == l[21]]))
-	# chain_res_l = list(set([int(l.split()[5]) for l in open(pdb).readlines() if 'ATOM' in l[:4] and chain == l.split()[4]]))
-	chain_res_l = list(set([int(l[22:26]) for l in open(pdb).readlines() if 'ATOM' in l[:4] and chain == l[21]]))
-
-	ref_res_dic = dict([(i+1, e) for i, e in enumerate(ref_res_l)])
-	chain_res_dic = dict([(i+1, e) for i, e in enumerate(chain_res_l)])
-
-	counterA = 0
-	counterB = 0
-	offset = 0
-	numbering_list = []
-
-	for position, aln in enumerate(zip(ref_seq_aln, ubound_seq_aln)):
-		#
-		resA = aln[0]
-		resB = aln[1]
-		#
-		if resA != '-':
-			counterA +=1
-		if resB != '-':
-			counterB +=1
-		#
-		if not '-' in aln:
-			resnumA = ref_res_dic[counterA]
-			resnumB = chain_res_dic[counterB]
-			# print position, aln, counterA, counterB, resnumA, resnumB 
-			# exit()
-			if resA != resB:
-				print 'WARNING: Reference chain %s aa %s position %i does not match target chain %s aa %s' % (chain, resA, i, chain, resB)
-			else:
-				# check if this residue is valid
-				if resnumA in ref_valid_atoms[chain] and resnumB in chain_valid_atoms[chain]:
-					numbering_list.append((resnumA, resnumB))
-		
-	# write numbering_chain.param
-	out = open('%s-numbering.ref' % chain,'w')
-	for pair in numbering_list:
-		out.write('%i,%i\n' % (pair[0], pair[1]))
-	out.close()
+# print('2. Renumber unbound structures according to reference and get numbering reference file')
+# clustalo_exe = '/home/rodrigo/clustal-omega'
+#
+# ref_seqf = 'reference.fasta'
+# # cmd = 'python /home/rodrigo/pdb-tools/pdb_toseq.py %s' % reference
+# cmd = 'pdb_toseq %s' % reference
+# run(cmd, ref_seqf)
+# ref_seq_dic = retrieve_seqs(ref_seqf)
+#
+# ref_valid_atoms = valid_atoms(reference)
+#
+# len_dic = {}
+# for chain in pdb_dic:
+#
+# 	open('ref.fasta','w').write('>ref\n%s\n' % ref_seq_dic[chain])
+#
+# 	pdb = pdb_dic[chain]
+# 	seqf = pdb.replace('.pdb','.fasta')
+# 	# cmd = 'python /home/rodrigo/pdb-tools/pdb_toseq.py %s' % pdb
+# 	cmd = 'pdb_toseq %s' % pdb
+# 	run(cmd, seqf)
+#
+# 	# prepare alignment
+# 	aln_outf = '%s.aln' % chain
+# 	os.system('cat ref.fasta %s > seqs.fasta' % seqf)
+# 	cmd = '%s -i seqs.fasta --outfmt=clu --resno --wrap=9000 --force' % clustalo_exe
+# 	run(cmd, aln_outf)
+#
+# 	aln_list = []
+# 	# identity
+# 	for l in open(aln_outf):
+# 		if 'ref' in l:
+# 			aln_list.append(l.split()[1])
+# 		elif pdb.split('.')[0] in l:
+# 			aln_list.append(l.split()[1])
+#
+# 	chain_valid_atoms = valid_atoms(pdb)
+#
+# 	ref_seq_aln = aln_list[0]
+# 	ubound_seq_aln = aln_list[1]
+#
+# 	# ref_res_l = list(set([int(l.split()[5]) for l in open(reference).readlines() if 'ATOM' in l[:4] and chain == l.split()[4]]))
+# 	ref_res_l = list(set([int(l[22:26]) for l in open(reference).readlines() if 'ATOM' in l[:4] and chain == l[21]]))
+# 	# chain_res_l = list(set([int(l.split()[5]) for l in open(pdb).readlines() if 'ATOM' in l[:4] and chain == l.split()[4]]))
+# 	chain_res_l = list(set([int(l[22:26]) for l in open(pdb).readlines() if 'ATOM' in l[:4] and chain == l[21]]))
+#
+# 	ref_res_dic = dict([(i+1, e) for i, e in enumerate(ref_res_l)])
+# 	chain_res_dic = dict([(i+1, e) for i, e in enumerate(chain_res_l)])
+#
+# 	counterA = 0
+# 	counterB = 0
+# 	offset = 0
+# 	numbering_list = []
+#
+# 	for position, aln in enumerate(zip(ref_seq_aln, ubound_seq_aln)):
+# 		#
+# 		resA = aln[0]
+# 		resB = aln[1]
+# 		#
+# 		if resA != '-':
+# 			counterA +=1
+# 		if resB != '-':
+# 			counterB +=1
+# 		#
+# 		if not '-' in aln:
+# 			resnumA = ref_res_dic[counterA]
+# 			resnumB = chain_res_dic[counterB]
+# 			# print position, aln, counterA, counterB, resnumA, resnumB
+# 			# exit()
+# 			if resA != resB:
+# 				print('WARNING: Reference chain %s aa %s position %i does not match target chain %s aa %s' % (chain, resA, i, chain, resB))
+# 			else:
+# 				# check if this residue is valid
+# 				if resnumA in ref_valid_atoms[chain] and resnumB in chain_valid_atoms[chain]:
+# 					numbering_list.append((resnumA, resnumB))
+#
+# 	# write numbering_chain.param
+# 	out = open('%s-numbering.ref' % chain,'w')
+# 	for pair in numbering_list:
+# 		out.write('%i,%i\n' % (pair[0], pair[1]))
+# 	out.close()
 
 #================================================================================================#
 # 3. Convert Benchmark AIR to CG
 #================================================================================================#
-print '3. Convert Benchmark AIR to CG (DNA only)'
-
-if args.dna:
-	bb_d ={"BB1": ["P", "O1P", "O2P", "O5'", "OP1", "OP2"],
-	"BB2": ["C5'", "O4'", "C4'"],
-	"BB3": ["C3'", "C2'", "C1'"]}
-
-	sc_d = {"SC1": ["N9", "C4", "N1", "C6"],
-	"SC2": ["O2", "C2", "N2", "N3"],
-	"SC3": ['C7','N6','O6', 'N1','O4','N4','C6','C5','C4'],
-	"SC4": ["C8", "N7", "C5"]}
-
-	f = 'air_trueiface_unbound.tbl'
-	if os.path.isfile(f):
-		out = open('air_trueiface_unbound-cg.tbl','w')
-
-		for l in open(f).readlines():
-			atoms = ''.join(''.join(l.split('name')[1:]).split('))')[0].split('or')).split()
-
-			bb = list(set([b for b in bb_d for e in atoms for c in bb_d[b] if e == c]))
-			bb.sort()
-
-			sc = list(set([s for s in sc_d for e in atoms for c in sc_d[s] if e == c]))
-			sc.sort()
-
-			if sc:
-				n_l = l.split('name')[0] + 'name ' + ' or name '.join(sc) + '))\n'
-
-			elif bb:
-				n_l = l.split('name')[0] + 'name ' + ' or name '.join(bb) + '))\n'
-
-			else:
-				n_l = l
-			
-			out.write(n_l)
-		out.close()
-	else:
-		print f, 'not found'
-		exit()
+# print('3. Convert Benchmark AIR to CG (DNA only)')
+#
+# if args.dna:
+# 	bb_d ={"BB1": ["P", "O1P", "O2P", "O5'", "OP1", "OP2"],
+# 	"BB2": ["C5'", "O4'", "C4'"],
+# 	"BB3": ["C3'", "C2'", "C1'"]}
+#
+# 	sc_d = {"SC1": ["N9", "C4", "N1", "C6"],
+# 	"SC2": ["O2", "C2", "N2", "N3"],
+# 	"SC3": ['C7','N6','O6', 'N1','O4','N4','C6','C5','C4'],
+# 	"SC4": ["C8", "N7", "C5"]}
+#
+# 	f = 'air_trueiface_unbound.tbl'
+# 	if os.path.isfile(f):
+# 		out = open('air_trueiface_unbound-cg.tbl','w')
+#
+# 		for l in open(f).readlines():
+# 			atoms = ''.join(''.join(l.split('name')[1:]).split('))')[0].split('or')).split()
+#
+# 			bb = list(set([b for b in bb_d for e in atoms for c in bb_d[b] if e == c]))
+# 			bb.sort()
+#
+# 			sc = list(set([s for s in sc_d for e in atoms for c in sc_d[s] if e == c]))
+# 			sc.sort()
+#
+# 			if sc:
+# 				n_l = l.split('name')[0] + 'name ' + ' or name '.join(sc) + '))\n'
+#
+# 			elif bb:
+# 				n_l = l.split('name')[0] + 'name ' + ' or name '.join(bb) + '))\n'
+#
+# 			else:
+# 				n_l = l
+#
+# 			out.write(n_l)
+# 		out.close()
+# 	else:
+# 		print(f, 'not found')
+# 		exit()
 
 #================================================================================================#
 # 4. Convert from AA to CG
 #================================================================================================#
-print '4. Convert from AA to CG'
-
-aa2cgf = 'cg2aa.tbl'
-if os.path.isfile(aa2cgf):
-	os.system('rm %s' % aa2cgf)
-
-sorted_chains = pdb_dic.keys()
-sorted_chains.sort()
-
-for chain in sorted_chains: 
-	pdbf = pdb_dic[chain]
-	cg_outf = pdbf.replace('.pdb','_cg.pdb')
-	backmap_outf = pdbf.replace('.pdb','_cg_to_aa.tbl')
-	
-	cmd = 'python2.7 /home/rodrigo/Nostromo/aa2cg/aa2cg-prot_dna_rna.py %s' % pdbf
-	print cmd
-	run(cmd, 'log')
-	
-	# 4.1 get aa2cg.tbl (backmapping)
-	os.system('cat %s >> %s' % (backmap_outf, aa2cgf))
-	
-	#   4.2 fix segids/chain
-	fix_chain_segid(cg_outf)
-
-
-# 4.3 get dna_restraints.def
-if not os.path.isfile('dna_restraints.def'):
-	print '> WARNING: dna_restraints.def not generated, is there a double stranded DNA/RNA molecule? check aa2cg conversion'
-	# exit()
-
-if not os.path.isfile('dna-aa_groups.dat'):
-	print '> WARNING: dna-aa_groups.dat not generated, this is needed for the DNA/RNA restrictions, check aa2cg conversion'
-	# exit()
+# print('4. Convert from AA to CG')
+#
+# aa2cgf = 'cg2aa.tbl'
+# if os.path.isfile(aa2cgf):
+# 	os.system('rm %s' % aa2cgf)
+#
+# sorted_chains = pdb_dic.keys()
+# sorted_chains.sort()
+#
+# for chain in sorted_chains:
+# 	pdbf = pdb_dic[chain]
+# 	cg_outf = pdbf.replace('.pdb','_cg.pdb')
+# 	backmap_outf = pdbf.replace('.pdb','_cg_to_aa.tbl')
+#
+# 	cmd = 'python2.7 /home/rodrigo/Nostromo/aa2cg/aa2cg-prot_dna_rna.py %s' % pdbf
+# 	print(cmd)
+# 	run(cmd, 'log')
+#
+# 	# 4.1 get aa2cg.tbl (backmapping)
+# 	os.system('cat %s >> %s' % (backmap_outf, aa2cgf))
+#
+# 	#   4.2 fix segids/chain
+# 	fix_chain_segid(cg_outf)
+#
+#
+# # 4.3 get dna_restraints.def
+# if not os.path.isfile('dna_restraints.def'):
+# 	print('> WARNING: dna_restraints.def not generated, is there a double stranded DNA/RNA molecule? check aa2cg conversion')
+# 	# exit()
+#
+# if not os.path.isfile('dna-aa_groups.dat'):
+# 	print('> WARNING: dna-aa_groups.dat not generated, this is needed for the DNA/RNA restrictions, check aa2cg conversion')
+# 	# exit()
 
 #================================================================================================#
 # 5. Prepare files for analysis
 #================================================================================================#
-print '5. Convert reference for future analysis'
-
-referencecgf = reference.replace('.pdb','_cg.pdb')
-cmd = 'python2.7 /home/rodrigo/Nostromo/aa2cg/aa2cg-prot_dna_rna.py %s' % reference
-run(cmd, 'log')
+# print('5. Convert reference for future analysis')
+#
+# referencecgf = reference.replace('.pdb','_cg.pdb')
+# cmd = 'python2.7 /home/rodrigo/Nostromo/aa2cg/aa2cg-prot_dna_rna.py %s' % reference
+# run(cmd, 'log')
 
 #================================================================================================#
 # 6. Run setup
 #================================================================================================#
-print '6. Write setup files'
+# print '6. Write setup files'
+#
+# # write new.html
+# tbw = '<html>\n'
+# tbw += '<head>\n'
+# tbw += '<title>HADDOCK - start</title>\n'
+# tbw += '</head>\n'
+# tbw += '<body bgcolor=#ffffff>\n'
+# tbw += '<h2>Parameters for the start:</h2>\n'
+# tbw += '<BR>\n'
+# tbw += '<h4><!-- HADDOCK -->\n'
+# tbw += 'CGTOAA_TBL=./cg2aa.tbl<BR>\n'
+#
+# if args.dna:
+# 	tbw +='AMBIG_TBL=./air_trueiface_unbound-cg.tbl<BR>\n'
+#
+# if args.rna:
+# 	tbw +='AMBIG_TBL=./ambig.tbl<BR>\n'
+# 	tbw +='UNAMBIG_TBL=./unambig.tbl<BR>\n'
+#
+# tbw += 'HADDOCK_DIR=/home/abonvin/haddock2.3/<BR>\n'
+# tbw += 'N_COMP=%i<BR>\n' % len(pdb_dic)
+#
+# chain_list.sort()
+# for i, chain in enumerate(chain_list):
+# 	cg_f = pdb_dic[chain].replace('.pdb','_cg.pdb')
+# 	tbw += 'PDB_FILE%i=./%s<BR>\n' % (i+1, pdb_dic[chain])
+# 	tbw += 'CGPDB_FILE%i=./%s<BR>\n' % (i+1, cg_f)
+# 	tbw += 'PROT_SEGID_%i=%s<BR>\n' % (i+1, chain)
+#
+# tbw += 'RUN_NUMBER=%i<BR>\n' % args.runn
+# tbw += 'PROJECT_DIR=./<BR>\n'
+# tbw += 'submit_save=Save updated parameters<BR>\n'
+# tbw += '</h4><!-- HADDOCK -->\n'
+# tbw += '</body>\n'
+# tbw += '</html>\n'
+#
+# open('new.html.%i' % args.runn,'w').write(tbw)
+# os.system('cp new.html.%i new.html' % args.runn)
 
-# write new.html
-tbw = '<html>\n'
-tbw += '<head>\n'
-tbw += '<title>HADDOCK - start</title>\n'
-tbw += '</head>\n'
-tbw += '<body bgcolor=#ffffff>\n'
-tbw += '<h2>Parameters for the start:</h2>\n'
-tbw += '<BR>\n'
-tbw += '<h4><!-- HADDOCK -->\n'
-tbw += 'CGTOAA_TBL=./cg2aa.tbl<BR>\n'
+# if args.dna:
+# 	open('run%i.sh' % args.runn,'w').write('python /home/software/haddock/haddock2.3/Haddock/RunHaddock.py\nbash /home/rodrigo/Nostromo/DNA/patch-dna-cg-run%i.sh %s' % (args.runn, dna_chain))
+# if args.rna:
+# 	open('run%i.sh' % args.runn,'w').write('python /home/software/haddock/haddock2.3/Haddock/RunHaddock.py\nbash /home/rodrigo/Nostromo/RNA/patch-rna-cg-run%i.sh %s' % (args.runn, dna_chain))
 
-if args.dna:
-	tbw +='AMBIG_TBL=./air_trueiface_unbound-cg.tbl<BR>\n'
-
-if args.rna:
-	tbw +='AMBIG_TBL=./ambig.tbl<BR>\n'
-	tbw +='UNAMBIG_TBL=./unambig.tbl<BR>\n'
-
-tbw += 'HADDOCK_DIR=/home/abonvin/haddock2.3/<BR>\n'
-tbw += 'N_COMP=%i<BR>\n' % len(pdb_dic)
-
-chain_list.sort()
-for i, chain in enumerate(chain_list):
-	cg_f = pdb_dic[chain].replace('.pdb','_cg.pdb')
-	tbw += 'PDB_FILE%i=./%s<BR>\n' % (i+1, pdb_dic[chain])
-	tbw += 'CGPDB_FILE%i=./%s<BR>\n' % (i+1, cg_f)
-	tbw += 'PROT_SEGID_%i=%s<BR>\n' % (i+1, chain)
-
-tbw += 'RUN_NUMBER=%i<BR>\n' % args.runn
-tbw += 'PROJECT_DIR=./<BR>\n'
-tbw += 'submit_save=Save updated parameters<BR>\n'
-tbw += '</h4><!-- HADDOCK -->\n'
-tbw += '</body>\n'
-tbw += '</html>\n'
-
-open('new.html.%i' % args.runn,'w').write(tbw)
-os.system('cp new.html.%i new.html' % args.runn)
-
-if args.dna:
-	open('run%i.sh' % args.runn,'w').write('python /home/software/haddock/haddock2.3/Haddock/RunHaddock.py\nbash /home/rodrigo/Nostromo/DNA/patch-dna-cg-run%i.sh %s' % (args.runn, dna_chain))
-if args.rna:
-	open('run%i.sh' % args.runn,'w').write('python /home/software/haddock/haddock2.3/Haddock/RunHaddock.py\nbash /home/rodrigo/Nostromo/RNA/patch-rna-cg-run%i.sh %s' % (args.runn, dna_chain))
+open('run%i.sh' % args.runn,'w').write('/home/enmr/software/miniconda2/bin/python2.7 /home/abonvin/haddock_git/haddock2.4/Haddock/RunHaddock.py\nbash /home/rodrigo/Nostromo/DNA/patch-dna-cg-run%i.sh %s' % (args.runn, string.ascii_uppercase.index(dna_chain) + 1))
 
 
 

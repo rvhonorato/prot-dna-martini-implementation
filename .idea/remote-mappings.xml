@@ -4,6 +4,13 @@
     <list>
       <list>
         <remote-mappings server-id="python@sftp://rodrigo@alcazar.science.uu.nl:22/home/rodrigo/miniconda2/bin/python" />
+        <remote-mappings server-id="python@sftp://rodrigo@alcazar.science.uu.nl:22/home/rodrigo/miniconda3/bin/python">
+          <settings>
+            <list>
+              <mapping local-root="$PROJECT_DIR$" remote-root="/home/rodrigo/Nostromo" />
+            </list>
+          </settings>
+        </remote-mappings>
       </list>
     </list>
   </component>

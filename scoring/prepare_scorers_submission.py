@@ -29,8 +29,8 @@ REMARK     CASP ID AUTHOR 3472-4644-8807
 
 def usage():
     """Prints an usage message"""
-    print "Usage: %s md5_file list_of_pdb_files scorers_file.pdb" % (sys.argv[0])
-    print "  example: %s Target152.MD5 top10.list T152-scorers-top10.pdb" % (sys.argv[0])
+    print("Usage: %s md5_file list_of_pdb_files scorers_file.pdb" % (sys.argv[0]))
+    print("  example: %s Target152.MD5 top10.list T152-scorers-top10.pdb" % (sys.argv[0]))
     raise SystemExit("ERROR: Wrong parameters")
 
 
@@ -94,7 +94,7 @@ if __name__ == "__main__":
             output.write("REMARK     MODEL   %6d MD5 %s" % (model_id, hashes[model_id]) + os.linesep)
 
         for model_file_name in models_list:
-            print "Reading model from file %s..." % (model_file_name)
+            print("Reading model from file %s..." % (model_file_name))
             with open(model_file_name) as model_file:
                 model_id = int(model_file_name.split('_')[1])
                 output.write("MODEL   %6d" % model_id + os.linesep)
@@ -105,5 +105,5 @@ if __name__ == "__main__":
 
         output.write("END" + os.linesep)
 
-    print "Scorers file %s generated." % (output_file_name)
+    print("Scorers file %s generated." % (output_file_name))
 
