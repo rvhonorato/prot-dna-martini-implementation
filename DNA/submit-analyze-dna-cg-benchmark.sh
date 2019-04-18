@@ -4,7 +4,7 @@ RUNN=$1
 SUFFIX=_complex.pdb
 #HADDOCKCMD="python /home/software/haddock/haddock2.3/Haddock/RunHaddock.py"
 HADDOCKCMD="/home/enmr/software/miniconda2/bin/python2.7 /home/abonvin/haddock_git/haddock2.4/Haddock/RunHaddock.py"
-BENCHMARK_PATH="/home/rodrigo/dna-benchmark"
+BENCHMARK_PATH="/home/rodrigo/ProtDNA-CG/benchmark"
 
 cd $BENCHMARK_PATH
 DIRL="$(ls -d */)"
@@ -22,18 +22,14 @@ for TARGET in $DIRL
 	cd $TARGET
 	echo "########### >> $TARGET - run$RUNN <<"
 
-#	if [ ! -d run$RUNN ]; then
-#		echo "## Setting up"
-    python /home/rodrigo/Nostromo/scripts/prepare_input.py $RUNN --dna
-    bash run$RUNN.sh
-#	fi
-
-	# Run
-	cd run$RUNN
-	#echo "## Executing"
-	$HADDOCKCMD > haddock.out
-	cd ..
-
+    if [ ! -f run$RUNN/structures/it1/water/file.list ]; then
+        python /home/rodrigo/Nostromo/scripts/prepare_input.py $RUNN --dna
+        bash run$RUNN.sh
+	    # Run
+	    cd run$RUNN
+	    $HADDOCKCMD >& haddock.out
+	    cd ..
+    fi
 #	# Analyze
 #	REFERENCE=${TARGET%/}$SUFFIX
 #	if [ ! -f run$RUNN/water.dat ]; then

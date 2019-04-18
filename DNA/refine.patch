@@ -1,0 +1,8 @@
+1247a1248,1250
+> if ($Data.dnacgrest eq true ) then
+>   @RUN:data/sequence/dna-rna-cg_restraints.def
+> end if
+1689a1693,1695
+>   if ($Data.dnacgrest eq true ) then
+>     @RUN:data/sequence/dna-rna-cg_restraints.def
+>   end if

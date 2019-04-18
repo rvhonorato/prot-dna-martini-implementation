@@ -82,7 +82,7 @@ bead_dic = {
 
 
 # read all martini information into a dictionary
-nonbonded_dic = dict([((l.split()[0], l.split()[1]), (float(l.split()[3]), float(l.split()[4]))) for l in open('/Users/rvhonorato/alc/Nostromo/parametrization/nonbonded-subset.dat')])
+nonbonded_dic = dict([((l.split()[0], l.split()[1]), (float(l.split()[3]), float(l.split()[4]))) for l in open('/home/rodrigo/Nostromo/parametrization/nonbonded-subset.dat')])
 
 # generate all bead combinations
 bead_combinations = itertools.combinations(bead_dic.keys(), 2)
@@ -96,7 +96,7 @@ for haddock_bead in bead_dic:
 	sig = sigma * 10 # nm to aa
 	eps = epsilon / 4.178 # kJ to kCal
 	#
-	print 'NONBONded\t%s\t%.3f\t%.1f\t%.3f\t%.1f' % (haddock_bead, sig, eps, sig, eps)
+	print 'NONBONded\t%s\t%.3f\t%.1f\t%.3f\t%.1f' % (haddock_bead, eps, sig, eps, sig)
 	# selfterms.append('NONBONded\t%s\t%.3f\t%.1f\t%.3f\t%.1f' % (haddock_bead, sig, eps, sig, eps))
 
 
@@ -114,7 +114,7 @@ for e in bead_combinations:
 		v = nonbonded_dic[(martini_beadA, martini_beadB)]
 	except KeyError:
 		v = nonbonded_dic[(martini_beadB, martini_beadA)]
-	#	
+	#
 	sigma, epsilon = v
 	#
 	attr = (4 * (sigma*10)**12) * (epsilon / 4.178) # cns takes of the rest of the formula

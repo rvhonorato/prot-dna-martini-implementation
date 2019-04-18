@@ -1,0 +1,28 @@
+remarks this is a macro to define cg nucleid acid links
+
+set message ? end eval ($old_message=$result) set echo ? end eval ($old_echo=$result)
+set message=off echo=off end
+
+checkversion 1.3
+
+link nuc head - DA tail + DA end
+link nuc head - DA tail + DC end
+link nuc head - DA tail + DG end
+link nuc head - DA tail + DT end
+
+link nuc head - DC tail + DA end
+link nuc head - DC tail + DC end
+link nuc head - DC tail + DG end
+link nuc head - DC tail + DT end
+
+link nuc head - DG tail + DA end
+link nuc head - DG tail + DC end
+link nuc head - DG tail + DG end
+link nuc head - DG tail + DT end
+
+link nuc head - DT tail + DA end
+link nuc head - DT tail + DC end
+link nuc head - DT tail + DG end
+link nuc head - DT tail + DT end
+
+set message=$old_message echo=$old_echo end

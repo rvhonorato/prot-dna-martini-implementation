@@ -97,7 +97,7 @@ def retrieve_seqs2(fastaf):
         for sidx in seq_idx_list[i]:
             sequence += aln_data[sidx]
 
-        chain = header.split()[0].split('_')[-1]
+        chain = header.split()[0].split('|')[-1]
         seq_dic[chain] = ''.join(sequence.split())
     return seq_dic
 
@@ -276,14 +276,10 @@ for stage in stage_ref_dic:
 #=========================================================================================#
 ## Numbering
 #=========================================================================================#
-
+# create numbering dic on the fly
 print '> Matching numbering via sequence alignment'
 
-# create numbering dic on the fly
-
-chain_list = list(set([l[21] for l in open(pdbf).readlines() if 'ATOM' in l [:4]]))
-target_chain_dic = dict([(c, []) for c in chain_list])
-
+# Fetch a model from the run
 decoy = stage_ref_dic['water'][0][0]
 
 if not os.path.isfile(decoy) and not os.path.isfile(decoy + '.gz'):
@@ -298,13 +294,22 @@ else:
 decoy_name = decoy.split('/')[-1].split('.pdb')[0]
 
 os.system('cp %s .' % decoy)
-os.system('python /home/rodrigo/pdb-tools/pdb_splitseg.py %s.pdb' % decoy_name)
+
+chain_list = list(set([l[21] for l in open(pdbf).readlines() if 'ATOM' in l [:4]]))
+target_chain_dic = dict([(c, []) for c in chain_list])
+
+# split it by segid
+os.system('python /home/rodrigo/pdb-tools/pdbtools/pdb_splitseg.py %s.pdb' % decoy_name)
+# os.system('pdb_splitseg %s.pdb' % decoy_name)
 
 # put in the dictionary
 pdb_dic = dict([(c.split('_')[-1].split('.pdb')[0], c) for c in glob.glob('%s_*pdb*' % decoy_name)])
 
+
 ref_seqf = 'reference.fasta'
-cmd = 'python /home/rodrigo/pdb-tools/pdb_toseq.py %s' % pdbf
+# cmd = 'python /home/rodrigo/pdb-tools/pdb_toseq.py %s' % pdbf
+# cmd = 'pdb_toseq %s' % pdbf
+cmd = 'python /home/rodrigo/pdb-tools/pdbtools/pdb_tofasta.py -multi %s' % pdbf
 run(cmd, ref_seqf)
 ref_seq_dic = retrieve_seqs2(ref_seqf)
 
@@ -316,7 +321,8 @@ for chain in pdb_dic:
 
     pdb = pdb_dic[chain]
     seqf = pdb.replace('.pdb','.fasta')
-    cmd = 'python /home/rodrigo/pdb-tools/pdb_toseq.py %s' % pdb
+    # cmd = 'python /home/rodrigo/pdb-tools/pdb_toseq.py %s' % pdb
+    cmd = 'python /home/rodrigo/pdb-tools/pdbtools/pdb_tofasta.py %s' % pdb
     run(cmd, seqf)
 
     # prepare alignment
@@ -331,7 +337,8 @@ for chain in pdb_dic:
     for l in open(aln_outf):
         if 'ref' in l:
             aln_list.append(l.split()[1])
-        elif pdb.split('.')[0] in l:
+        elif 'PDB' in l:
+        # elif pdb.split('.')[0] in l:
             aln_list.append(l.split()[1])
 
     ref_seq_aln = aln_list[0]
@@ -508,7 +515,7 @@ for stage in stage_ref_dic:
         cmd = 'refe %s\nmobi %s\nATOMS %s\nZONE CLEAR\n%s\nstatus\nFIT\nquit' % (ref, conformation, atoms, '\n'.join(izone_l))
 
         # save this for debug
-        open('irmsd.dbg','w').write(cmd)
+        open('irmsd_%s.dbg' % stage,'w').write(cmd)
         # open('idbg_%i' % counter,'w').write(cmd)
         # if counter == 2:
         # 	exit()
@@ -533,9 +540,9 @@ for stage in stage_ref_dic:
 
     #
     if stage == 'water':
-        outputf = '%s/%s/structures/it1/%s/i-RMSD.dat' % (path, runf, stage)
+        outputf = '%s/%s/structures/it1/%s/i-RMSD-sorted.dat' % (path, runf, stage)
     else:
-        outputf = '%s/%s/structures/%s/i-RMSD.dat' % (path, runf, stage)
+        outputf = '%s/%s/structures/%s/i-RMSD-sorted.dat' % (path, runf, stage)
     #
     irms_out = open(outputf,'w')
     irms_out.write('#struc i-RMSD\n')
@@ -547,89 +554,89 @@ for stage in stage_ref_dic:
         irms_out.write('%s %.3f\n' % (pdb_name, irms))
     irms_out.close()
     #
-    os.system('cp %s %s' % (outputf, outputf.replace('.dat', '-sorted.dat')))
+    # os.system('cp %s %s' % (outputf, outputf.replace('.dat', '-sorted.dat')))
 
 
 #=========================================================================================#
 ## Ligand RMSD
 #=========================================================================================#
-#
-# print '> Calculating l-rmsd'
-#
-# ligand_zone = {}
-# for chain in numbering_dic:
-# 	ligand_zone[chain] = []
-# 	for bound_res in numbering_dic[chain]:
-# 		unbound_res = numbering_dic[chain][bound_res]
-# 		#
-# 		ligand_zone[chain].append('ZONE %s%s-%s%i:%s%i-%s%i' % (chain, bound_res, chain, bound_res, chain, unbound_res, chain, unbound_res))
-#
-# # generate command
-# lrms_cmd = ''
-# lrms_cmd += '\n'.join(ligand_zone[receptor_chain])
-# lrms_cmd += '\n'
-# lrms_cmd += 'FIT'
-# lrms_cmd += '\n'
-# for ligand in ligand_zone:
-# 	if ligand != receptor_chain:
-# 		l_tbw = ''
-# 		for zone in ligand_zone[ligand]:
-# 			l_tbw += ' R%s\n' % zone
-# 		lrms_cmd += l_tbw[1:]
-# 		lrms_cmd += '\n'
-# lrms_cmd += 'ZONE CLEAR'
-# lrms_cmd += '\n'
-#
-# # ready?
-# for stage in stage_ref_dic:
-# 	# print '>> %s' % stage
-#
-# 	pdb_l = stage_ref_dic[stage][0]
-# 	ref = stage_ref_dic[stage][1]
-# 	atoms = stage_ref_dic[stage][2]
-#
-# 	lrms_dic = {}
-# 	for conformation in pdb_l:
-#
-# 		# segid_output = 'segid.temp'
-# 		fix_chain_segid(conformation)
-#
-# 		# os.system('%s/pdb_segid-to-chain %s > %s' % (haddocktools_path, conformation, segid_output))
-# 		# os.system('cp segid.temp %s' % conformation)
-# 		cmd = 'refe %s\nmobi %s\nATOMS %s\n%s\nquit' % (ref, conformation, atoms, lrms_cmd)
-#
-# 		output = os.popen('echo "%s" | profit' % cmd)
-#
-# 		# parse result
-# 		result = [l for l in output if 'RMS' in l][-1]
-# 		lrms = float(result.split()[-1])
-#
-# 		lrms_dic[conformation] = lrms
-# 		result_dic[stage][conformation]['lrms'] = lrms
-# 		#
-# 		# os.system('rm %s' % segid_output)
-#
-# 	if stage == 'water':
-# 		outputf = '%s/structures/it1/%s/l-RMSD.dat' % (runf, stage)
-# 	else:
-# 		outputf = '%s/structures/%s/l-RMSD.dat' % (runf, stage)
-#
-# 	#
-# 	lrms_out = open(outputf,'w')
-# 	lrms_out.write('#struc l-RMSD\n')
-# 	sorted_lrms_dic = sorted(lrms_dic.items(), key=operator.itemgetter(1))
-# 	for e in sorted_lrms_dic:
-# 		conformation = e[0]
-# 		pdb_name = conformation.split('/')[-1]
-# 		lrms = e[1]
-# 		lrms_out.write('%s %.3f\n' % (conformation, lrms))
-# 	lrms_out.close()
-# 	#
-# 	os.system('cp %s %s' % (outputf, outputf.replace('.dat', '-sorted.dat')))
-#
-# #=========================================================================================#
-# ## Fnat
-# #=========================================================================================#
+
+print '> Calculating l-rmsd'
+
+ligand_zone = {}
+for chain in numbering_dic:
+	ligand_zone[chain] = []
+	for bound_res in numbering_dic[chain]:
+		unbound_res = numbering_dic[chain][bound_res]
+		#
+		ligand_zone[chain].append('ZONE %s%s-%s%i:%s%i-%s%i' % (chain, bound_res, chain, bound_res, chain, unbound_res, chain, unbound_res))
+
+# generate command
+lrms_cmd = ''
+lrms_cmd += '\n'.join(ligand_zone[receptor_chain])
+lrms_cmd += '\n'
+lrms_cmd += 'FIT'
+lrms_cmd += '\n'
+for ligand in ligand_zone:
+	if ligand != receptor_chain:
+		l_tbw = ''
+		for zone in ligand_zone[ligand]:
+			l_tbw += ' R%s\n' % zone
+		lrms_cmd += l_tbw[1:]
+		lrms_cmd += '\n'
+lrms_cmd += 'ZONE CLEAR'
+lrms_cmd += '\n'
+
+# ready?
+for stage in stage_ref_dic:
+	# print '>> %s' % stage
+
+	pdb_l = stage_ref_dic[stage][0]
+	ref = stage_ref_dic[stage][1]
+	atoms = stage_ref_dic[stage][2]
+
+	lrms_dic = {}
+	for conformation in pdb_l:
+
+		# segid_output = 'segid.temp'
+		fix_chain_segid(conformation)
+
+		# os.system('%s/pdb_segid-to-chain %s > %s' % (haddocktools_path, conformation, segid_output))
+		# os.system('cp segid.temp %s' % conformation)
+		cmd = 'refe %s\nmobi %s\nATOMS %s\n%s\nquit' % (ref, conformation, atoms, lrms_cmd)
+
+		output = os.popen('echo "%s" | profit' % cmd)
+
+		# parse result
+		result = [l for l in output if 'RMS' in l][-1]
+		lrms = float(result.split()[-1])
+
+		lrms_dic[conformation] = lrms
+		result_dic[stage][conformation]['lrms'] = lrms
+		#
+		# os.system('rm %s' % segid_output)
+
+	if stage == 'water':
+		outputf = '%s/structures/it1/%s/l-RMSD.dat' % (runf, stage)
+	else:
+		outputf = '%s/structures/%s/l-RMSD.dat' % (runf, stage)
+
+	#
+	lrms_out = open(outputf,'w')
+	lrms_out.write('#struc l-RMSD\n')
+	sorted_lrms_dic = sorted(lrms_dic.items(), key=operator.itemgetter(1))
+	for e in sorted_lrms_dic:
+		conformation = e[0]
+		pdb_name = conformation.split('/')[-1]
+		lrms = e[1]
+		lrms_out.write('%s %.3f\n' % (conformation, lrms))
+	lrms_out.close()
+	#
+	os.system('cp %s %s' % (outputf, outputf.replace('.dat', '-sorted.dat')))
+
+#=========================================================================================#
+## Fnat
+#=========================================================================================#
 
 print '> Calculating fnat (%.2f A)' % fnat_distance_threshold
 
@@ -724,59 +731,55 @@ for stage in stage_ref_dic:
 
 print '> Analyzing clusters'
 
-path = os.getcwd()
-
 # water
-if os.path.isfile('%s/structures/it1/water/analysis/cluster.out.gz' % runf):
-    water_clusterf = '%s/structures/it1/water/analysis/cluster.out.gz' % (runf)
-elif os.path.isfile('%s/structures/it1/water/analysis/cluster.out' % runf):
-    water_clusterf = '%s/structures/it1/water/analysis/cluster.out' % runf
+if os.path.isfile('%s/%s/structures/it1/water/analysis/cluster.out.gz' % (path, runf)):
+    water_clusterf = '%s/%s/structures/it1/water/analysis/cluster.out.gz' % (path, runf)
+elif os.path.isfile('%s/%s/structures/it1/water/analysis/cluster.out' % (path, runf)):
+    water_clusterf = '%s/%s/structures/it1/water/analysis/cluster.out' % (path, runf)
 else:
     water_clusterf = False
 
 # it1
-if os.path.isfile('%s/structures/it1/analysis/cluster.out.gz' % runf):
-    it1_clusterf = '%s/structures/it1/analysis/cluster.out.gz' % runf
-elif os.path.isfile('%s/structures/it1/analysis/cluster.out' % runf):
-    it1_clusterf = '%s/structures/it1/analysis/cluster.out' % runf
+if os.path.isfile('%s/%s/structures/it1/analysis/cluster.out.gz' % (path, runf)):
+    it1_clusterf = '%s/%s/structures/it1/analysis/cluster.out.gz' % (path, runf)
+elif os.path.isfile('%s/%s/structures/it1/analysis/cluster.out' % (path, runf)):
+    it1_clusterf = '%s/%s/structures/it1/analysis/cluster.out' % (path, runf)
 else:
     it1_clusterf = False
 
 if water_clusterf:
     if 'gz' in water_clusterf:
-        os.chdir('%s/structures/it1/water/analysis/' % runf)
+        os.chdir('%s/%s/structures/it1/water/analysis/' % (path, runf))
         os.system('gunzip cluster.out.gz')
 
-    os.chdir('%s/structures/it1/water/' % runf)
+    os.chdir('%s/%s/structures/it1/water/' % (path, runf))
     # os.system('%s/tools/ana_clusters.csh -best 4 analysis/cluster.out' % runf)
     os.system('%s/ana_clusters.csh -best 4 analysis/cluster.out' % haddocktools_path)
     os.chdir(path)
 
-    score_f = '%s/structures/it1/water/file.list' % runf
-    cluster_f = '%s/structures/it1/water/analysis/cluster.out' % runf
-    irmsd_f = '%s/structures/it1/water/i-RMSD.dat' % runf
+    score_f = '%s/%s/structures/it1/water/file.list' % (path, runf)
+    cluster_f = '%s/%s/structures/it1/water/analysis/cluster.out' % (path, runf)
+    irmsd_f = '%s/%s/structures/it1/water/i-RMSD-sorted.dat' % (path, runf)
 
-    water_cluster_statf = open('%s/water_cluster.dat' % runf,'w')
+    water_cluster_statf = open('water_cluster.dat','w')
     tbw = cluster_stats(score_f, irmsd_f,cluster_f)
     water_cluster_statf.write(tbw)
     water_cluster_statf.close()
 
-
 if it1_clusterf:
     if 'gz' in it1_clusterf:
-        os.chdir('%s/structures/it1/analysis/' % runf)
+        os.chdir('%s/%s/structures/it1/analysis/' % (path, runf))
         os.system('gunzip cluster.out.gz')
 
-    os.chdir('%s/structures/it1/' % runf)
+    os.chdir('%s/%s/structures/it1/' % (path, runf))
     # os.system('%s/tools/ana_clusters.csh -best 4 analysis/cluster.out' % runf)
     os.system('%s/ana_clusters.csh -best 4 analysis/cluster.out' % haddocktools_path)
-    os.chdir(path)
 
-    score_f = '%s/structures/it1/file.list' % runf
-    cluster_f = '%s/structures/it1/analysis/cluster.out' % runf
-    irmsd_f = '%s/structures/it1/i-RMSD.dat' % runf
+    score_f = '%s/%s/structures/it1/file.list' % (path, runf)
+    cluster_f = '%s/%s/structures/it1/analysis/cluster.out' % (path, runf)
+    irmsd_f = '%s/%s/structures/it1/i-RMSD-sorted.dat' % (path, runf)
 
-    it1_cluster_statf = open('%s/it1_cluster.dat' % runf,'w')
+    it1_cluster_statf = open('it1_cluster.dat','w')
     tbw = cluster_stats(score_f, irmsd_f,cluster_f)
     it1_cluster_statf.write(tbw)
     it1_cluster_statf.close()
@@ -811,27 +814,13 @@ for stage in stage_ref_dic:
     pdb_l = stage_ref_dic[stage][0]
     for conformation in pdb_l:
         data = open(conformation).readlines()
-        # TODO: Find a more reliable way to parse this
-        try:
-            energies_l = map(float, data[7].split(':')[-1].split(','))
-        except:
-            energies_l = map(float, data[6].split(':')[-1].split(','))
+
+        energies_l = map(float, data[6].split(':')[-1].split(','))
         total, bonds, angles, improper, dihe, vdw, elec, air, cdih, coup, rdcs, vean, dani, xpcs, rg = energies_l
 
-        try:
-            # local run
-            bsa = float(data[32].split(':')[-1])
-            desolv = float(data[27].split(':')[-1])
-            binding = float(data[30].split(':')[-1])
-        except:
-            # server run
-            # bsa = float(data[28].split(':')[-1])
-            # binding = float(data[26].split(':')[-1])
-            # desolv = float(data[23].split(':')[-1])
-
-            bsa = float(data[28-1].split(':')[-1])
-            binding = float(data[26-1].split(':')[-1])
-            desolv = float(data[23-1].split(':')[-1])
+        bsa = float(data[31].split(':')[-1])
+        binding = float(data[29].split(':')[-1])
+        desolv = float(data[26].split(':')[-1])
 
         result_dic[stage][conformation]['total'] = total
         result_dic[stage][conformation]['bonds'] = bonds
@@ -897,6 +886,33 @@ for stage in result_dic:
             total, bonds, angles, improper, dihe, vdw, elec, air, cdih, coup, rdcs, vean, dani, xpcs, rg))
 
     out.close()
+    pass
+    #
+
+# write i-RMSD.dat > sorted by haddock score
+pass
+
+for stage in result_dic:
+    if stage == 'water':
+        outputf_name = '%s/structures/it1/%s/i-RMSD.dat' % (runf, stage)
+    else:
+        outputf_name = '%s/structures/%s/i-RMSD.dat' % (runf,  stage)
+
+    outputf = open(outputf_name, 'w')
+
+    sorted_haddock_score_list = sorted(haddock_score_dic[stage].items(), key=operator.itemgetter(1))
+
+    for i, e in enumerate(sorted_haddock_score_list):
+
+        conformation = e[0].split('/')
+        irms = result_dic[stage][e[0]]['irms']
+
+        outputf.write('%s %.3f' % (conformation, irms))
+
+    outputf.close()
+
+
+
 
 # done (:
 

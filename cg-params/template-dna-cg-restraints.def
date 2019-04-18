@@ -1,0 +1,256 @@
+! dna-cg_restraints.def
+
+{- begin block parameter definition -} define(
+
+{=========================================== Watson-Crick base pairs =======================================}
+
+{* pick Watson-Crick restraint values from structure *}
+{+ choice: true false +}
+{===>} dna_pick_wc=false;
+
+
+{* error range used for dna_pick_wc defined Watson-Crick restraints *}
+{===>} wc_low=0.05;
+{===>} wc_up=0.05;
+
+{* residues which form Watson-Crick pairs *}
+
+
+
+
+{=========================================================================================================}
+{                        things below this line do not normally need to be changed                        }
+{=========================================================================================================}
+
+ ) {- end block parameter definition -}
+
+
+ if (&dna_pick_wc = true) then
+  evaluate ($pair=1)
+  evaluate ($done=false)
+  while ( $done = false ) loop noe
+   if ( &exist_base_a_$pair = true ) then
+     if ( &exist_base_b_$pair = true ) then
+       show ( resn ) ( &base_a_$pair and name SC1 ) 
+       evaluate ($ares=$result)
+       show ( resn ) ( &base_b_$pair and name SC1 ) 
+       evaluate ($bres=$result)
+
+
+       if ( $ares = DT ) then
+        pick bond
+                  (&base_a_$pair and name SC2) 
+                  (&base_b_$pair and name SC2)
+		  geometry
+        evaluate ($dtsc2=$result)
+
+        pick bond
+                  (&base_a_$pair and name SC3) 
+                  (&base_b_$pair and name SC3)
+		  geometry
+        evaluate ($dtsc3=$result)
+
+
+
+       elseif ( $ares = U ) then
+        pick bond
+                  (&base_a_$pair and name SC2) 
+                  (&base_b_$pair and name SC2)
+      geometry
+        evaluate ($dtsc2=$result)
+        pick bond
+                  (&base_a_$pair and name SC3) 
+                  (&base_b_$pair and name SC3)
+      geometry
+        evaluate ($dtsc3=$result)
+
+
+       elseif ( $ares = DA ) then        
+	      pick bond
+                  (&base_b_$pair and name SC2) 
+                  (&base_a_$pair and name SC2)
+		  geometry
+        evaluate ($dasc2=$result)
+        
+	pick bond
+                  (&base_b_$pair and name SC3) 
+                  (&base_a_$pair and name SC3)
+		  geometry
+        evaluate ($dasc3=$result)
+!------------------------------------------------
+       elseif ( $ares = A ) then        
+        pick bond
+                  (&base_b_$pair and name SC2) 
+                  (&base_a_$pair and name SC2)
+      geometry
+        evaluate ($dasc2=$result)
+        
+  pick bond
+                  (&base_b_$pair and name SC3) 
+                  (&base_a_$pair and name SC3)
+      geometry
+        evaluate ($dasc3=$result)
+  !------------------------------------------------
+	elseif ( $ares = DC ) then
+	pick bond
+                  (&base_a_$pair and name SC2) 
+                  (&base_b_$pair and name SC2)
+		  geometry
+        evaluate ($dcsc2=$result)
+        pick bond
+                  (&base_a_$pair and name SC3) 
+                  (&base_b_$pair and name SC3)
+		  geometry
+        evaluate ($dcsc3=$result)
+
+  elseif ( $ares = C ) then
+  pick bond
+                  (&base_a_$pair and name SC2) 
+                  (&base_b_$pair and name SC2)
+      geometry
+        evaluate ($dcsc2=$result)
+        pick bond
+                  (&base_a_$pair and name SC3) 
+                  (&base_b_$pair and name SC3)
+      geometry
+        evaluate ($dcsc3=$result)
+  !------------------------------------------------
+	elseif ( $ares = DG ) then
+        pick bond
+                  (&base_b_$pair and name SC2) 
+                  (&base_a_$pair and name SC2)
+		  geometry
+        evaluate ($dgsc2=$result)
+        pick bond
+                  (&base_b_$pair and name SC3) 
+                  (&base_a_$pair and name SC3)
+		  geometry
+        evaluate ($dgsc3=$result)
+       
+       end if
+       noe
+         if ( $ares = DT ) then
+           assign (&base_a_$pair and name SC2) 
+                  (&base_b_$pair and name SC2) $dtsc2 &wc_low &wc_up 
+           assign (&base_a_$pair and name SC3) 
+                  (&base_b_$pair and name SC3) $dtsc3 &wc_low &wc_up
+         elseif ( $ares = U ) then
+           assign (&base_a_$pair and name SC2) 
+                  (&base_b_$pair and name SC2) $dtsc2 &wc_low &wc_up 
+           assign (&base_a_$pair and name SC3) 
+                  (&base_b_$pair and name SC3) $dtsc3 &wc_low &wc_up
+
+         elseif ( $ares = DA ) then
+           assign (&base_b_$pair and name SC2) 
+                  (&base_a_$pair and name SC2) $dasc2 &wc_low &wc_up 
+           assign (&base_b_$pair and name SC3) 
+                  (&base_a_$pair and name SC3) $dasc3 &wc_low &wc_up
+         elseif ( $ares = A ) then
+           assign (&base_b_$pair and name SC2) 
+                  (&base_a_$pair and name SC2) $dasc2 &wc_low &wc_up 
+           assign (&base_b_$pair and name SC3) 
+                  (&base_a_$pair and name SC3) $dasc3 &wc_low &wc_up
+
+         elseif ( $ares = DC ) then
+           assign (&base_a_$pair and name SC2) 
+                  (&base_b_$pair and name SC2) $dcsc2 &wc_low &wc_up 
+           assign (&base_a_$pair and name SC3) 
+                  (&base_b_$pair and name SC3) $dcsc3 &wc_low &wc_up
+         elseif ( $ares = C ) then
+           assign (&base_a_$pair and name SC2) 
+                  (&base_b_$pair and name SC2) $dcsc2 &wc_low &wc_up 
+           assign (&base_a_$pair and name SC3) 
+                  (&base_b_$pair and name SC3) $dcsc3 &wc_low &wc_up
+
+         elseif ( $ares = DG ) then
+           assign (&base_b_$pair and name SC2) 
+                  (&base_a_$pair and name SC2) $dgsc2 &wc_low &wc_up 
+           assign (&base_b_$pair and name SC3) 
+                  (&base_a_$pair and name SC3) $dgsc3 &wc_low &wc_up
+         elseif ( $ares = G ) then
+           assign (&base_b_$pair and name SC2) 
+                  (&base_a_$pair and name SC2) $dgsc2 &wc_low &wc_up 
+           assign (&base_b_$pair and name SC3) 
+                  (&base_a_$pair and name SC3) $dgsc3 &wc_low &wc_up
+         end if
+       end
+     end if
+   else
+     evaluate ($done=true)
+   end if         
+   evaluate ($pair=$pair+1)
+  end loop noe
+
+ else
+ 
+ evaluate ($pair=1)
+ evaluate ($done=false)
+ while ( $done = false ) loop noe
+   if ( &exist_base_a_$pair = true ) then
+     if ( &exist_base_b_$pair = true ) then
+       show ( resn ) ( &base_a_$pair and name SC1 ) 
+       evaluate ($ares=$result)
+       show ( resn ) ( &base_b_$pair and name SC1 ) 
+       evaluate ($bres=$result)
+       noe
+         if ( $ares = DT ) then
+           assign (&base_a_$pair and name SC2) 
+                  (&base_b_$pair and name SC2) 4.5 0.2 0.2 
+           assign (&base_a_$pair and name SC3) 
+                  (&base_b_$pair and name SC3) 4.5 0.2 0.2
+
+         elseif ( $ares = DA ) then
+           assign (&base_b_$pair and name SC2) 
+                  (&base_a_$pair and name SC2) 4.5 0.2 0.2 
+           assign (&base_b_$pair and name SC3) 
+                  (&base_a_$pair and name SC2) 4.5 0.2 0.2
+
+         elseif ( $ares = DC ) then
+           assign (&base_a_$pair and name SC2) 
+                  (&base_b_$pair and name SC2) 4.5 0.2 0.2 
+           assign (&base_a_$pair and name SC3) 
+                  (&base_b_$pair and name SC3) 4.5 0.2 0.2
+
+         elseif ( $ares = DG ) then
+           assign (&base_b_$pair and name SC2) 
+                  (&base_a_$pair and name SC2) 4.5 0.2 0.2 
+           assign (&base_b_$pair and name SC3) 
+                  (&base_a_$pair and name SC3) 4.5 0.2 0.2
+
+         elseif ( $ares = U ) then
+           assign (&base_a_$pair and name SC2) 
+                  (&base_b_$pair and name SC2) 4.5 0.2 0.2 
+           assign (&base_a_$pair and name SC3) 
+                  (&base_b_$pair and name SC3) 4.5 0.2 0.2
+
+         elseif ( $ares = A ) then
+           assign (&base_b_$pair and name SC2) 
+                  (&base_a_$pair and name SC2) 4.5 0.2 0.2 
+           assign (&base_b_$pair and name SC3) 
+                  (&base_a_$pair and name SC2) 4.5 0.2 0.2
+
+         elseif ( $ares = C ) then
+           assign (&base_a_$pair and name SC2) 
+                  (&base_b_$pair and name SC2) 4.5 0.2 0.2 
+           assign (&base_a_$pair and name SC3) 
+                  (&base_b_$pair and name SC3) 4.5 0.2 0.2
+
+         elseif ( $ares = G ) then
+           assign (&base_b_$pair and name SC2) 
+                  (&base_a_$pair and name SC2) 4.5 0.2 0.2 
+           assign (&base_b_$pair and name SC3) 
+                  (&base_a_$pair and name SC3) 4.5 0.2 0.2
+         end if
+       end
+     end if
+   else
+     evaluate ($done=true)
+   end if         
+   evaluate ($pair=$pair+1)
+ end loop noe
+ end if
+ flags include noe end
+
+set message=off echo=off end
+
+

@@ -1,0 +1,30 @@
+91a92
+> {===>} dnacgbreak_cutoff=10.0;
+100a102
+> {===>} cgdna_break_infile="RUN:toppar/prot-dna-rna_break.top";
+190c192
+< {===>} nucl_topology_infile="RUN:toppar/dna-rna-allatom-hj-opls-1.3.top";
+---
+> {===>} nucl_topology_infile="RUN:toppar/prot-dna-rna_cg.top";
+194c196
+< {===>} nucl_link_infile="RUN:/toppar/dna-rna-1.3.link";
+---
+> {===>} nucl_link_infile="RUN:/toppar/prot-dna-rna.link";
+197c199
+< {===>} nucl_parameter_infile="RUN:/toppar/dna-rna-allatom-hj-opls-1.3.param";
+---
+> {===>} nucl_parameter_infile="RUN:/toppar/prot-dna-rna.param";
+304a307
+>      @@&cgdna_break_infile
+394a398
+>  inline @RUN:protocols/patch-types-cg-hbond-dna-rna.cns
+426a431
+>    inline @RUN:protocols/patch-breaks-cg-dna-rna.cns
+761c766
+<      if ($Data.dnarest eq TRUE) then
+---
+>      if ($Data.dnacgrest eq TRUE) then
+765c770
+<        @RUN:data/sequence/dna-rna_restraints.def
+---
+>        @RUN:data/sequence/dna-rna-cg_restraints.def

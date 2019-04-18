@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="Copy of project-level server 'Alc'" createEmptyFolders="true" showAutoUploadSettingsWarning="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="rodrigo@alcazar.science.uu.nl:22" createEmptyFolders="true" showAutoUploadSettingsWarning="false">
     <serverData>
       <paths name="Alc">
         <serverdata>
@@ -21,6 +21,20 @@
           <mappings>
             <mapping local="$USER_HOME$/work/scoring/example-scoring/ana_scripts" web="/" />
             <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="rodrigo@alcazar.science.uu.nl:22">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/Nostromo" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="rodrigo@alcazar.science.uu.nl:22 (1)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/Nostromo" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>

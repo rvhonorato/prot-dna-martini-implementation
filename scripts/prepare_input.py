@@ -333,39 +333,39 @@ else:
 #================================================================================================#
 # 4. Convert from AA to CG
 #================================================================================================#
-# print('4. Convert from AA to CG')
-#
-# aa2cgf = 'cg2aa.tbl'
-# if os.path.isfile(aa2cgf):
-# 	os.system('rm %s' % aa2cgf)
-#
-# sorted_chains = pdb_dic.keys()
-# sorted_chains.sort()
-#
-# for chain in sorted_chains:
-# 	pdbf = pdb_dic[chain]
-# 	cg_outf = pdbf.replace('.pdb','_cg.pdb')
-# 	backmap_outf = pdbf.replace('.pdb','_cg_to_aa.tbl')
-#
-# 	cmd = 'python2.7 /home/rodrigo/Nostromo/aa2cg/aa2cg-prot_dna_rna.py %s' % pdbf
-# 	print(cmd)
-# 	run(cmd, 'log')
-#
-# 	# 4.1 get aa2cg.tbl (backmapping)
-# 	os.system('cat %s >> %s' % (backmap_outf, aa2cgf))
-#
-# 	#   4.2 fix segids/chain
-# 	fix_chain_segid(cg_outf)
-#
-#
-# # 4.3 get dna_restraints.def
-# if not os.path.isfile('dna_restraints.def'):
-# 	print('> WARNING: dna_restraints.def not generated, is there a double stranded DNA/RNA molecule? check aa2cg conversion')
-# 	# exit()
-#
-# if not os.path.isfile('dna-aa_groups.dat'):
-# 	print('> WARNING: dna-aa_groups.dat not generated, this is needed for the DNA/RNA restrictions, check aa2cg conversion')
-# 	# exit()
+print('4. Convert from AA to CG')
+
+aa2cgf = 'cg2aa.tbl'
+if os.path.isfile(aa2cgf):
+	os.system('rm %s' % aa2cgf)
+
+sorted_chains = pdb_dic.keys()
+sorted_chains.sort()
+
+for chain in sorted_chains:
+	pdbf = pdb_dic[chain]
+	cg_outf = pdbf.replace('.pdb','_cg.pdb')
+	backmap_outf = pdbf.replace('.pdb','_cg_to_aa.tbl')
+
+	cmd = 'python2.7 /home/rodrigo/Nostromo/aa2cg/aa2cg-prot_dna_rna.py %s' % pdbf
+	print(cmd)
+	run(cmd, 'log')
+
+	# 4.1 get aa2cg.tbl (backmapping)
+	os.system('cat %s >> %s' % (backmap_outf, aa2cgf))
+
+	#   4.2 fix segids/chain
+	fix_chain_segid(cg_outf)
+
+
+# 4.3 get dna_restraints.def
+if not os.path.isfile('dna_restraints.def'):
+	print('> WARNING: dna_restraints.def not generated, is there a double stranded DNA/RNA molecule? check aa2cg conversion')
+	# exit()
+
+if not os.path.isfile('dna-aa_groups.dat'):
+	print('> WARNING: dna-aa_groups.dat not generated, this is needed for the DNA/RNA restrictions, check aa2cg conversion')
+	# exit()
 
 #================================================================================================#
 # 5. Prepare files for analysis
