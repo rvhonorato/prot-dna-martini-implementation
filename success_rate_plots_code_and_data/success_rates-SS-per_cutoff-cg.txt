@@ -1,0 +1,8 @@
+stage cutoff High Medium Acceptable Near-Acceptable Low
+Single T1 0 1 13 2 11
+Single T5 0 1 16 1 8
+Single T10 0 2 17 0 7
+Single T20 0 5 16 0 6
+Single T50 0 5 17 0 5
+Single T100 0 7 17 0 3
+Single T200 0 8 17 0 2

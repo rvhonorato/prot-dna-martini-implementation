@@ -1,0 +1,6 @@
+stage cutoff High Medium Acceptable Near-Acceptable Low
+Clustering T1 0 1 15 2 9
+Clustering T2 0 2 18 2 5
+Clustering T3 0 4 18 1 4
+Clustering T4 0 7 16 1 3
+Clustering T5 0 8 16 0 3

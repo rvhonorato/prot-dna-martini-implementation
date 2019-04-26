@@ -2,7 +2,8 @@
 #----------------------------------------------------------------------------------------------------------------#
 # INPUT
 #----------------------------------------------------------------------------------------------------------------#
-DNA_ID=$1 # number
+#DNA_ID=$1 # number
+DNA_ID=$(cat run.param | gawk 'match($0, /PDB_FILE([1-9])=\.\/DNA_unbound.pdb/, a) {print a[1]}')
 
 # Add CG topology, parameters, link and patches
 DNACG_FOLDER=/home/rodrigo/cg-params/

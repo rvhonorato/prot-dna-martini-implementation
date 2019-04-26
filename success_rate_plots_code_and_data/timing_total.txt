@@ -1,0 +1,3 @@
+stage time approach
+Total 51.30 All-Atom
+Total 7.63 Coarse-Grained

@@ -2,24 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="82c45af0-fb02-4518-9942-7757b09e83e9" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/DNA/patch-dna-aa.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DNA/submit-dna-aa-benchmark.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/nucleosome/patch-nuc.sh.old" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Nostromo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Nostromo.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/analysis/create-input-jefe.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cg2aa/cg-to-aa.cns" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cg2aa/cg2aa.cns" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cg2aa/re_h2o.inp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cg2aa/read_struc.cns" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DNA/html2param.py" beforeDir="false" afterPath="$PROJECT_DIR$/DNA/html2param.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DNA/patch-dna-cg-run1.old.sh" beforeDir="false" afterPath="$PROJECT_DIR$/DNA/depc/patch-dna-cg-run1.old.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DNA/patch-dna-cg-run1.sh" beforeDir="false" afterPath="$PROJECT_DIR$/DNA/patch-dna-cg-run1.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DNA/patch-dna-cg-run4.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh" beforeDir="false" afterPath="$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DNA/patch-dna-aa.sh" beforeDir="false" afterPath="$PROJECT_DIR$/DNA/patch-dna-AA.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DNA/patch-dna-cg-run1.sh" beforeDir="false" afterPath="$PROJECT_DIR$/DNA/patch-dna-CG.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh" beforeDir="false" afterPath="$PROJECT_DIR$/DNA/run-CG-benchmark.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aa2cg/aa2cg-prot_dna_rna.py" beforeDir="false" afterPath="$PROJECT_DIR$/aa2cg/aa2cg-prot_dna_rna.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/analysis/analyze-run.py" beforeDir="false" afterPath="$PROJECT_DIR$/analysis/analyze-run.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis/parse_ranking.py" beforeDir="false" afterPath="$PROJECT_DIR$/analysis/parse_ranking.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/nucleosome/patch-nuc.sh" beforeDir="false" afterPath="$PROJECT_DIR$/nucleosome/patch-nuc.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/parametrization/extract_nonbonded.py" beforeDir="false" afterPath="$PROJECT_DIR$/parametrization/extract_nonbonded.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/prepare_input.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/prepare_input.py" afterDir="false" />
     </list>
     <list id="fc44617b-5af8-4708-a40b-b063f3a1a643" name="nucleosome changes" comment="" />
     <ignored path="$PROJECT_DIR$/.idea/shelf/" />
@@ -49,81 +45,77 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cg-params/refine.patch">
+        <entry file="file://$PROJECT_DIR$/success_rate_plots_code_and_data/success_rates-SS-cg.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="42" column="29" lean-forward="true" selection-start-line="42" selection-start-column="29" selection-end-line="42" selection-end-column="29" />
+            <state>
+              <caret selection-end-line="7" selection-end-column="28" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cg-params/run.cns.patch">
-          <provider selected="true" editor-type-id="text-editor" />
+        <entry file="file://$PROJECT_DIR$/analysis/parse-results.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="17" column="38" selection-start-line="17" selection-start-column="38" selection-end-line="17" selection-end-column="38" />
+              <folding>
+                <element signature="e#48#59#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/analysis/create-input-jefe.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DNA/run-CG-benchmark.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="15" column="49" selection-start-line="15" selection-start-column="14" selection-end-line="15" selection-end-column="49" />
+            </state>
+          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/cg-params/template-dna-cg-restraints.def">
+        <entry file="file://$PROJECT_DIR$/analysis/analyze-run.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
-              <caret line="26" lean-forward="true" selection-start-line="26" selection-end-line="26" />
+            <state relative-caret-position="6954">
+              <caret line="908" column="32" selection-start-line="908" selection-start-column="32" selection-end-line="908" selection-end-column="32" />
+              <folding>
+                <element signature="e#62#120#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cg-params/run.cns-aa.patch">
+        <entry file="file://$PROJECT_DIR$/analysis/parse_data.py">
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cg-params/dna-CG-MARTINI-2-1p.link">
+        <entry file="file://$PROJECT_DIR$/analysis/parse_hit_rate.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" selection-start-line="2" selection-end-line="2" />
-            </state>
+            <state relative-caret-position="-270" />
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cg-params/dna-CG-MARTINI-2-1p.param">
+        <entry file="file://$PROJECT_DIR$/analysis/parse_ranking.py">
           <provider selected="true" editor-type-id="text-editor">
             <state>
-              <caret selection-end-line="1" selection-end-column="36" />
+              <folding>
+                <element signature="e#150#161#0" expanded="true" />
+              </folding>
             </state>
           </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cg-params/dna-CG-MARTINI-2-1p.top">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="1" column="37" selection-start-line="1" selection-start-column="37" selection-end-line="1" selection-end-column="37" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cg-params/dna-CG-MARTINI-2-1p-break.top">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" selection-start-line="4" selection-end-line="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cg-params/generate-cg.patch">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="21" column="47" selection-start-line="21" selection-start-column="47" selection-end-line="21" selection-end-column="47" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cg-params/template-dna-aa-restraints.def">
-          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
     </leaf>
@@ -133,16 +125,13 @@
       <list>
         <option value="HTML File" />
         <option value="Jupyter Notebook" />
+        <option value="CNS" />
         <option value="Python Script" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>dihed</find>
-      <find>ion</find>
-      <find>RUN:toppar/</find>
-      <find>.param</find>
       <find>param</find>
       <find>parameter</find>
       <find>temperature</find>
@@ -169,6 +158,10 @@
       <find>breaks</find>
       <find>_A</find>
       <find>rna</find>
+      <find>dna_chain</find>
+      <find>CG aa</find>
+      <find>$file</find>
+      <find>file</find>
     </findStrings>
     <replaceStrings>
       <replace>&quot;,&quot;</replace>
@@ -183,7 +176,7 @@
     <setting file="file://$PROJECT_DIR$/nucleosome/run-nuc.sh" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/analysis/analyze-run.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/restraints/create-numbering.py" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/DNA/patch-dna-cg-run1.sh" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/DNA/patch-dna-CG.sh" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/scripts/prepare_input.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/scripts/martinize-restraints.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/scripts/apply-patch.sh" root0="SKIP_INSPECTION" />
@@ -195,10 +188,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
-        <option value="$PROJECT_DIR$/restraints/create-numbering.py" />
-        <option value="$PROJECT_DIR$/nucleosome/fix-chains.py" />
-        <option value="$PROJECT_DIR$/nucleosome/find-models.py" />
         <option value="$PROJECT_DIR$/nucleosome/test-job.sh" />
         <option value="$PROJECT_DIR$/nucleosome/run-nuc-cg.sh" />
         <option value="$PROJECT_DIR$/nucleosome/run_cg_nuc.sh" />
@@ -225,13 +214,8 @@
         <option value="$PROJECT_DIR$/DNA/thread-test.py" />
         <option value="$PROJECT_DIR$/DNA/html2param.py" />
         <option value="$PROJECT_DIR$/DNA/submit-dna-aa-benchmark.py" />
-        <option value="$PROJECT_DIR$/DNA/patch-dna-aa.sh" />
-        <option value="$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh" />
         <option value="$PROJECT_DIR$/DNA/submit-dna-aa-benchmark.sh" />
-        <option value="$PROJECT_DIR$/nucleosome/patch-nuc.sh" />
-        <option value="$PROJECT_DIR$/analysis/analyze-run.py" />
         <option value="$PROJECT_DIR$/scripts/prepare_input.py" />
-        <option value="$PROJECT_DIR$/aa2cg/aa2cg-prot_dna_rna.py" />
         <option value="$PROJECT_DIR$/parametrization/nonbonded-subset.dat" />
         <option value="$PROJECT_DIR$/cg-params/generate-cg_nuc.patch" />
         <option value="$PROJECT_DIR$/cg-params/generate-cg.patch" />
@@ -242,13 +226,26 @@
         <option value="$PROJECT_DIR$/cg-params/dna-CG-MARTINI-2-1p.link" />
         <option value="$PROJECT_DIR$/cg-params/dna-CG-MARTINI-2-1p.top" />
         <option value="$PROJECT_DIR$/cg-params/dna-CG-MARTINI-2-1p-break.top" />
+        <option value="$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh" />
+        <option value="$PROJECT_DIR$/DNA/patch-dna-aa.sh" />
+        <option value="$PROJECT_DIR$/DNA/patch-dna-AA.sh" />
+        <option value="$PROJECT_DIR$/DNA/patch-dna-CG.sh" />
+        <option value="$PROJECT_DIR$/analysis/analyze-run.py" />
+        <option value="$PROJECT_DIR$/DNA/run-CG-benchmark.sh" />
+        <option value="$PROJECT_DIR$/DNA/run-AA-benchmark.sh" />
+        <option value="$PROJECT_DIR$/aa2cg/aa2cg-prot_dna_rna.py" />
+        <option value="$PROJECT_DIR$/cg2aa/cg2aa.cns" />
+        <option value="$PROJECT_DIR$/nucleosome/patch-nuc.sh" />
+        <option value="$PROJECT_DIR$/success_rate_plots_code_and_data/success_rates-SS-aa.txt" />
+        <option value="$PROJECT_DIR$/analysis/parse_ranking.py" />
+        <option value="$PROJECT_DIR$/analysis/create-input-jefe.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="y" value="23" />
     <option name="width" value="2560" />
-    <option name="height" value="1359" />
+    <option name="height" value="1351" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -268,12 +265,17 @@
             <path>
               <item name="Nostromo" type="b2602c69:ProjectViewProjectNode" />
               <item name="Nostromo" type="462c0819:PsiDirectoryNode" />
-              <item name="cg-params" type="462c0819:PsiDirectoryNode" />
+              <item name="analysis" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Nostromo" type="b2602c69:ProjectViewProjectNode" />
               <item name="Nostromo" type="462c0819:PsiDirectoryNode" />
-              <item name="parametrization" type="462c0819:PsiDirectoryNode" />
+              <item name="scripts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Nostromo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Nostromo" type="462c0819:PsiDirectoryNode" />
+              <item name="success_rate_plots_code_and_data" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -293,23 +295,24 @@
     <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/nucleosome" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/cg2aa" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="web.server" />
+    <property name="settings.editor.selected.configurable" value="RSettings" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/nucleosome" />
-      <recent name="$PROJECT_DIR$/DNA" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/DNA/depc" />
       <recent name="$PROJECT_DIR$/collab" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/cg2aa" />
+      <recent name="$PROJECT_DIR$/nucleosome" />
+      <recent name="$PROJECT_DIR$/DNA" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -324,7 +327,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.extract_nonbonded">
+  <component name="RunManager" selected="Python.create-input-jefe">
     <configuration name="aa2cg" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Nostromo" />
       <option name="INTERPRETER_OPTIONS" value="-s" />
@@ -356,13 +359,35 @@
         <env name="FASTCONTACTDIR" value="$USER_HOME$/software/fastcontact" />
       </envs>
       <option name="SDK_HOME" value="sftp://rodrigo@alcazar.science.uu.nl:22/usr/bin/python" />
-      <option name="WORKING_DIRECTORY" value="/home/rodrigo/ProtDNA-CG/benchmark/cg/1BY4" />
+      <option name="WORKING_DIRECTORY" value="/home/rodrigo/ProtDNA-CG/benchmark/aa/1BY4" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/analysis/analyze-run.py" />
-      <option name="PARAMETERS" value="&quot;1BY4_complex.pdb&quot; &quot;run1&quot;" />
+      <option name="PARAMETERS" value="&quot;1BY4_complex.pdb&quot; &quot;run1&quot; &quot;--aa&quot;" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="create-input-jefe" type="PythonConfigurationType" factoryName="Python">
+      <module name="Nostromo" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="/home/rodrigo/ProtDNA-CG/benchmark/cg" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/analysis/create-input-jefe.py" />
+      <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -436,6 +461,13 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="success-rate" type="RRunConfigurationType" factoryName="R">
+      <option name="SCRIPT_PATH" value="$PROJECT_DIR$/success_rate_plots_code_and_data/success-rate.R" />
+      <option name="SCRIPT_ARGS" value="" />
+      <option name="WORKING_DIRECTORY_PATH" value="$PROJECT_DIR$/success_rate_plots_code_and_data" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="tests" factoryName="Unittests">
       <module name="ana_scripts" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -457,12 +489,14 @@
       <item itemvalue="Python.analyze" />
       <item itemvalue="Python.aa2cg" />
       <item itemvalue="Python.extract_nonbonded" />
+      <item itemvalue="R.success-rate" />
+      <item itemvalue="Python.create-input-jefe" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.analyze" />
         <item itemvalue="Python.extract_nonbonded" />
         <item itemvalue="Python.aa2cg" />
-        <item itemvalue="Python.analyze" />
         <item itemvalue="Python.html2param" />
         <item itemvalue="Python.match-chain" />
       </list>
@@ -495,7 +529,8 @@
       <workItem from="1554740779475" duration="587000" />
       <workItem from="1554817180566" duration="13084000" />
       <workItem from="1555404729384" duration="20487000" />
-      <workItem from="1555569329040" duration="12022000" />
+      <workItem from="1555569329040" duration="36638000" />
+      <workItem from="1556274151890" duration="3188000" />
     </task>
     <task id="LOCAL-00001" summary="22102018">
       <created>1540226120237</created>
@@ -522,7 +557,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="136282000" />
+    <option name="totallyTimeSpent" value="164086000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -534,33 +569,33 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="2560" height="1359" extended-state="0" />
+    <frame x="0" y="23" width="2560" height="1351" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49834436" visible="true" weight="0.15687053" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49834436" visible="true" weight="0.15806195" />
       <window_info id="Favorites" order="1" sideWeight="0.50165564" side_tool="true" weight="0.16755603" />
       <window_info id="Structure" order="2" weight="0.13065925" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Cvs" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Debug" order="4" sideWeight="0.49722" weight="0.38437253" />
+      <window_info anchor="bottom" id="Debug" order="4" sideWeight="0.49722" weight="0.38363782" />
       <window_info anchor="bottom" id="Python Console" order="5" sideWeight="0.4988086" weight="0.32359904" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32998884" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.22037652" />
-      <window_info anchor="bottom" id="File Transfer" order="9" sideWeight="0.49960285" weight="0.23599052" />
+      <window_info anchor="bottom" id="File Transfer" order="9" sideWeight="0.49960285" weight="0.2359015" />
       <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.50277996" side_tool="true" weight="0.38437253" />
-      <window_info anchor="bottom" id="Run" order="12" sideWeight="0.4992057" weight="0.44514602" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="13" sideWeight="0.4960286" visible="true" weight="0.4822415" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5039714" side_tool="true" weight="0.5297856" />
+      <window_info anchor="bottom" id="Run" order="12" sideWeight="0.4992057" weight="0.44479746" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="13" sideWeight="0.4960286" visible="true" weight="0.33915806" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="SciView" order="3" />
       <window_info anchor="right" id="Database" order="4" />
       <window_info anchor="right" id="Remote Host" order="5" weight="0.22637014" />
-      <window_info anchor="right" id="R Graphics" order="6" />
-      <window_info anchor="right" id="R Packages" order="7" />
+      <window_info anchor="right" id="R Graphics" order="6" weight="0.32962668" />
+      <window_info anchor="right" id="R Packages" order="7" weight="0.32962668" />
     </layout>
     <layout-to-restore>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49834436" visible="true" weight="0.11517077" />
@@ -667,14 +702,19 @@
           <line>813</line>
           <option name="timeStamp" value="10" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="the-r-line">
+          <url>file://$PROJECT_DIR$/success_rate_plots_code_and_data/success-rate.R</url>
+          <line>19</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Nostromo$scoring.coverage" NAME="scoring Coverage Results" MODIFIED="1554726585564" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="/home/rodrigo/scoring/example-scoring/rescored" />
     <SUITE FILE_PATH="coverage/Nostromo$prepare_input.coverage" NAME="prepare_input Coverage Results" MODIFIED="1554374473698" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="/home/rodrigo/dna-benchmark/1O3T" />
-    <SUITE FILE_PATH="coverage/Nostromo$analyze.coverage" NAME="analyze Coverage Results" MODIFIED="1555581885715" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="/home/rodrigo/ProtDNA-CG/benchmark/cg/1BY4" />
     <SUITE FILE_PATH="coverage/Nostromo$extract_nonbonded.coverage" NAME="extract_nonbonded Coverage Results" MODIFIED="1555596839600" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/parametrization" />
+    <SUITE FILE_PATH="coverage/Nostromo$analyze.coverage" NAME="analyze Coverage Results" MODIFIED="1556011767360" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="/home/rodrigo/ProtDNA-CG/benchmark/aa/1BY4" />
     <SUITE FILE_PATH="coverage/Nostromo$aa2cg.coverage" NAME="aa2cg Coverage Results" MODIFIED="1555589918651" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="/home/rodrigo/ProtDNA-CG/benchmark/cg/1BY4" />
     <SUITE FILE_PATH="coverage/Nostromo$html2param.coverage" NAME="html2param Coverage Results" MODIFIED="1554392130420" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="/home/rodrigo/" />
   </component>
@@ -700,133 +740,10 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/temp/scoring-dimer.inp" />
-    <entry file="file://$USER_HOME$/Library/Caches/PyCharm2018.3/remote_sources/1674973333/371262748/tokenize.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="446" selection-start-line="446" selection-end-line="446" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/work/scoring/example-scoring/ana_scripts/ana_rescored.csh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="26" column="1" selection-start-line="26" selection-start-column="1" selection-end-line="26" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scoring/prepare_scorers_submission.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="29" column="12" selection-start-line="29" selection-start-column="12" selection-end-line="29" selection-end-column="12" />
-          <folding>
-            <element signature="e#47#56#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/capri-eval.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="724">
-          <caret line="57" column="22" selection-start-line="57" selection-start-column="22" selection-end-line="57" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scoring/extract-top10.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="25" selection-start-line="6" selection-start-column="25" selection-end-line="6" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scoring/match-chain.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="637">
-          <caret line="61" column="17" selection-start-line="61" selection-start-column="17" selection-end-line="61" selection-end-column="17" />
-          <folding>
-            <element signature="e#68#78#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps/_pydev_execfile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" selection-start-line="17" selection-end-line="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Library/Caches/PyCharm2019.1/remote_sources/1674973333/371262748/tokenize.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="446" selection-start-line="446" selection-end-line="446" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../haddock/protocols/refine.inp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="490">
-          <caret line="1688" lean-forward="true" selection-start-line="1688" selection-end-line="1688" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nucleosome/run-nuc.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="17" lean-forward="true" selection-start-line="23" selection-start-column="17" selection-end-line="23" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DNA/thread-test.py" />
-    <entry file="file://$PROJECT_DIR$/nucleosome/prepare.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="14" column="17" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nucleosome/plot_nuc.R">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nucleosome/test-job.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="55" selection-start-line="6" selection-start-column="55" selection-end-line="6" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scoring/scoring.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="14" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DNA/patch-dna-cg-run4.sh" />
-    <entry file="file://$PROJECT_DIR$/DNA/run.cns.patch">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" selection-start-line="4" selection-end-line="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DNA/generate-cg.patch">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/DNA/depc/patch-dna-cg-run1.old.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-387">
           <caret line="86" column="1" lean-forward="true" selection-start-line="86" selection-start-column="1" selection-end-line="86" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DNA/html2param.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
-          <folding>
-            <element signature="e#32#43#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -841,13 +758,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="4" selection-start-line="4" selection-end-line="4" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nucleosome/patch-nuc.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="825">
-          <caret line="55" selection-start-line="55" selection-end-line="55" />
         </state>
       </provider>
     </entry>
@@ -868,13 +778,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/prepare_input.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="339" column="31" selection-start-line="339" selection-start-column="31" selection-end-line="339" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/parametrization/parse_dna_angles_param.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-36" />
@@ -884,37 +787,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="428">
           <caret line="4634" column="47" selection-start-line="163" selection-end-line="4634" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DNA/patch-dna-aa.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="4" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/analysis/analyze-run.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5841">
-          <caret line="748" selection-start-line="748" selection-end-line="748" />
-          <folding>
-            <element signature="e#62#120#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/aa2cg/aa2cg-prot_dna_rna.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="319">
-          <caret line="225" column="36" selection-start-line="225" selection-start-column="36" selection-end-line="225" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DNA/submit-analyze-dna-cg-benchmark.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" column="59" selection-start-line="25" selection-start-column="46" selection-end-line="25" selection-end-column="59" />
         </state>
       </provider>
     </entry>
@@ -939,13 +811,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DNA/patch-dna-cg-run1.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="444">
-          <caret line="95" column="16" lean-forward="true" selection-start-line="95" selection-start-column="16" selection-end-line="95" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cg-params/patch-breaks-cg-dna.cns">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -957,16 +822,14 @@
     <entry file="file://$PROJECT_DIR$/cg-params/refine.patch">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
-          <caret line="42" column="29" lean-forward="true" selection-start-line="42" selection-start-column="29" selection-end-line="42" selection-end-column="29" />
+          <caret line="42" column="29" selection-start-line="42" selection-start-column="29" selection-end-line="42" selection-end-column="29" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cg-params/run.cns.patch">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/cg-params/refine.patch.old">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/cg-params/refine.patch.old" />
     <entry file="file://$PROJECT_DIR$/cg-params/run.cns-aa.patch">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1005,6 +868,64 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/cg-params/template-dna-aa-restraints.def">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cg-params/template-dna-cg-restraints.def">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" selection-start-line="14" selection-end-line="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DNA/html2param.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" selection-start-line="22" selection-end-line="22" />
+          <folding>
+            <element signature="e#32#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/aa2cg/._aa2cg-prot_dna_rna.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/aa2cg/aa2cg-prot_dna_rna.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="694" column="11" lean-forward="true" selection-start-line="693" selection-end-line="694" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nucleosome/run-nuc.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="23" column="17" selection-start-line="23" selection-start-column="17" selection-end-line="23" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DNA/patch-dna-AA.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" selection-start-line="2" selection-end-line="2" selection-end-column="97" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DNA/run-AA-benchmark.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="26" column="14" selection-start-line="26" selection-start-column="14" selection-end-line="26" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DNA/patch-dna-CG.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="92">
+          <caret line="8" column="37" selection-start-line="8" selection-start-column="37" selection-end-line="8" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/cg-params/generate-cg.patch">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
@@ -1012,13 +933,125 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cg-params/template-dna-aa-restraints.def">
+    <entry file="file://$PROJECT_DIR$/scripts/prepare_input.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="178">
+          <caret line="136" column="116" selection-start-line="136" selection-start-column="8" selection-end-line="136" selection-end-column="116" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cg2aa/cg2aa.cns">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nucleosome/patch-nuc.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="483">
+          <caret line="39" column="46" selection-start-line="39" selection-start-column="46" selection-end-line="39" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cg2aa/cg-to-aa.cns">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/cg-params/template-dna-cg-restraints.def">
+    <entry file="file://$PROJECT_DIR$/cg2aa/re_h2o.inp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="26" lean-forward="true" selection-start-line="26" selection-end-line="26" />
+        <state relative-caret-position="537">
+          <caret line="91" column="30" selection-start-line="91" selection-start-column="30" selection-end-line="91" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cg2aa/read_struc.cns">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="12" column="46" selection-start-line="12" selection-start-column="46" selection-end-line="12" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/success_rate_plots_code_and_data/success-rate.R">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="19" selection-start-line="19" selection-end-line="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/analysis/parse_data.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/success_rate_plots_code_and_data/success_rates-CT-per_cutoff-aa.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/success_rate_plots_code_and_data/success_rates-CT-per_cutoff-cg.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/success_rate_plots_code_and_data/success_rates-SS-aa.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="42" column="28" lean-forward="true" selection-start-line="42" selection-start-column="28" selection-end-line="42" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/success_rate_plots_code_and_data/success_rates-SS-per_cutoff-aa.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/success_rate_plots_code_and_data/success_rates-SS-per_cutoff-cg.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/analysis/parse_ranking.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#150#161#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/analysis/parse_hit_rate.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-270" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/analysis/parse-results.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="17" column="38" selection-start-line="17" selection-start-column="38" selection-end-line="17" selection-end-column="38" />
+          <folding>
+            <element signature="e#48#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/success_rate_plots_code_and_data/success_rates-SS-cg.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="7" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/analysis/create-input-jefe.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DNA/run-CG-benchmark.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="49" selection-start-line="15" selection-start-column="14" selection-end-line="15" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/analysis/analyze-run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6954">
+          <caret line="908" column="32" selection-start-line="908" selection-start-column="32" selection-end-line="908" selection-end-column="32" />
+          <folding>
+            <element signature="e#62#120#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

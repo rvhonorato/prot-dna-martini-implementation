@@ -1,0 +1,23 @@
+!@RUN:protocols/read_struc.cns
+
+! Load CG structure
+structure @"RUN:prot-cg.psf" end
+! Load CG params
+parameter @@RUN:toppar/prot-dna_cg.param end
+! Load AA parameters
+parameter @@RUN:toppar/prot-dna-rna.param end
+
+! Set values?
+parameter
+  nbonds
+    nbxmod=5 atom cdie shift
+    cutnb=9.5 ctofnb=8.5 ctonnb=6.5 eps=1.0 e14fac=0.4 inhibit 0.25
+    wmin=0.5 tolerance  0.5
+  end
+end
+
+!coor @@"1crn.pdb"
+!coor copy end
+
+! Read AA structure
+structure @@RUN:prot-cg.psf end

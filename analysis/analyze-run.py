@@ -890,7 +890,6 @@ for stage in result_dic:
     #
 
 # write i-RMSD.dat > sorted by haddock score
-pass
 
 for stage in result_dic:
     if stage == 'water':
@@ -904,10 +903,10 @@ for stage in result_dic:
 
     for i, e in enumerate(sorted_haddock_score_list):
 
-        conformation = e[0].split('/')
+        conformation = e[0].split('/')[-1]
         irms = result_dic[stage][e[0]]['irms']
 
-        outputf.write('%s %.3f' % (conformation, irms))
+        outputf.write('%s %.3f\n' % (conformation, irms))
 
     outputf.close()
 
